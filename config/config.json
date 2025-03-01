@@ -1,0 +1,1026 @@
+{
+  "RCONFIG": {
+    "TABS": [
+      {
+        "TAB_NAME": "Magnesium",
+        "TAB_KEY": "MAGNESIUM",
+        "MNEMONICS": [
+          {
+            "MNEMONIC": "Magnesium Oxide - Oral",
+            "ProtocolURL": "",
+            "Event_Name": ""
+          },
+          {
+            "MNEMONIC": "Magnesium Sulfate - IV",
+            "ProtocolURL": "",
+            "Event_Name": ""
+          },
+          {
+            "MNEMONIC": "Magnesium Oxide - Oral."
+          },
+          {
+            "MNEMONIC": "Magnesium Sulfate - IV."
+          }
+        ],
+        "CRITERIA": [
+          {
+            "LABEL": "Patient not on dialysis",
+            "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+            "DISPLAY": "",
+            "TOOLTIP": "No active dialysis order"
+          },
+          {
+            "LABEL": "Dosing Weight > 50 kg",
+            "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+            "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+            "TOOLTIP": "Dosing weight"
+          },
+          {
+            "LABEL": "No active Insulin Advisor (DKA/HHS)",
+            "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+            "DISPLAY": "",
+            "TOOLTIP": ""
+          },
+          {
+            "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+            "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+            "DISPLAY": "",
+            "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+          },
+          {
+            "LABEL": "Est Creat Clear > 30 mL/min",
+            "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+            "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min ",
+            "TOOLTIP": ""
+          },
+          {
+            "LABEL": "Serum Creatinine < 2 mg/dL",
+            "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+            "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL "
+          }
+        ],
+        "ORDER_SECTIONS": [
+          {
+            "SECTION_NAME": "Replace Therapy Requires a Magnesium Lab result within the past 4 hours",
+            "CONCEPT_NAME": "[%{EACRITERIAVALIDMAGRESULT4H} = 0%]",
+            "SINGLE_SELECT": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "Magnesium Level",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "<span style=\"color: red;\">CONTACT PROVIDER FOR IV REPLACEMENT<br>CRITICALLY LOW RESULT</span>",
+            "CONCEPT_NAME": "[%{EASHOWMAGORDERS} AND NOT {EAPROTOCOLMAGIV} AND {EACRITERIAVALIDMAGRESULT4H} AND {EALABMAGBTW00AND13}%]",
+            "SINGLE_SELECT": 0,
+            "SHOW_INACTIVE_DUPLICATES": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "Nursing Communication",
+                "ORDER_SENTENCE": "Request IV replacement of Magnesium in Electrolyte Advisor.  Oral ordered, but IV need.  Magnesium level is critically low.",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ]
+          },
+          {
+            "SECTION_NAME": "CONTACT PROVIDER FOR IV REPLACEMENT<br>Patient is now NPO",
+            "CONCEPT_NAME": "[%{EASHOWMAGORDERS} AND NOT {EAPROTOCOLMAGIV} AND {EAPROTOCOLMAGORAL} AND NOT {EACRITERIANOTNPO} AND {EACRITERIAVALIDMAGRESULT4H} AND {EALABMAGBTW14AND19}%]",
+            "SINGLE_SELECT": 0,
+            "SHOW_INACTIVE_DUPLICATES": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "Nursing Communication",
+                "ORDER_SENTENCE": "T;N, Request IV replacement of Magnesium in Electrolyte Advisor.  Oral ordered, but IV need.  Patient is now NPO.",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ]
+          },
+          {
+            "SECTION_NAME": "<span style=\"color: red;\">NOTIFY PHYSICIAN<br>CRITICALLY LOW RESULT</span> <br> Magnesium - Less Than 1.4 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWMAGORDERS} AND {EAPROTOCOLMAGIV} AND {EACRITERIAVALIDMAGRESULT4H} AND {EALABMAGBTW00AND13}%]",
+            "SINGLE_SELECT": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "magnesium sulfate",
+                "ORDER_SENTENCE": "2 gm, Soln-IV, IV Piggyback, q1H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 4 gm; max rate 125 mg/min <br> Check Magnesium Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "<span style=\"color:blue;font-weight:bold;\">If patient is not NPO, and tolerating oral medications, the recommended choice of replacement route is to be oral. </span><br> Magnesium - 1.4 - 1.9 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWMAGORDERS} AND {EAPROTOCOLMAGIV} AND {EAPROTOCOLMAGORAL} AND {EACRITERIANOTNPO} AND {EACRITERIAVALIDMAGRESULT4H} AND {EALABMAGBTW14AND19}%]",
+            "SINGLE_SELECT": 1,
+            "ORDERS": [
+              {
+                "MNEMONIC": "magnesium oxide",
+                "ORDER_SENTENCE": "400 mg, Tab, Oral, q12H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 800 mg <br> Check Magnesium Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL."
+              },
+              {
+                "MNEMONIC": "magnesium sulfate",
+                "ORDER_SENTENCE": "2 gm, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 2 gm; max rate 125 mg/min <br> Check Magnesium Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "Oral Magnesium replacement ordered <br> Magnesium - 1.4 - 1.9 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWMAGORDERS} AND NOT {EAPROTOCOLMAGIV} AND {EAPROTOCOLMAGORAL} AND {EACRITERIANOTNPO} AND {EACRITERIAVALIDMAGRESULT4H} AND {EALABMAGBTW14AND19}%]",
+            "SINGLE_SELECT": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "magnesium oxide",
+                "ORDER_SENTENCE": "400 mg, Tab, Oral, q12H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 800 mg <br> Check Magnesium Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL."
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "IV therapy ordered, or patient has an active NPO order <br> Magnesium - 1.4 - 1.9 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWMAGORDERS} AND {EAPROTOCOLMAGIV} AND (NOT {EAPROTOCOLMAGORAL} OR NOT {EACRITERIANOTNPO}) AND {EACRITERIAVALIDMAGRESULT4H} AND {EALABMAGBTW14AND19}%]",
+            "SINGLE_SELECT": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "magnesium sulfate",
+                "ORDER_SENTENCE": "2 gm, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 2 gm; max rate 125 mg/min <br> Check Magnesium Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "Magnesium Lab Orders <br><p style=\"text-indent: 25px;\">Last Magnesium Lvl Result Value:  @concept{EALABMAG.value} mg/dL</p><p style=\"text-indent: 25px;\">Last Magnesium Lvl Result Date/Time: @concept{EATIMELASTMAGLVLIN.value} </p>",
+            "CONCEPT_NAME": "[%{EACRITERIAVALIDMAGRESULT4H} > 0%]",
+            "SINGLE_SELECT": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "Magnesium Level",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Order a STAT Magnesium Level"
+              },
+              {
+                "MNEMONIC": "Magnesium Level",
+                "ORDER_SENTENCE": "Blood, AM collect, T+1;0400, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Order a Magnesium Level in the AM following completion of Magnesium Replacement"
+              },
+              {
+                "MNEMONIC": "Magnesium Level",
+                "ORDER_SENTENCE": "Blood, TS collect, T;N+60, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule a Magnesium level for 1 hour after replacement therapy"
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "!!!CONFIG ONLY!!!<br>Last Mag Level Lab ordered on:  @concept{EATIMELASTMAGLVLOUT.value} <br>Last Mag Level Resulted:  @concept{EALABMAG.value} was on @concept{EATIMELASTMAGLVLIN.value} <br>Last Magnesium Replacement ordered on:  @concept{EATIMELASTMAGREPLACE.value}",
+            "CONCEPT_NAME": "[%false%]",
+            "SINGLE_SELECT": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "Creatinine",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "magnesium oxide",
+                "ORDER_SENTENCE": "400 mg, Tab, Oral, q12H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 800 mg <br> Check Magnesium Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL."
+              },
+              {
+                "MNEMONIC": "magnesium sulfate",
+                "ORDER_SENTENCE": "2 gm, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 2 gm; max rate 125 mg/min <br> Check Magnesium Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              },
+              {
+                "MNEMONIC": "magnesium sulfate",
+                "ORDER_SENTENCE": "2 gm, Soln-IV, IV Piggyback, q1H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N, Administer over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 4 gm; max rate 125 mg/min <br> Check Magnesium Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              },
+              {
+                "MNEMONIC": "Magnesium Level",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "Magnesium Level",
+                "ORDER_SENTENCE": "Blood, AM collect, T+1;0400, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule an AM collect for Magnesium level"
+              },
+              {
+                "MNEMONIC": "Magnesium Level",
+                "ORDER_SENTENCE": "Blood, TS collect, T;N+60, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule a Magnesium level for 1 hour after replacement therapy"
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          }
+        ],
+        "FLAG_ON_CONCEPT": "[%{EALABMAGALERT}%]",
+        "RESOURCE_URLS": [
+          {
+            "LABEL": "Magnesium Protocol",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Magnesium Protocol v2.2.pdf"
+          },
+          {
+            "LABEL": "Potassium Protocol",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Potassium Protocol v2.2.pdf"
+          },
+          {
+            "LABEL": "Phosphorus Protocol",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Phosphorus Protocol v2.2.pdf"
+          },
+          {
+            "LABEL": "Electrolyte Protocol Flowsheet",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Flowsheet.pdf"
+          }
+        ],
+        "SUBMIT_BUTTON": {
+          "DISMISS_LABEL": "No Orders Necessary",
+          "SIGN_LABEL": "Sign Orders"
+        },
+        "GRAPHED_RESULTS": [
+          {
+            "LABEL": "Magnesium Level",
+            "EVENT_SET": "TPN Magnesium Serum Magnesium",
+            "LOOKBACK": "144,H",
+            "MAX_RESULT_COUNT": "6",
+            "RESULTS_VIEW": {
+              "LOOKBEHIND_LABEL": "Mag Lab Results",
+              "LABEL": "30 Days"
+            }
+          },
+          {
+            "LABEL": "Urine Output",
+            "EVENT_SET": "Urine Voided.",
+            "LOOKBACK": "144,H",
+            "MAX_RESULT_COUNT": "6",
+            "RESULTS_VIEW": {
+              "LOOKBEHIND_LABEL": ""
+            }
+          }
+        ],
+        "CONCEPT_FOR_DISMISS": "EALABMAGTODO",
+        "CONCEPTS": [],
+        "CANCEL_BUTTON": {}
+      },
+      {
+        "TAB_NAME": "Potassium",
+        "TAB_KEY": "POTASSIUM",
+        "MNEMONICS": [
+          {
+            "MNEMONIC": "Potassium Chloride - Oral & IV",
+            "ProtocolURL": "",
+            "Event_Name": ""
+          },
+          {
+            "MNEMONIC": "Potassium Chloride - Oral & IV."
+          }
+        ],
+        "CRITERIA": [
+          {
+            "LABEL": "Patient not on dialysis",
+            "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+            "DISPLAY": "",
+            "TOOLTIP": "No active dialysis order"
+          },
+          {
+            "LABEL": "Dosing Weight > 50 kg",
+            "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+            "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+            "TOOLTIP": "Dosing weight"
+          },
+          {
+            "LABEL": "No active Insulin Advisor (DKA/HHS)",
+            "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+            "DISPLAY": "",
+            "TOOLTIP": ""
+          },
+          {
+            "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+            "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+            "DISPLAY": "",
+            "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+          },
+          {
+            "LABEL": "Est Creat Clear > 30 mL/min",
+            "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+            "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min",
+            "TOOLTIP": ""
+          },
+          {
+            "LABEL": "Serum Creatinine < 2 mg/dL",
+            "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+            "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL "
+          }
+        ],
+        "ORDER_SECTIONS": [
+          {
+            "SECTION_NAME": "Replace Therapy Requires a Potassium Lab result within the past 4 hours",
+            "CONCEPT_NAME": "[%{EACRITERIAVALIDPOTRESULT4H} = 0%]",
+            "SINGLE_SELECT": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "Potassium Level",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "<span style=\"color: red;\">NOTIFY PHYSICIAN<br>CRITICALLY LOW RESULT</span> <br> Potassium - Less than 2.5 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWPOTORDERS} AND {EAPROTOCOLPOT} AND {EACRITERIAVALIDPOTRESULT4H} AND {EALABPOTBTW00AND24}%]",
+            "SINGLE_SELECT": 1,
+            "ORDERS": [
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 6 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 3 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "<span style=\"color:blue;font-weight:bold;\">If patient is not NPO, and tolerating oral medications, the recommended choice of replacement route is to be oral. </span> <br> Potassium - 2.5 - 2.9 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWPOTORDERS} AND {EAPROTOCOLPOT} AND {EACRITERIANOTNPO} AND {EACRITERIAVALIDPOTRESULT4H} AND {EALABPOTBTW25AND29}%]",
+            "SINGLE_SELECT": 1,
+            "ORDERS": [
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Tab-ER, Oral, q3H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Packet, Oral, q3H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 6 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 3 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "IV therapy only, patient has an active NPO order <br> Potassium - 2.5 - 2.9 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWPOTORDERS} AND {EAPROTOCOLPOT} AND NOT {EACRITERIANOTNPO} AND {EACRITERIAVALIDPOTRESULT4H} AND {EALABPOTBTW25AND29}%]",
+            "SINGLE_SELECT": 1,
+            "ORDERS": [
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 6 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 3 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "<span style=\"color:blue;font-weight:bold;\">If patient is not NPO, and tolerating oral medications, the recommended choice of replacement route is to be oral. </span> <br> Potassium - 3.0 - 3.4 mg/dL",
+            "CONCEPT_NAME": "[%{EALABPOTTODO} AND {EAPROTOCOLPOT} AND {EACRITERIANOTNPO} AND {EACRITERIAVALIDPOTRESULT4H} AND {EALABPOTBTW30AND34}%]",
+            "SINGLE_SELECT": 1,
+            "ORDERS": [
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "30 mEq, Tab-ER, Oral, q3H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "20 mEq, Packet, Oral, q2H Interval, Duration: 3 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 4 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "PERIPHERAL LINE"
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "<span style='color:Tomato;'>CENTRAL LINE</span>"
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "IV therapy only, patient has an active NPO order <br> Potassium - 3.0 - 3.4 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWPOTORDERS} AND {EAPROTOCOLPOT} AND NOT {EACRITERIANOTNPO} AND {EACRITERIAVALIDPOTRESULT4H} AND {EALABPOTBTW30AND34}%]",
+            "SINGLE_SELECT": 1,
+            "ORDERS": [
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 4 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "<span style=\"color:blue;font-weight:bold;\">If patient is not NPO, and tolerating oral medications, the recommended choice of replacement route is to be oral.  </span><br> Potassium - 3.5 - 3.9 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWPOTORDERS} AND {EAPROTOCOLPOT} AND {EACRITERIANOTNPO} AND {EACRITERIAVALIDPOTRESULT4H} AND {EALABPOTBTW35AND39}%]",
+            "SINGLE_SELECT": 1,
+            "ORDERS": [
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Tab-ER, Oral, Once, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Packet, Oral, Once, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "IV therapy only, patient has an active NPO order <br> Potassium - 3.5 - 3.9 mg/dL",
+            "CONCEPT_NAME": "[%{EASHOWPOTORDERS} AND {EAPROTOCOLPOT} AND NOT {EACRITERIANOTNPO} AND {EACRITERIAVALIDPOTRESULT4H} AND {EALABPOTBTW35AND39}%]",
+            "SINGLE_SELECT": 1,
+            "ORDERS": [
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer Over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "Potassium Lab Orders <br><p style=\"text-indent: 25px;\">Last Potassium Lvl Result Value:  @concept{EALABPOT.value} mg/dL</p><p style=\"text-indent: 25px;\">Last Potassium Lvl Result Date/Time: @concept{EATIMELASTPOTLVLIN.value} </p>",
+            "CONCEPT_NAME": "[%{EACRITERIAVALIDPOTRESULT4H} > 0%]",
+            "SINGLE_SELECT": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "Potassium Level",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "Potassium Level",
+                "ORDER_SENTENCE": "Blood, AM collect, T+1;0400, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule an AM collect for Potassium level"
+              },
+              {
+                "MNEMONIC": "Potassium Level",
+                "ORDER_SENTENCE": "Blood, TS collect, T;N+120, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule a Potassium level for 2 hours after replacement therapy"
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "!!!CONFIG ONLY!!!<br>Last Potassium Result:  @concept{EALABPOT.value} was resulted at @concept{EATIMELASTPOTLVLIN.value} <br>Last Potassium Level ordered:  @concept{EATIMELASTPOTLVLOUT.value} <br>Last Potassium Replacement ordered:  @concept{EATIMELASTPOTREPLACE.value} <br>",
+            "CONCEPT_NAME": "[%false%]",
+            "SINGLE_SELECT": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Tab-ER, Oral, q3H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "30 mEq, Tab-ER, Oral, q3H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Tab-ER, Oral, Once, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Cap-ER, Oral, q3H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "30 mEq, Cap-ER, Oral, q3H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Cap-ER, Oral, Once, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Packet, Oral, q3H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "30 mEq, Packet, Oral, q3H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "20 mEq, Packet, Oral, q2H Interval, Duration: 3 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride",
+                "ORDER_SENTENCE": "40 mEq, Packet, Oral, Once, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 6 Doses, First Dose: Routine, Start date: T;N, Administer over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 4 Doses, First Dose: Routine, Start date: T;N, Administer over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 10 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N, Administer over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 3 Doses, First Dose: Routine, Start date: T;N, Administer over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 2 Doses, First Dose: Routine, Start date: T;N, Administer over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "potassium chloride 20 mEq/100 mL intravenous solution",
+                "ORDER_SENTENCE": "20 mEq, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer over: 1 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "Creatinine",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "Potassium Level",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "Potassium Level",
+                "ORDER_SENTENCE": "Blood, AM collect, T+1;0400, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule an AM collect for Potassium level"
+              },
+              {
+                "MNEMONIC": "Potassium Level",
+                "ORDER_SENTENCE": "Blood, TS collect, T;N+120, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule a Potassium level for 2 hours after replacement therapy"
+              }
+            ],
+            "SHOW_INACTIVE_DUPLICATES": 0
+          }
+        ],
+        "RESOURCE_URLS": [
+          {
+            "LABEL": "Magnesium Protocol",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Magnesium Protocol v2.2.pdf"
+          },
+          {
+            "LABEL": "Potassium Protocol",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Potassium Protocol v2.2.pdf"
+          },
+          {
+            "LABEL": "Phosphorus Protocol",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Phosphorus Protocol v2.2.pdf"
+          },
+          {
+            "LABEL": "Electrolyte Protocol Flowsheet",
+            "URL": "https://uhspaeaeast.cernerworks.com/mpage-content/p152e.uhs_pa.cernerasp.com/CROSSINGS/docs/Protocols/Electrolyte/Electrolyte Flowsheet.pdf"
+          }
+        ],
+        "SUBMIT_BUTTON": {
+          "DISMISS_LABEL": "No Orders Necessary",
+          "SIGN_LABEL": "Sign Orders"
+        },
+        "FLAG_ON_CONCEPT": "[%{EALABPOTALERT}%]",
+        "GRAPHED_RESULTS": [
+          {
+            "LABEL": "Potassium Level",
+            "EVENT_SET": "TPN Potassium Serum Potassium",
+            "LOOKBACK": "144,H",
+            "RESULTS_VIEW": {
+              "LOOKBEHIND_LABEL": "Potassium Lab Results",
+              "LABEL": "30 Days"
+            },
+            "MAX_RESULT_COUNT": "6"
+          },
+          {
+            "LABEL": "Urine Output",
+            "EVENT_SET": "Urine Voided.",
+            "LOOKBACK": "144,H",
+            "MAX_RESULT_COUNT": "6",
+            "RESULTS_VIEW": {
+              "LOOKBEHIND_LABEL": ""
+            }
+          }
+        ],
+        "CONCEPT_FOR_DISMISS": "EALABPOTTODO",
+        "CONCEPTS": [],
+        "CANCEL_BUTTON": {}
+      },
+      {
+        "TAB_NAME": "Phosphate",
+        "TAB_KEY": "PHOSPHATE",
+        "MNEMONICS": [
+          {
+            "MNEMONIC": "Sodium Phosphate - Oral",
+            "ProtocolURL": "",
+            "Event_Name": ""
+          },
+          {
+            "MNEMONIC": "Sodium Phosphate - IV"
+          },
+          {
+            "MNEMONIC": "Sodium Phosphate - Oral."
+          },
+          {
+            "MNEMONIC": "Sodium Phosphate - IV."
+          }
+        ],
+        "CRITERIA": [
+          {
+            "LABEL": "Patient not on dialysis",
+            "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+            "DISPLAY": "",
+            "TOOLTIP": "No active dialysis order"
+          },
+          {
+            "LABEL": "Dosing Weight > 50 kg",
+            "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+            "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+            "TOOLTIP": "Dosing weight"
+          },
+          {
+            "LABEL": "No active Insulin Advisor (DKA/HHS)",
+            "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+            "DISPLAY": "",
+            "TOOLTIP": ""
+          },
+          {
+            "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+            "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+            "DISPLAY": "",
+            "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+          },
+          {
+            "LABEL": "Est Creat Clear > 30 mL/min",
+            "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+            "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min",
+            "TOOLTIP": ""
+          },
+          {
+            "LABEL": "Serum Creatinine < 2 mg/dL",
+            "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+            "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL"
+          }
+        ],
+        "ORDER_SECTIONS": [
+          {
+            "SECTION_NAME": "Replace Therapy Requires a Phosphorus Lab result within the past 4 hours",
+            "ORDERS": [
+              {
+                "MNEMONIC": "Phosphorus Level",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ],
+            "CONCEPT_NAME": "[%{EACRITERIAVALIDPHOSRESULT4H} = 0%]",
+            "SINGLE_SELECT": 0,
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "<span style=\"color: red;\">CONTACT PROVIDER FOR IV REPLACEMENT<br>CRITICALLY LOW RESULT</span>",
+            "CONCEPT_NAME": "[%{EASHOWPHOSORDERS} AND NOT {EAPROTOCOLPHOSIV} AND {EACRITERIAVALIDPHOSRESULT4H} AND {EALABPHOSBTW00AND09}%]",
+            "SINGLE_SELECT": 0,
+            "SHOW_INACTIVE_DUPLICATES": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "Nursing Communication",
+                "ORDER_SENTENCE": "T;N, Request IV replacement of Phosphate in Electrolyte Advisor.  Oral ordered, but IV need.  Phosphorus level is critically low.",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ]
+          },
+          {
+            "SECTION_NAME": "CONTACT PROVIDER FOR IV REPLACEMENT<br>Patient is now NPO",
+            "CONCEPT_NAME": "[%{EASHOWPHOSORDERS} AND NOT {EAPROTOCOLPHOSIV} AND {EAPROTOCOLPHOSORAL} AND {ACTIVENPODIETORDER} AND {EACRITERIAVALIDPHOSRESULT4H} AND {EALABPHOSBTW10AND20}%]",
+            "SINGLE_SELECT": 0,
+            "SHOW_INACTIVE_DUPLICATES": 0,
+            "ORDERS": [
+              {
+                "MNEMONIC": "Nursing Communication",
+                "ORDER_SENTENCE": "T;N, Request IV replacement of Phosphate in Electrolyte Advisor.  Oral ordered, but IV need.  Patient is now NPO.",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              }
+            ]
+          },
+          {
+            "SECTION_NAME": "<span style=\"color: red;\">NOTIFY PHYSICIAN<br>CRITICALLY LOW RESULT</span> <br> Phosphorus - Less Than 1.0 mg/dL",
+            "ORDERS": [
+              {
+                "MNEMONIC": "sodium phosphate",
+                "ORDER_SENTENCE": "30 mmol, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer Over: 6 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Check Phosphorus Level 6 hours post infusion and repeat replacement protocol until Phosphorus greater than 2.0 mg/dL"
+              }
+            ],
+            "CONCEPT_NAME": "[%{EASHOWPHOSORDERS} AND {EAPROTOCOLPHOSIV} AND {EACRITERIAVALIDPHOSRESULT4H} AND {EALABPHOSBTW00AND09}%]",
+            "SINGLE_SELECT": 1,
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "<span style=\"color:blue;font-weight:bold;\">If patient is not NPO, and tolerating oral medications, the recommended choice of replacement route is to be oral.  </span><br> Phosphorus - 1.0 - 2.0 mg/dL",
+            "ORDERS": [
+              {
+                "MNEMONIC": "Neutra-Phos",
+                "ORDER_SENTENCE": "2 Packets, Oral, q6H Interval, Duration: 3 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 6 packets = 48 mMol phosphorus and 42.6 mEq potassium <br> Mix contents of each packet with 75 mls of water or juice. Stir well and administer promptly. <br> Check Phosphorous Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              },
+              {
+                "MNEMONIC": "sodium phosphate",
+                "ORDER_SENTENCE": "15 mmol, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer Over: 4 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Check Phosphorous Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              }
+            ],
+            "CONCEPT_NAME": "[%{EASHOWPHOSORDERS} AND {EAPROTOCOLPHOSIV} AND {EAPROTOCOLPHOSORAL} AND {EACRITERIANOTNPO}  AND {EACRITERIAVALIDPHOSRESULT4H} AND {EALABPHOSBTW10AND20}%]",
+            "SINGLE_SELECT": 1,
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "Oral Phosphorus replacement ordered <br> Phosphorus - 1.0 - 2.0 mg/dL",
+            "ORDERS": [
+              {
+                "MNEMONIC": "Neutra-Phos",
+                "ORDER_SENTENCE": "2 Packets, Oral, q6H Interval, Duration: 3 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 6 packets = 48 mMol phosphorus and 42.6 mEq potassium <br> Mix contents of each packet with 75 mls of water or juice. Stir well and administer promptly. <br> Check Phosphorous Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              }
+            ],
+            "CONCEPT_NAME": "[%{EASHOWPHOSORDERS} AND NOT {EAPROTOCOLPHOSIV} AND {EAPROTOCOLPHOSORAL} AND {EACRITERIANOTNPO} AND {EACRITERIAVALIDPHOSRESULT4H} AND {EALABPHOSBTW10AND20}%]",
+            "SINGLE_SELECT": 1,
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "IV therapy only, or patient has an active NPO order <br> Phosphorus - 1.0 - 2.0 mg/dL",
+            "ORDERS": [
+              {
+                "MNEMONIC": "sodium phosphate",
+                "ORDER_SENTENCE": "15 mmol, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer Over: 4 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Check Phosphorous Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              }
+            ],
+            "CONCEPT_NAME": "[%{EASHOWPHOSORDERS} AND {EAPROTOCOLPHOSIV} AND (NOT {EAPROTOCOLPHOSORAL} OR NOT {EACRITERIANOTNPO}) AND {EACRITERIAVALIDPHOSRESULT4H} AND {EALABPHOSBTW10AND20}%]",
+            "SINGLE_SELECT": 1,
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "Phosphorus Lab Orders <br><p style=\"text-indent: 25px;\">Last Phosphorus Lvl Result Value:  @concept{EALABPHOS.value} mg/dL</p><p style=\"text-indent: 25px;\">Last Phosphorus Lvl Result Date/Time: @concept{EATIMELASTPHOSLVLIN.value} </p>",
+            "ORDERS": [
+              {
+                "MNEMONIC": "Phosphorus Level",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "Phosphorus Level",
+                "ORDER_SENTENCE": "Blood, AM collect, T+1;0400, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule an AM collect for Phosphorus level"
+              },
+              {
+                "MNEMONIC": "Phosphorus Level",
+                "ORDER_SENTENCE": "Blood, TS collect, T;N+240, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule a Phosphorus level for 4 hours after replacement therapy"
+              }
+            ],
+            "CONCEPT_NAME": "[%{EACRITERIAVALIDPHOSRESULT4H} > 0%]",
+            "SINGLE_SELECT": 0,
+            "SHOW_INACTIVE_DUPLICATES": 0
+          },
+          {
+            "SECTION_NAME": "!!!CONFIG ONLY!!!<br>Last Phos Level Lab ordered on:  @concept{EATIMELASTPHOSLVLOUT.value} <br>Last Phos Level Resulted:  @concept{EALABPHOS.value} mg/dL was on @concept{EATIMELASTPHOSLVLIN.value} <br>Last Phosphorus Replacement ordered on:  @concept{EATIMELASTPHOSREPLACE.value}",
+            "ORDERS": [
+              {
+                "MNEMONIC": "sodium phosphate",
+                "ORDER_SENTENCE": "30 mmol, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer over: 6 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Check Phosphorus Level 6 hours post infusion and repeat replacement protocol until Phosphorus greater than 2.0 mg/dL"
+              },
+              {
+                "MNEMONIC": "sodium phosphate",
+                "ORDER_SENTENCE": "15 mmol, Soln-IV, IV Piggyback, Once, First Dose: Routine, Start date: T;N, Administer over: 4 hr",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Check Phosphorous Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              },
+              {
+                "MNEMONIC": "Neutra-Phos",
+                "ORDER_SENTENCE": "2 Packets, Oral, q6H Interval, Duration: 3 Doses, First Dose: Routine, Start date: T;N",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Total Dose = 6 packets = 48 mMol phosphorus and 42.6 mEq potassium <br> Mix contents of each packet with 75 mls of water or juice. Stir well and administer promptly. <br> Check Phosphorous Level in AM and repeat replacement protocol daily until greater than 2.0 mg/dL"
+              },
+              {
+                "MNEMONIC": "Creatinine",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "Phosphorus Level",
+                "ORDER_SENTENCE": "Blood, ST collect, T;N, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": ""
+              },
+              {
+                "MNEMONIC": "Phosphorus Level",
+                "ORDER_SENTENCE": "Blood, AM collect, T+1;0400, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule an AM collect for Phosphorus level"
+              },
+              {
+                "MNEMONIC": "Phosphorus Level",
+                "ORDER_SENTENCE": "Blood, TS collect, T;N+240, Once",
+                "ASC_SHORT_DESCRIPTION": "",
+                "COMMENT": "Schedule a Phosphorus level for 4 hours after replacement therapy"
+              }
+            ],
+            "CONCEPT_NAME": "[%false%]",
+            "SINGLE_SELECT": 0,
+            "SHOW_INACTIVE_DUPLICATES": 0
+          }
+        ],
+        "RESOURCE_URLS": [
+          {
+            "LABEL": "Magnesium Protocol",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Magnesium Protocol v2.2.pdf"
+          },
+          {
+            "LABEL": "Potassium Protocol",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Potassium Protocol v2.2.pdf"
+          },
+          {
+            "LABEL": "Phosphorus Protocol",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Phosphorus Protocol v2.2.pdf"
+          },
+          {
+            "LABEL": "Electrolyte Protocol Flowsheet",
+            "URL": "I:\\Winintel\\static_content\\CROSSINGS\\docs\\Protocols\\Electrolyte\\Electrolyte Flowsheet.pdf"
+          }
+        ],
+        "FLAG_ON_CONCEPT": "[%{EALABPHOSALERT}%]",
+        "SUBMIT_BUTTON": {
+          "DISMISS_LABEL": "No Orders Necessary",
+          "SIGN_LABEL": "Sign Orders"
+        },
+        "GRAPHED_RESULTS": [
+          {
+            "LABEL": "Phosphorus Labs",
+            "EVENT_SET": "TPN Phosphate Serum Phosphate",
+            "LOOKBACK": "144,H",
+            "RESULTS_VIEW": {
+              "LOOKBEHIND_LABEL": "Phosphorus Lab Results",
+              "LABEL": "30 Days"
+            },
+            "MAX_RESULT_COUNT": "6"
+          },
+          {
+            "LABEL": "Urine Output",
+            "EVENT_SET": "Urine Voided.",
+            "LOOKBACK": "144,H",
+            "MAX_RESULT_COUNT": "6",
+            "RESULTS_VIEW": {
+              "LOOKBEHIND_LABEL": ""
+            }
+          }
+        ],
+        "CONCEPT_FOR_DISMISS": "EALABPHOSTODO",
+        "CONCEPTS": [],
+        "CANCEL_BUTTON": {}
+      }
+    ],
+    "CCL_POSTPROCESS": "UHS_MPG_GET_TABBED_ADVISOR",
+    "JSON_RETURN": ""
+  }
+}

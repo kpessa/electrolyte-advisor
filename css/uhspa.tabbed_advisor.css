@@ -1,0 +1,473 @@
+/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+/* Patient header */
+.patient-header {
+    background-color: #0066a4;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.patient-name {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/* Tabbed advisor container */
+.uhspa-tabbed-advisor-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Tabs */
+.uhspa-tabs-container {
+    display: flex;
+    background-color: #4682b4;
+    border-bottom: 1px solid #ccc;
+}
+
+.uhspa-tab-button {
+    padding: 10px 20px;
+    background-color: #4682b4;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.uhspa-tab-button.active {
+    background-color: white;
+    color: #333;
+    border-top: 3px solid #0066a4;
+}
+
+/* Content area */
+.uhspa-content-container {
+    display: flex;
+    min-height: 400px;
+}
+
+.uhspa-tab-content {
+    display: none;
+    width: 100%;
+}
+
+.uhspa-tab-content.active {
+    display: flex;
+}
+
+/* Left column */
+.uhspa-info-box {
+    width: 250px;
+    border-right: 1px solid #ddd;
+    padding: 10px;
+}
+
+.uhspa-header {
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.ushpa-tabbed-advisor-criteria-row {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+.ushpa-tabbed-advisor-info-icon {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+}
+
+.uhspa-icon-satisfied:before {
+    content: "✓";
+    color: green;
+}
+
+.uhspa-icon-warning:before {
+    content: "✗";
+    color: red;
+}
+
+/* Right column */
+.uhspa-order-container {
+    flex: 1;
+    padding: 10px;
+}
+
+.uhspa-order-header {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.uhspa-order-item {
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+.uhspa-button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.uhspa-tabbed-advisor-cancel-button,
+.uhspa-tabbed-advisor-submit-button {
+    padding: 8px 15px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.uhspa-tabbed-advisor-submit-button {
+    background-color: #4682b4;
+    color: white;
+}
+
+/* Utility classes */
+.uhspa-bold {
+    font-weight: bold;
+}
+
+.uhspa-uom {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Base layout elements */
+.ushpa-tabbed-advisor-clear-element{
+  clear:both;
+}
+
+.uhspa-tabbed-advisor-tab-container{
+  height: 90vh;
+  overflow-y: auto !important;
+}
+
+.uhspa-tabbed-advisor .uhspa-header{
+  font-size: 1.5em;
+}
+
+/* Column layout */
+.ushpa-tabbed-advisor-info-column {
+  float: left;
+  width: 25%;
+}
+
+.ushpa-tabbed-advisor-main-column {
+  float: left;
+  width: 75%;
+}
+
+/* Info box styling */
+.ushpa-tabbed-advisor-info-box {
+  margin: .25em;
+  padding: .25em;
+  border: 1px solid steelblue;
+  overflow: hidden;
+}
+
+.ushpa-tabbed-advisor-header {
+  border-bottom: 1px solid black;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+/* Link styling */
+.uhspa-tabbed-advisor .uhspa-link{
+  font-size: 1.1em;
+}
+
+.uhspa-tabbed-advisor .uhspa-link:hover{
+  color: steelblue;
+}
+
+.ushpa-tabbed-advisor-normal-text{
+  font-size: 1.1em !important;
+}
+
+.ushpa-tabbed-advisor-normal-text:hover{
+  color: steelblue;
+}
+
+/* Criteria row styling */
+.ushpa-tabbed-advisor-criteria-row{
+  display: block;
+}
+
+.ushpa-tabbed-advisor-criteria-text{
+  display: inline-block;
+  vertical-align: top;
+  min-width: 180px;
+  width: 65%;
+}
+
+.ushpa-tabbed-advisor-criteria-result{
+  display: inline-block;
+  vertical-align: top;
+  height: 20px;
+  min-width: 50px;
+  width: 25%;
+  text-align: right;
+}
+
+.uhspa-tabbed-advisor-criteria-failure-text{
+  color: steelblue;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/* Button styling */
+.uhspa-tabbed-advisor-submit-button{
+  float: right;
+  color: steelblue;
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 1px;
+  margin-left: 5px;
+}
+
+.uhspa-tabbed-advisor-submit-button:hover{
+  color: steelblue;
+}
+ 
+.uhspa-tabbed-advisor-cancel-button{
+  float: right;
+  color: steelblue;
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 1px;
+  margin-left: 5px;
+}
+
+.uhspa-tabbed-advisor-cancel-button:hover{
+  color: steelblue;
+}
+
+/* Text styling */
+.ushpa-tabbed-advisor-tiny-text{
+  display: inline-block;
+  margin-top:1em;
+  font-size:.9em;
+}
+
+.uhspa-tabbed-advisor .uhspa-uom{
+  font-size: 1em;
+}
+
+/* Order styling */
+.ushpa-tabbed-advisor-order-mne{
+  display: inline;
+  margin-left: 5px;
+}
+
+.ushpa-tabbed-advisor-order-detail-text{
+  display: block;
+  font-size: 1em;
+  vertical-align: top;
+  font-weight: normal;
+  padding-left: 19px;
+  text-indent: -19px; /* Fixed property name from 'indent' to 'text-indent' */
+}
+
+.uhspa-tabbed-advisor .ushpa-tabbed-advisor-order-comment{
+  padding-left: 19px;
+  text-indent: -19px; /* Fixed property name */
+}
+
+/* Warning icons */
+.uhspa-tabbed-advisor-dup-warning{
+  display: inline-block;
+  vertical-align: top;
+  height: 16px;
+  width: 20px;
+}
+
+.uhspa-tabbed-advisor-dup-warning.ui-icon{
+  display: inline-block;
+  vertical-align: top;
+  height: 20px;
+  min-width: 16px;
+  width: 5%;
+}
+
+/* Tooltip styling */
+.uhspa-tabbed-advisor-tooltip{
+  font-size: .9em;
+  background-color: #CFDEEC;
+  cursor: pointer;
+  border: 1px solid lightgray;
+}
+
+/* Last reviewed styling */
+.uhspa-tabbed-advisor-last-reviewed{
+  font-size: 1.1em;
+  text-align: right;
+}
+
+.uhspa-tabbed-advisor-last-reviewed-over-24h{
+  color: red;
+}
+
+/* Utility classes */
+.uhspa-tabbed-advisor-tight{
+  display: inline-block;
+  width: 5em;
+}
+
+.uhspa-tabbed-advisor-spark-container{
+  display: inline-block;
+  width: 5em;
+  float: left;
+  margin-right: 10px;
+}
+
+/* Busy screen style */
+.uhspa-tabbed_advisor.uhspa-busy-screen{
+  min-height: 210px;
+  height: 100% !important;
+  border: 0px !important;
+  border-radius: 0px !important;
+}
+
+.uhspa-tabbed_advisor.uhspa-busy-screen .uhspa-busy-screen-text{
+  border-radius: 0px !important;
+  background: rgba(70, 130, 180, 0.87) !important;
+  font-size: medium !important;
+}
+
+/* Modern tab container styling */
+.uhspa-tabbed-advisor-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.uhspa-tabs-container {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+
+.uhspa-tab-button {
+  padding: 10px 15px;
+  cursor: pointer;
+  background-color: #f1f1f1;
+}
+
+.uhspa-tab-button.active {
+  background-color: #ccc;
+}
+
+/* Styles from uhspa.tabbed_advisor.txt */
+.ushpa-tabbed-advisor-clear-element {
+  clear: both;
+}
+
+.uhspa-tabbed-advisor-tab-container {
+  height: 90vh;
+  overflow-y: auto !important;
+}
+
+.uhspa-tabbed-advisor .uhspa-header {
+  font-size: 1.5em;
+}
+
+.ushpa-tabbed-advisor-info-column {
+  float: left;
+  width: 25%;
+}
+
+.ushpa-tabbed-advisor-main-column {
+  float: left;
+  width: 75%;
+}
+
+.ushpa-tabbed-advisor-info-box {
+  margin: .25em;
+  padding: .25em;
+  border: 1px solid steelblue;
+  overflow: hidden;
+}
+
+.ushpa-tabbed-advisor-header {
+  border-bottom: 1px solid black;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.uhspa-tabbed-advisor .uhspa-link {
+  font-size: 1.1em;
+}
+
+.uhspa-tabbed-advisor .uhspa-link:hover {
+  color: steelblue;
+}
+
+.ushpa-tabbed-advisor-criteria-row {
+  display: block;
+}
+
+.ushpa-tabbed-advisor-info-icon {
+  display: inline-block;
+  vertical-align: top;
+  height: 20px;
+  min-width: 16px;
+  width: 5%;
+}
+
+.ushpa-tabbed-advisor-criteria-text {
+  display: inline-block;
+  vertical-align: top;
+  min-width: 180px;
+  width: 65%;
+}
+
+.ushpa-tabbed-advisor-criteria-result {
+  display: inline-block;
+  vertical-align: top;
+  height: 20px;
+  min-width: 50px;
+  width: 25%;
+  text-align: right;
+}
+
+.uhspa-icon-satisfied {
+  background-image: url('../../images/4022_16.png');
+}
+
+.uhspa-icon-warning {
+  background-image: url('../../images/4017_16.png');
+}
+
+.uhspa-icon {
+  display: inline-block;
+  width: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.uhspa-uom {
+  font-size: .8em;
+  color: grey;
+}
+
+.uhspa-bold {
+  font-weight: bold;
+} 

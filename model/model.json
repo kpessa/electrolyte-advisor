@@ -1,0 +1,329 @@
+{
+    "type": "object",
+    "value": {
+      "RCONFIG": {
+        "type": "object",
+        "value": {
+          "TABS": {
+            "type": "array",
+            "value": {
+              "TAB_NAME": {
+                "type": "string",
+                "ui": {
+                  "type": "text",
+                  "label": "Tab Label",
+                  "hint": "Potassium, Magnesium, etc."
+                }
+              },
+              "TAB_KEY": {
+                "ui": {
+                  "type": "none",
+                  "label": "Tab Key",
+                  "hint": "Key of the tab - used by CCL"
+                }
+              },
+              "FLAG_ON_CONCEPT": {
+                "ui": {
+                  "type": "conceptExpression",
+                  "label": "Tab Alert Concept",
+                  "hint": "You can search for a concept name by typing <b>{</b> and then starting to type the concept name in CAPS.<br>If the patient has this concept, the tab will indicate that attention is needed."
+                }
+              },
+              "CONCEPT_FOR_DISMISS": {
+                "type": "string",
+                "value": "",
+                "ui": {
+                  "type": "select",
+                  "label": "Concept to remove on Sign/Dismiss",
+                  "hint": "If a concept is entered here, it will removed when the user takes a sign or dismiss action. Leave blank for no action.",
+                  "options": "component.concept.existing_atomic_concepts()",
+                  "name_eval": "option.CONCEPT_NAME_KEY",
+                  "value_eval": "option.CONCEPT_NAME_KEY"
+                }
+              },
+              "MNEMONICS": {
+                "type": "array",
+                "value": {
+                  "MNEMONIC": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Protocol Mnemonic",
+                      "hint": "The mnemonic of the protocol for use in the advisor"
+                    }
+                  },
+                  "ProtocolURL": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Protocol url",
+                      "hint": "URL to the protocol document source"
+                    }
+                  },
+                  "Event_Name": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Event Name",
+                      "hint": "Event name to document"
+                    }
+                  }
+                }
+              },
+              "CONCEPTS": {
+                "type": "array",
+                "value": {
+                  "Concept": {
+                    "ui": {
+                      "type": "conceptExpression",
+                      "label": "Tab Concept",
+                      "hint": "You can search for a concept name by typing <b>{</b> and then starting to type the concept name in CAPS.<br>Qualifying for the concept will display the tab"
+                    }
+                  }
+                }
+              },
+              "CRITERIA": {
+                "type": "array",
+                "label": "Criteria Based Medications",
+                "value": {
+                  "LABEL": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Label",
+                      "hint": "Label that will display in the advisor's criteria segment."
+                    }
+                  },
+                  "CONCEPT_NAME": {
+                    "ui": {
+                      "type": "conceptExpression",
+                      "label": "Qualifying Concept",
+                      "hint": "You can search for a concept name by typing <b>{</b> and then starting to type the concept name in CAPS.<br>Qualifying for the concept will display a checkmark next to the criteria on the advisor."
+                    }
+                  },
+                  "DISPLAY": {
+                    "ui": {
+                      "type": "triggeredAutocomplete",
+                      "label": "Value",
+                      "hint": "You can search for a concept name by typing <b>@concept</b> and then starting to type the concept name.<br>Concept to display the value next to the criteria on the advisor.",
+                      "source": "component.object_model.auto_replace_options",
+                      "trigger": "@"
+                    },
+                    "type": "string",
+                    "value": ""
+                  },
+                  "VALUE": {
+                    "ui": {
+                      "type": "none",
+                      "label": "Display Value",
+                      "hint": "Default value to show on satisfied criteria."
+                    }
+                  },
+                  "TOOLTIP": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Hover Text",
+                      "hint": "What do you want to display on hover of a criteria?"
+                    }
+                  }
+                }
+              },
+              "GRAPHED_RESULTS": {
+                "type": "array",
+                "value": {
+                  "LABEL": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Label",
+                      "hint": "Header label for this section. Defaults to Displayed Results if nothing is entered."
+                    }
+                  },
+                  "EVENT_SET": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Event Set",
+                      "hint": "The event set that will contain the data you want displayed on the left side of the advisor. <b>Must use a parent event set.</b> Good: mPages Magnesium Level. Bad: Magnesium Lvl"
+                    }
+                  },
+                  "LOOKBACK": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Lookback",
+                      "hint": "How far back do you want results from? <b>Format: 2,H</b>"
+                    }
+                  },
+                  "MAX_RESULT_COUNT": {
+                    "ui": {
+                      "type": "number",
+                      "label": "Max Results",
+                      "hint": "What is the max number of results you want to see graphed?"
+                    }
+                  },
+                  "RESULTS_VIEW": {
+                    "type": "object",
+                    "value": {
+                      "LABEL": {
+                        "ui": {
+                          "type": "text",
+                          "label": "Label",
+                          "hint": "Header label for this section. Defaults to Displayed Results if nothing is entered."
+                        }
+                      },
+                      "LOOKBEHIND_LABEL": {
+                        "type": "string",
+                        "ui": {
+                          "type": "text",
+                          "label": "Lookback Label",
+                          "hint": "This label shows on the report to indicate the lookback used."
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "ORDER_SECTIONS": {
+                "type": "array",
+                "value": {
+                  "SECTION_NAME": {
+                    "type": "string",
+                    "ui": {
+                      "type": "text",
+                      "label": "Section Name",
+                      "hint": "Medications, Labs, Physician Notification, etc."
+                    }
+                  },
+                  "CONCEPT_NAME": {
+                    "ui": {
+                      "type": "conceptExpression",
+                      "label": "Show on Concept",
+                      "hint": "You can search for a concept name by typing <b>{</b> and then starting to type the concept name in CAPS.<br>These orders will only display in the advisor if the patient is in the configured concept."
+                    }
+                  },
+                  "SINGLE_SELECT": {
+                    "type": "number",
+                    "ui": {
+                      "type": "checkbox",
+                      "label": "Single Select",
+                      "hint": "Can the user pick multiple orders or just one from this section?",
+                      "checked_value": 1,
+                      "unchecked_value": 0
+                    }
+                  },
+                  "SHOW_INACTIVE_DUPLICATES": {
+                    "type": "number",
+                    "ui": {
+                      "type": "checkbox",
+                      "label": "Include Inactive Duplicates?",
+                      "hint": "When checking for duplicate orders, should we also include complete/done orders? Default: No",
+                      "checked_value": 1,
+                      "unchecked_value": 0
+                    }
+                  },
+                  "ORDERS": {
+                    "type": "array",
+                    "value": {
+                      "MNEMONIC": {
+                        "type": "string",
+                        "ui": {
+                          "type": "text",
+                          "label": "Mnemonic",
+                          "hint": "The mnemonic of an order."
+                        }
+                      },
+                      "ORDER_SENTENCE": {
+                        "type": "string",
+                        "ui": {
+                          "type": "text",
+                          "label": "Order Sentence",
+                          "hint": "Is there a specific order sentence you want used?"
+                        }
+                      },
+                      "ASC_SHORT_DESCRIPTION": {
+                        "type": "string",
+                        "ui": {
+                          "type": "text",
+                          "label": "Alt_Sel_Cat Short Description",
+                          "hint": "Pick order sentence from<br>this grouper<br>blank = not in ASC group"
+                        }
+                      },
+                      "COMMENT": {
+                        "type": "string",
+                        "ui": {
+                          "type": "text",
+                          "label": "Instructions/Note",
+                          "hint": "Instruction(s)/comment(s) for the user that display below this order in the advisor<br><b>DOES NOT CARRY OVER TO THE ORDER</b><br>use #ORDER_COMMENT#<br>to retrieve from sentence's order comment"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "RESOURCE_URLS": {
+                "type": "array",
+                "value": {
+                  "LABEL": {
+                    "type": "string",
+                    "ui": {
+                      "type": "text",
+                      "label": "URL Label",
+                      "hint": "This shows in place of the actual URL."
+                    }
+                  },
+                  "URL": {
+                    "type": "string",
+                    "ui": {
+                      "type": "text",
+                      "label": "Resource URL",
+                      "hint": "Web address to an external resource."
+                    }
+                  }
+                }
+              },
+              "SUBMIT_BUTTON": {
+                "type": "object",
+                "label": "Submit Button Labels",
+                "value": {
+                  "DISMISS_LABEL": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Dismiss Label",
+                      "hint": "Label on the submit button when the user is dismissing/taking no action on a tab."
+                    }
+                  },
+                  "SIGN_LABEL": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Sign Label",
+                      "hint": "Label on the submit button when the user is signing/taking action on a tab."
+                    }
+                  }
+                }
+              },
+              "CANCEL_BUTTON": {
+                "type": "object",
+                "label": "Cancel Button Labels",
+                "value": {
+                  "CANCEL_LABEL": {
+                    "ui": {
+                      "type": "text",
+                      "label": "Cancel Label"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "CCL_POSTPROCESS": {
+            "ui": {
+              "type": "none"
+            },
+            "type": "string",
+            "value": "UHS_MPG_GET_TABBED_ADVISOR"
+          },
+          "JSON_RETURN": {
+            "ui": {
+              "type": "none"
+            },
+            "type": "string",
+            "value": ""
+          }
+        }
+      }
+    }
+  }

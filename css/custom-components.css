@@ -1,0 +1,174 @@
+/* Custom styles to match the screenshot */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Patient header */
+.patient-header {
+    background-color: #2b6ca3;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.patient-name {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.patient-details {
+    margin-top: 5px;
+}
+
+/* Tabs */
+.uhspa-tabs-container {
+    display: flex;
+    background-color: #2b6ca3;
+}
+
+.uhspa-tab-button {
+    padding: 10px 20px;
+    background-color: #2b6ca3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.uhspa-tab-button.active {
+    background-color: white;
+    color: #333;
+}
+
+/* Content wrapper */
+.content-wrapper {
+    display: flex;
+    border: 1px solid #ccc;
+    background-color: white;
+}
+
+/* Left column */
+.uhspa-info-container {
+    width: 30%;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+}
+
+/* Right column */
+.uhspa-order-container {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Info sections */
+.info-section {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.info-header {
+    font-weight: bold;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #000;
+}
+
+/* Criteria */
+.criterion {
+    margin: 5px 0;
+    display: flex;
+}
+
+.check-icon {
+    color: green;
+    margin-right: 5px;
+}
+
+.criterion-label {
+    flex-grow: 1;
+}
+
+.criterion-value {
+    color: #666;
+}
+
+/* Resources */
+.resources-list {
+    margin-top: 5px;
+}
+
+.resource-link {
+    margin: 3px 0;
+}
+
+/* Order section */
+.order-section {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.order-section-header {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.orders-list {
+    margin-top: 10px;
+}
+
+.order-item {
+    margin: 10px 0;
+}
+
+.order-details {
+    margin-left: 25px;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.order-comment {
+    margin-left: 25px;
+    font-style: italic;
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Button container */
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    margin-top: auto;
+}
+
+.cancel-button {
+    padding: 8px 15px;
+    margin-right: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.submit-button {
+    padding: 8px 15px;
+    background-color: #2b6ca3;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Links */
+.uhspa-link {
+    color: #0066a4;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.uhspa-link:hover {
+    text-decoration: underline;
+}
