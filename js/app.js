@@ -4,7 +4,7 @@ $(document).ready(function() {
     $.getJSON('config/config.json', function(config) {
         initializeAdvisor(config);
     }).fail(function() {
-        console.error("Failed to load configuration");
+        $('body').append('<div class="error-message">Failed to load configuration.</div>');
     });
 
     function initializeAdvisor(config) {
@@ -23,14 +23,18 @@ $(document).ready(function() {
         // Create tabs
         tabs.forEach((tab, index) => {
             const tabButton = $(`<div class="uhspa-tab-button" data-tab-key="${tab.TAB_KEY}">${tab.TAB_NAME}</div>`);
-            if (tab.TAB_KEY === "PHOSPHATE") { // Default to Phosphate tab
+            // Default to first tab or Phosphate tab if it exists
+            if (index === 0 || tab.TAB_KEY === "PHOSPHATE") {
                 tabButton.addClass('active');
             }
             tabButton.appendTo(tabsContainer);
         });
         
-        // Create tab content
-        const activeTab = tabs.find(tab => tab.TAB_KEY === "PHOSPHATE");
+        // Create tab content for the active tab
+        const activeTabButton = $('.uhspa-tab-button.active');
+        const activeTabKey = activeTabButton.data('tab-key');
+        const activeTab = tabs.find(tab => tab.TAB_KEY === activeTabKey) || tabs[0];
+        
         renderTabContent(activeTab, contentWrapper);
         
         // Add tab click handlers
@@ -74,71 +78,56 @@ $(document).ready(function() {
         // Create left column (info container)
         const infoContainer = $('<div class="uhspa-info-container"></div>').appendTo(container);
         
+        // Ordered By section
+        const orderedBySection = $('<div class="info-section"></div>').appendTo(infoContainer);
+        $('<div class="info-header">Ordered By</div>').appendTo(orderedBySection);
+        $('<div>Pessa PharmD, Kurt</div>').appendTo(orderedBySection);
+        
+        // Criteria section
+        const criteriaSection = $('<div class="info-section"></div>').appendTo(infoContainer);
+        $('<div class="info-header">Criteria</div>').appendTo(criteriaSection);
+        
+        // Add criteria items from the tab configuration
+        if (tab.CRITERIA && tab.CRITERIA.length > 0) {
+            tab.CRITERIA.forEach(criterion => {
+                // In a real app, we would evaluate CONCEPT_NAME to determine if criteria is met
+                // For this demo, we'll show all criteria as satisfied
+                addCriterionItem(criteriaSection, criterion.LABEL, criterion.DISPLAY.replace('@concept{WEIGHTDOSING.value}', '70')
+                    .replace('@concept{EACRITERIACREATININECLEARANCE.value}', '138.61')
+                    .replace('@concept{EACRITERIASERUMCREATININE.value}', '0.500'));
+            });
+        }
+        
+        // Phosphorus Labs section (or equivalent for the tab)
+        const labsSection = $('<div class="info-section"></div>').appendTo(infoContainer);
+        $(`<div class="info-header">${tab.TAB_NAME} Labs</div>`).appendTo(labsSection);
+        $('<div>No Results Found</div>').appendTo(labsSection);
+        
+        // Urine Output section
+        const urineOutputSection = $('<div class="info-section"></div>').appendTo(infoContainer);
+        $('<div class="info-header">Urine Output</div>').appendTo(urineOutputSection);
+        $('<div>No Results Found</div>').appendTo(urineOutputSection);
+        
+        // Additional Resources section
+        renderResourcesSection(tab, infoContainer);
+        
         // Create right column (order container)
         const orderContainer = $('<div class="uhspa-order-container"></div>').appendTo(container);
         
-        // Render left column sections
-        renderOrderedBySection(infoContainer);
-        renderCriteriaSection(tab, infoContainer);
-        renderLabsSection(tab, infoContainer);
-        renderResourcesSection(tab, infoContainer);
-        
-        // Render right column sections
+        // Render order sections
         renderOrderSections(tab, orderContainer);
         
         // Add buttons
         renderButtons(tab, orderContainer);
     }
     
-    function renderOrderedBySection(container) {
-        const section = $('<div class="info-section"></div>').appendTo(container);
-        $('<div class="info-header">Ordered By</div>').appendTo(section);
-        $('<div>Pessa PharmD, Kurt</div>').appendTo(section);
-    }
-    
-    function renderCriteriaSection(tab, container) {
-        const section = $('<div class="info-section"></div>').appendTo(container);
-        $('<div class="info-header">Criteria</div>').appendTo(section);
-        
-        // Add criteria items from config
-        if (tab.CRITERIA) {
-            tab.CRITERIA.forEach(criterion => {
-                const criterionRow = $('<div class="criterion"></div>').appendTo(section);
-                $('<span class="check-icon">✓</span>').appendTo(criterionRow);
-                
-                const labelSpan = $('<span class="criterion-label"></span>').text(criterion.LABEL);
-                labelSpan.appendTo(criterionRow);
-                
-                if (criterion.DISPLAY) {
-                    // Extract the value from the DISPLAY field
-                    // In a real app, this would be populated from actual patient data
-                    let displayValue = criterion.DISPLAY;
-                    
-                    // For demo purposes, use the values from the screenshot
-                    if (criterion.LABEL.includes("Dosing Weight")) {
-                        displayValue = "70 kg";
-                    } else if (criterion.LABEL.includes("Est Creat Clear")) {
-                        displayValue = "138.61 mL/min";
-                    } else if (criterion.LABEL.includes("Serum Creatinine")) {
-                        displayValue = "0.500 mg/dL";
-                    }
-                    
-                    $('<span class="criterion-value"></span>').text(displayValue).appendTo(criterionRow);
-                }
-            });
+    function addCriterionItem(container, label, value) {
+        const criterion = $('<div class="criterion"></div>').appendTo(container);
+        $('<span class="check-icon">✓</span>').appendTo(criterion);
+        $('<span class="criterion-label">' + label + '</span>').appendTo(criterion);
+        if (value && value.trim() !== '') {
+            $('<span class="criterion-value">' + value + '</span>').appendTo(criterion);
         }
-    }
-    
-    function renderLabsSection(tab, container) {
-        // Phosphorus Labs section
-        const phosphorusLabsSection = $('<div class="info-section"></div>').appendTo(container);
-        $('<div class="info-header">Phosphorus Labs</div>').appendTo(phosphorusLabsSection);
-        $('<div>No Results Found</div>').appendTo(phosphorusLabsSection);
-        
-        // Urine Output section
-        const urineOutputSection = $('<div class="info-section"></div>').appendTo(container);
-        $('<div class="info-header">Urine Output</div>').appendTo(urineOutputSection);
-        $('<div>No Results Found</div>').appendTo(urineOutputSection);
     }
     
     function renderResourcesSection(tab, container) {
@@ -156,35 +145,40 @@ $(document).ready(function() {
     
     function renderOrderSections(tab, container) {
         if (tab.ORDER_SECTIONS && tab.ORDER_SECTIONS.length > 0) {
-            // Find the first visible order section based on the screenshot
-            // In a real app, this would be determined by evaluating CONCEPT_NAME
-            const visibleSection = tab.ORDER_SECTIONS.find(section => 
-                section.SECTION_NAME.includes("Replace Therapy Requires a Phosphorus Lab"));
-            
-            if (visibleSection) {
+            tab.ORDER_SECTIONS.forEach(section => {
+                // In a real app, we would evaluate CONCEPT_NAME to determine if section should be shown
+                // For this demo, we'll show all sections
+                
                 const orderSection = $('<div class="order-section"></div>').appendTo(container);
-                $(`<div class="order-section-header">${visibleSection.SECTION_NAME}</div>`).appendTo(orderSection);
+                $(`<div class="order-section-header">${section.SECTION_NAME}</div>`).appendTo(orderSection);
                 
-                const ordersList = $('<div class="orders-list"></div>').appendTo(orderSection);
-                
-                visibleSection.ORDERS.forEach(order => {
-                    const orderItem = $('<div class="order-item"></div>').appendTo(ordersList);
+                if (section.ORDERS && section.ORDERS.length > 0) {
+                    const ordersList = $('<div class="orders-list"></div>').appendTo(orderSection);
                     
-                    const checkbox = $(`<input type="checkbox" id="order-${order.MNEMONIC.replace(/\s+/g, '-')}" class="order-checkbox">`);
-                    checkbox.appendTo(orderItem);
-                    
-                    const label = $(`<label for="order-${order.MNEMONIC.replace(/\s+/g, '-')}">${order.MNEMONIC}</label>`);
-                    label.appendTo(orderItem);
-                    
-                    if (order.ORDER_SENTENCE) {
-                        $(`<div class="order-details">${order.ORDER_SENTENCE}</div>`).appendTo(orderItem);
-                    }
-                    
-                    if (order.COMMENT) {
-                        $(`<div class="order-comment">${order.COMMENT}</div>`).appendTo(orderItem);
-                    }
-                });
-            }
+                    section.ORDERS.forEach(order => {
+                        const orderItem = $('<div class="order-item"></div>').appendTo(ordersList);
+                        
+                        const checkboxId = `order-${order.MNEMONIC.replace(/\s+/g, '-')}-${Math.random().toString(36).substring(2, 8)}`;
+                        const checkbox = $(`<input type="checkbox" id="${checkboxId}" class="order-checkbox">`);
+                        checkbox.appendTo(orderItem);
+                        
+                        const label = $(`<label for="${checkboxId}">${order.MNEMONIC}</label>`);
+                        label.appendTo(orderItem);
+                        
+                        if (order.ORDER_SENTENCE) {
+                            $(`<div class="order-details">${order.ORDER_SENTENCE}</div>`).appendTo(orderItem);
+                        }
+                        
+                        if (order.COMMENT) {
+                            $(`<div class="order-comment">${order.COMMENT}</div>`).appendTo(orderItem);
+                        }
+                    });
+                } else {
+                    $('<div class="no-orders">No orders available</div>').appendTo(orderSection);
+                }
+            });
+        } else {
+            $('<div class="no-orders-message">No order sections available for this tab.</div>').appendTo(container);
         }
     }
     
