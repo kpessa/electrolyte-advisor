@@ -2,53 +2,45 @@
 $(document).ready(function() {
     // Load configuration
     $.getJSON('config/config.json', function(config) {
+        // Store the default configuration globally
+        window.defaultConfig = JSON.parse(JSON.stringify(config));
+        window.currentConfig = config;
+        
         initializeAdvisor(config);
     }).fail(function() {
         $('body').append('<div class="error-message">Failed to load configuration.</div>');
     });
 
+    // Make initializeAdvisor globally accessible
+    window.initializeAdvisor = initializeAdvisor;
+
     function initializeAdvisor(config) {
-        const rconfig = config.RCONFIG;
-        const tabs = rconfig.TABS;
+        // If no config is provided, use the current config
+        if (!config) {
+            config = window.currentConfig;
+        }
         
-        // Create patient header
-        createPatientHeader();
-        
-        // Create tab container
-        const tabsContainer = $('<div class="uhspa-tabs-container"></div>').appendTo('body');
-        
-        // Create content wrapper
-        const contentWrapper = $('<div class="content-wrapper"></div>').appendTo('body');
-        
-        // Create tabs
-        tabs.forEach((tab, index) => {
-            const tabButton = $(`<div class="uhspa-tab-button" data-tab-key="${tab.TAB_KEY}">${tab.TAB_NAME}</div>`);
-            // Default to first tab or Phosphate tab if it exists
-            if (index === 0 || tab.TAB_KEY === "PHOSPHATE") {
-                tabButton.addClass('active');
+        try {
+            // Create a mock CCL response based on the configuration
+            var cclResponse = createCCLResponse(config);
+            
+            // Set the configuration for the advisor
+            $("#advisor-container").empty();
+            
+            // Add the CCL response to the configuration
+            if (typeof cclResponse === 'object') {
+                config.RCONFIG.JSON_RETURN = JSON.stringify(cclResponse);
+            } else {
+                config.RCONFIG.JSON_RETURN = cclResponse;
             }
-            tabButton.appendTo(tabsContainer);
-        });
-        
-        // Create tab content for the active tab
-        const activeTabButton = $('.uhspa-tab-button.active');
-        const activeTabKey = activeTabButton.data('tab-key');
-        const activeTab = tabs.find(tab => tab.TAB_KEY === activeTabKey) || tabs[0];
-        
-        renderTabContent(activeTab, contentWrapper);
-        
-        // Add tab click handlers
-        $('.uhspa-tab-button').click(function() {
-            $('.uhspa-tab-button').removeClass('active');
-            $(this).addClass('active');
             
-            const tabKey = $(this).data('tab-key');
-            const selectedTab = tabs.find(tab => tab.TAB_KEY === tabKey);
+            // Render the advisor using the existing rendering functions
+            renderAdvisor(config, cclResponse);
             
-            // Clear and render new content
-            contentWrapper.empty();
-            renderTabContent(selectedTab, contentWrapper);
-        });
+        } catch (error) {
+            console.error("Error initializing advisor:", error);
+            $("#advisor-container").html("<div class='error'>Error initializing advisor: " + error.message + "</div>");
+        }
     }
     
     function createPatientHeader() {
@@ -203,51 +195,58 @@ $(document).ready(function() {
             }
         });
     }
-});
 
-// Initialize the electrolyte advisor
-function initializeAdvisor() {
-    try {
-        // Create a mock CCL response based on the configuration
-        var cclResponse = createCCLResponse(window.currentConfig);
-        console.log("CCL Response:", cclResponse);
+    // Helper function to render the advisor
+    function renderAdvisor(config, cclResponse) {
+        // Create patient header
+        createPatientHeader();
         
-        // Set the configuration for the advisor
-        var advisor = new uhspa.tabbed_advisor({
-            target: "#advisor-container",
-            config_key: "ELECTROLYTE_ADVISOR"
+        // Get tabs from config
+        const rconfig = config.RCONFIG;
+        const tabs = rconfig.TABS;
+        
+        // Create tab container
+        const tabsContainer = $('<div class="uhspa-tabs-container"></div>').appendTo('#advisor-container');
+        
+        // Create content wrapper
+        const contentWrapper = $('<div class="content-wrapper"></div>').appendTo('#advisor-container');
+        
+        // Create tabs
+        tabs.forEach((tab, index) => {
+            const tabButton = $(`<div class="uhspa-tab-button" data-tab-key="${tab.TAB_KEY}">${tab.TAB_NAME}</div>`);
+            // Default to first tab or Phosphate tab if it exists
+            if (index === 0 || tab.TAB_KEY === "PHOSPHATE") {
+                tabButton.addClass('active');
+            }
+            tabButton.appendTo(tabsContainer);
         });
         
-        // Set the configuration object
-        advisor.config.object = window.currentConfig;
+        // Create tab content for the active tab
+        const activeTabButton = $('.uhspa-tab-button.active');
+        const activeTabKey = activeTabButton.data('tab-key');
+        const activeTab = tabs.find(tab => tab.TAB_KEY === activeTabKey) || tabs[0];
         
-        // Add the CCL response to the configuration
-        if (typeof cclResponse === 'object') {
-            window.currentConfig.RCONFIG.JSON_RETURN = JSON.stringify(cclResponse);
-        } else {
-            window.currentConfig.RCONFIG.JSON_RETURN = cclResponse;
-        }
+        renderTabContent(activeTab, contentWrapper);
         
-        // Directly set the tab data for rendering (as a backup)
-        if (cclResponse && cclResponse.RREC && cclResponse.RREC.TAB) {
-            advisor.tabData = cclResponse.RREC.TAB;
-        }
-        
-        // Render the advisor
-        advisor.makeItSo();
-    } catch (error) {
-        console.error("Error initializing advisor:", error);
-        $("#advisor-container").html("<div class='error'>Error initializing advisor: " + error.message + "</div>");
+        // Add tab click handlers
+        $('.uhspa-tab-button').click(function() {
+            $('.uhspa-tab-button').removeClass('active');
+            $(this).addClass('active');
+            
+            const tabKey = $(this).data('tab-key');
+            const selectedTab = tabs.find(tab => tab.TAB_KEY === tabKey);
+            
+            // Clear and render new content
+            contentWrapper.empty();
+            renderTabContent(selectedTab, contentWrapper);
+        });
     }
-}
+});
 
 // Create a mock CCL response based on the configuration
 function createCCLResponse(config) {
-    console.log("Creating CCL response with config:", config);
-    
     // Check if config has the expected structure
     if (!config || !config.RCONFIG || !config.RCONFIG.TABS) {
-        console.error("Invalid configuration structure:", config);
         return {
             RREC: {
                 STATUS_DATA: {
@@ -445,6 +444,5 @@ function createCCLResponse(config) {
         response.RREC.TAB.push(tabObj);
     });
     
-    console.log("Created CCL response:", response);
     return response;
 } 
