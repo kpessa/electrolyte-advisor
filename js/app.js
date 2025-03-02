@@ -7,6 +7,12 @@ $(document).ready(function() {
         window.currentConfig = config;
         
         initializeAdvisor(config);
+        
+        // Position the Edit Configuration button on the left side
+        $('#toggle-editor-btn').css({
+            'left': '20px',
+            'right': 'auto'  // Remove the right positioning
+        });
     }).fail(function() {
         $('body').append('<div class="error-message">Failed to load configuration.</div>');
     });
@@ -85,10 +91,11 @@ $(document).ready(function() {
         const criteriaSection = $('<div class="info-section criteria-section-container"></div>').appendTo(infoContainer);
         const criteriaHeader = $('<div class="info-header">Criteria</div>').appendTo(criteriaSection);
         
-        // Add edit button to criteria header
+        // Add edit button to criteria header - now positioned back on the right
         const editButton = $('<button class="edit-criteria-button">Edit</button>');
         editButton.css({
             'float': 'right',
+            'margin-left': '10px',
             'margin-top': '-2px',
             'font-size': '11px',
             'padding': '2px 8px',
@@ -106,6 +113,7 @@ $(document).ready(function() {
             openCriteriaMiniEditor(activeTabKey);
         });
         
+        // Append the button to the header (instead of prepending)
         criteriaHeader.append(editButton);
         
         // Create a container for criteria items
@@ -304,23 +312,50 @@ $(document).ready(function() {
                 if (section.ORDERS && section.ORDERS.length > 0) {
                     const ordersList = $('<div class="orders-list"></div>').appendTo(orderSection);
                     
+                    // Check if this section should use single select (radio buttons) or multi-select (checkboxes)
+                    const isSingleSelect = section.SINGLE_SELECT === 1;
+                    const inputType = isSingleSelect ? 'radio' : 'checkbox';
+                    const inputName = isSingleSelect ? `order-group-${sectionIndex}` : ''; // Radio buttons need the same name to work as a group
+                    
                     section.ORDERS.forEach(order => {
                         const orderItem = $('<div class="order-item"></div>').appendTo(ordersList);
                         
-                        const checkboxId = `order-${order.MNEMONIC.replace(/\s+/g, '-')}-${Math.random().toString(36).substring(2, 8)}`;
-                        const checkbox = $(`<input type="checkbox" id="${checkboxId}" class="order-checkbox">`);
-                        checkbox.appendTo(orderItem);
+                        const inputId = `order-${order.MNEMONIC.replace(/\s+/g, '-')}-${Math.random().toString(36).substring(2, 8)}`;
                         
-                        const label = $(`<label for="${checkboxId}">${order.MNEMONIC}</label>`);
-                        label.appendTo(orderItem);
+                        // Create input element (radio or checkbox based on SINGLE_SELECT)
+                        const input = $(`<input type="${inputType}" id="${inputId}" class="order-input" ${isSingleSelect ? `name="${inputName}"` : ''}>`);
+                        input.appendTo(orderItem);
+                        
+                        // Create a content container for all text content
+                        const contentContainer = $('<div class="order-content"></div>').appendTo(orderItem);
+                        
+                        const label = $(`<label for="${inputId}">${order.MNEMONIC}</label>`);
+                        label.appendTo(contentContainer);
                         
                         if (order.ORDER_SENTENCE) {
-                            $(`<div class="order-details">${order.ORDER_SENTENCE}</div>`).appendTo(orderItem);
+                            $(`<div class="order-details">${order.ORDER_SENTENCE}</div>`).appendTo(contentContainer);
                         }
                         
                         if (order.COMMENT) {
-                            $(`<div class="order-comment">${order.COMMENT}</div>`).appendTo(orderItem);
+                            $(`<div class="order-comment">${order.COMMENT}</div>`).appendTo(contentContainer);
                         }
+
+                        // Make the entire order item clickable
+                        orderItem.on('click', function(e) {
+                            // Don't handle click if it's on the input itself (let the default behavior work)
+                            if (!$(e.target).is('input')) {
+                                const checkbox = $(this).find('input');
+                                // For radio buttons, only select if not already selected
+                                if (checkbox.attr('type') === 'radio') {
+                                    if (!checkbox.prop('checked')) {
+                                        checkbox.prop('checked', true).trigger('change');
+                                    }
+                                } else {
+                                    // For checkboxes, toggle the state
+                                    checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
+                                }
+                            }
+                        });
                     });
                 } else {
                     $('<div class="no-orders">No orders available</div>').appendTo(orderSection);
@@ -426,9 +461,10 @@ $(document).ready(function() {
         $(`<button class="cancel-button">${cancelLabel}</button>`).appendTo(buttonContainer);
         $(`<button class="submit-button">${dismissLabel}</button>`).appendTo(buttonContainer);
         
-        // Add checkbox change handler to update button text
-        $(document).on('change', '.order-checkbox', function() {
-            const anyChecked = $('.order-checkbox:checked').length > 0;
+        // Add input change handler to update button text
+        $(document).on('change', '.order-input', function() {
+            // Check if any checkbox or radio button is checked
+            const anyChecked = $('.order-input:checked').length > 0;
             if (anyChecked) {
                 $('.submit-button').text(signLabel);
             } else {

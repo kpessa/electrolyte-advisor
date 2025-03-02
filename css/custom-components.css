@@ -146,24 +146,51 @@ body {
 }
 
 .order-item {
-    margin: 4px 0; /* Reduced from 8px */
-    padding: 2px 0; /* Reduced vertical padding */
-    border-bottom: none; /* Removed bottom border */
+    margin: 4px 0;
+    padding: 2px 0;
+    border-bottom: none;
     font-size: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.15s ease;
+}
+
+.order-item:hover {
+    background-color: #f5f5f5;
+}
+
+.order-input {
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.order-content {
+    flex: 1;
+    cursor: pointer;
 }
 
 .order-details {
-    margin-left: 18px; /* Slightly reduced */
     margin-top: 2px;
     color: #666;
     font-size: 11px;
 }
 
 .order-comment {
-    margin-left: 25px;
+    margin-top: 2px;
     font-style: italic;
     color: #666;
     font-size: 0.9em;
+}
+
+/* Prevent text selection when clicking */
+.order-item, 
+.order-content, 
+.order-details, 
+.order-comment {
+    user-select: none;
 }
 
 /* Button container */
@@ -260,12 +287,12 @@ body {
 
 /* Make checkboxes and their labels align better */
 .order-checkbox {
-    vertical-align: middle;
-    margin-right: 4px;
+    margin-top: 2px;
 }
 
 label {
-    vertical-align: middle;
+    margin-top: 0;
+    line-height: 1.4;
 }
 
 /* Styles for section visibility toggle */
