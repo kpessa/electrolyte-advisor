@@ -1,0 +1,374 @@
+ Model configuration loaded: {type: 'object', value: {…}}
+ Tab structure from configuration: {TAB_NAME: {…}, TAB_KEY: {…}, FLAG_ON_CONCEPT: {…}, CONCEPT_FOR_DISMISS: {…}, MNEMONICS: {…}, …}
+ ===== DEBUG: CONCEPT GROUPINGS FOR ALL TEST CASES =====
+ 
+PATIENT: Adult Male Patient (m7rtc0rq7lsh5)
+ 
+  TEST CASE: Potassium Level 2.9 (m7rtcg9r0ok9u)
+     Available concepts: 31
+ ===== STARTING CONCEPT GROUPING PROCESS =====
+ Grouping concepts by model configuration: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+ Invalid configuration structure: TABS array not found
+overrideMethod @ installHook.js:1
+extractConceptsFromConfig @ test-patient-ui.js:1813
+groupConceptsByModelConfig @ test-patient-ui.js:1541
+(anonymous) @ test-patient-ui.js:121
+(anonymous) @ test-patient-ui.js:108
+debugShowConceptGroupings @ test-patient-ui.js:97
+loadModelConfiguration @ test-patient-ui.js:74
+await in loadModelConfiguration
+initialize @ test-patient-ui.js:35
+await in initialize
+initialize @ concept-integration.js:31
+await in initialize
+(anonymous) @ app.js:9
+Promise.then
+(anonymous) @ app.js:5
+e @ jquery-3.6.0.min.js:2
+t @ jquery-3.6.0.min.js:2
+setTimeout
+(anonymous) @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+fire @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+ready @ jquery-3.6.0.min.js:2
+B @ jquery-3.6.0.min.js:2
+ Tab magnesium:
+   Criteria concepts: 0
+   Order concepts: 0
+   Total concepts: 0
+ Tab potassium:
+   Criteria concepts: 0
+   Order concepts: 0
+   Total concepts: 0
+ Tab phosphate:
+   Criteria concepts: 0
+   Order concepts: 0
+   Total concepts: 0
+ Available concept names: (31) ['EALABMAGALERT', 'EACRITERIANODIALYSIS', 'EACRITERIAWEIGHT', 'WEIGHTDOSING', 'EACRITERIADIGOXINCARDIAC', 'EACRITERIACREATININECLEARANCE', 'EACRITERIASERUMCREATININE', 'EASHOWMAGORDERS', 'EAPROTOCOLMAGIV', 'EACRITERIAVALIDMAGRESULT4H', 'EALABMAGBTW00AND13', 'EAPROTOCOLMAGORAL', 'EACRITERIANOTNPO', 'EALABMAGBTW14AND19', 'EALABPOTALERT', 'EASHOWPOTORDERS', 'EAPROTOCOLPOT', 'EACRITERIAVALIDPOTRESULT4H', 'EALABPOTBTW00AND24', 'EALABPOTBTW25AND29', 'EALABPOTTODO', 'EALABPOTBTW30AND34', 'EALABPOTBTW35AND39', 'EALABPHOSALERT', 'EASHOWPHOSORDERS', 'EAPROTOCOLPHOSIV', 'EACRITERIAVALIDPHOSRESULT4H', 'EALABPHOSBTW00AND09', 'EAPROTOCOLPHOSORAL', 'ACTIVENPODIETORDER', 'EALABPHOSBTW10AND20']
+ Total unique categorized concepts: 0 out of 31
+ WARNING: Some concepts were not categorized:
+   - EALABMAGALERT
+   - EACRITERIANODIALYSIS
+   - EACRITERIAWEIGHT
+   - WEIGHTDOSING
+   - EACRITERIADIGOXINCARDIAC
+   - EACRITERIACREATININECLEARANCE
+   - EACRITERIASERUMCREATININE
+   - EASHOWMAGORDERS
+   - EAPROTOCOLMAGIV
+   - EACRITERIAVALIDMAGRESULT4H
+   - EALABMAGBTW00AND13
+   - EAPROTOCOLMAGORAL
+   - EACRITERIANOTNPO
+   - EALABMAGBTW14AND19
+   - EALABPOTALERT
+   - EASHOWPOTORDERS
+   - EAPROTOCOLPOT
+   - EACRITERIAVALIDPOTRESULT4H
+   - EALABPOTBTW00AND24
+   - EALABPOTBTW25AND29
+   - EALABPOTTODO
+   - EALABPOTBTW30AND34
+   - EALABPOTBTW35AND39
+   - EALABPHOSALERT
+   - EASHOWPHOSORDERS
+   - EAPROTOCOLPHOSIV
+   - EACRITERIAVALIDPHOSRESULT4H
+   - EALABPHOSBTW00AND09
+   - EAPROTOCOLPHOSORAL
+   - ACTIVENPODIETORDER
+   - EALABPHOSBTW10AND20
+ These concepts will NOT be displayed in the UI as they are not defined in the configuration.
+ ===== FINAL GROUPED CONCEPTS =====
+ {magnesium: {…}, potassium: {…}, phosphate: {…}}
+ ==================================
+     ===== CONCEPT GROUPING RESULTS =====
+     TAB: MAGNESIUM
+       CRITERIA SECTION (0 concepts):
+       ORDER SECTION (0 concepts):
+     TAB: POTASSIUM
+       CRITERIA SECTION (0 concepts):
+       ORDER SECTION (0 concepts):
+     TAB: PHOSPHATE
+       CRITERIA SECTION (0 concepts):
+       ORDER SECTION (0 concepts):
+     =====================================
+ 
+  TEST CASE: Test #2 (m7rvn3yrz5atl)
+     Available concepts: 31
+ ===== STARTING CONCEPT GROUPING PROCESS =====
+ Grouping concepts by model configuration: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+ Invalid configuration structure: TABS array not found
+overrideMethod @ installHook.js:1
+extractConceptsFromConfig @ test-patient-ui.js:1813
+groupConceptsByModelConfig @ test-patient-ui.js:1541
+(anonymous) @ test-patient-ui.js:121
+(anonymous) @ test-patient-ui.js:108
+debugShowConceptGroupings @ test-patient-ui.js:97
+loadModelConfiguration @ test-patient-ui.js:74
+await in loadModelConfiguration
+initialize @ test-patient-ui.js:35
+await in initialize
+initialize @ concept-integration.js:31
+await in initialize
+(anonymous) @ app.js:9
+Promise.then
+(anonymous) @ app.js:5
+e @ jquery-3.6.0.min.js:2
+t @ jquery-3.6.0.min.js:2
+setTimeout
+(anonymous) @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+fire @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+ready @ jquery-3.6.0.min.js:2
+B @ jquery-3.6.0.min.js:2
+ Tab magnesium:
+   Criteria concepts: 0
+   Order concepts: 0
+   Total concepts: 0
+ Tab potassium:
+   Criteria concepts: 0
+   Order concepts: 0
+   Total concepts: 0
+ Tab phosphate:
+   Criteria concepts: 0
+   Order concepts: 0
+   Total concepts: 0
+ Available concept names: (31) ['EALABMAGALERT', 'EACRITERIANODIALYSIS', 'EACRITERIAWEIGHT', 'WEIGHTDOSING', 'EACRITERIADIGOXINCARDIAC', 'EACRITERIACREATININECLEARANCE', 'EACRITERIASERUMCREATININE', 'EASHOWMAGORDERS', 'EAPROTOCOLMAGIV', 'EACRITERIAVALIDMAGRESULT4H', 'EALABMAGBTW00AND13', 'EAPROTOCOLMAGORAL', 'EACRITERIANOTNPO', 'EALABMAGBTW14AND19', 'EALABPOTALERT', 'EASHOWPOTORDERS', 'EAPROTOCOLPOT', 'EACRITERIAVALIDPOTRESULT4H', 'EALABPOTBTW00AND24', 'EALABPOTBTW25AND29', 'EALABPOTTODO', 'EALABPOTBTW30AND34', 'EALABPOTBTW35AND39', 'EALABPHOSALERT', 'EASHOWPHOSORDERS', 'EAPROTOCOLPHOSIV', 'EACRITERIAVALIDPHOSRESULT4H', 'EALABPHOSBTW00AND09', 'EAPROTOCOLPHOSORAL', 'ACTIVENPODIETORDER', 'EALABPHOSBTW10AND20']
+ Total unique categorized concepts: 0 out of 31
+test-patient-ui.js:1569 WARNING: Some concepts were not categorized:
+test-patient-ui.js:1574   - EALABMAGALERT
+test-patient-ui.js:1574   - EACRITERIANODIALYSIS
+test-patient-ui.js:1574   - EACRITERIAWEIGHT
+test-patient-ui.js:1574   - WEIGHTDOSING
+test-patient-ui.js:1574   - EACRITERIADIGOXINCARDIAC
+test-patient-ui.js:1574   - EACRITERIACREATININECLEARANCE
+test-patient-ui.js:1574   - EACRITERIASERUMCREATININE
+test-patient-ui.js:1574   - EASHOWMAGORDERS
+test-patient-ui.js:1574   - EAPROTOCOLMAGIV
+test-patient-ui.js:1574   - EACRITERIAVALIDMAGRESULT4H
+test-patient-ui.js:1574   - EALABMAGBTW00AND13
+test-patient-ui.js:1574   - EAPROTOCOLMAGORAL
+test-patient-ui.js:1574   - EACRITERIANOTNPO
+test-patient-ui.js:1574   - EALABMAGBTW14AND19
+test-patient-ui.js:1574   - EALABPOTALERT
+test-patient-ui.js:1574   - EASHOWPOTORDERS
+test-patient-ui.js:1574   - EAPROTOCOLPOT
+test-patient-ui.js:1574   - EACRITERIAVALIDPOTRESULT4H
+test-patient-ui.js:1574   - EALABPOTBTW00AND24
+test-patient-ui.js:1574   - EALABPOTBTW25AND29
+test-patient-ui.js:1574   - EALABPOTTODO
+test-patient-ui.js:1574   - EALABPOTBTW30AND34
+test-patient-ui.js:1574   - EALABPOTBTW35AND39
+test-patient-ui.js:1574   - EALABPHOSALERT
+test-patient-ui.js:1574   - EASHOWPHOSORDERS
+test-patient-ui.js:1574   - EAPROTOCOLPHOSIV
+test-patient-ui.js:1574   - EACRITERIAVALIDPHOSRESULT4H
+test-patient-ui.js:1574   - EALABPHOSBTW00AND09
+test-patient-ui.js:1574   - EAPROTOCOLPHOSORAL
+test-patient-ui.js:1574   - ACTIVENPODIETORDER
+test-patient-ui.js:1574   - EALABPHOSBTW10AND20
+test-patient-ui.js:1578 These concepts will NOT be displayed in the UI as they are not defined in the configuration.
+test-patient-ui.js:1581 ===== FINAL GROUPED CONCEPTS =====
+test-patient-ui.js:1582 {magnesium: {…}, potassium: {…}, phosphate: {…}}
+test-patient-ui.js:1583 ==================================
+test-patient-ui.js:124     ===== CONCEPT GROUPING RESULTS =====
+test-patient-ui.js:126     TAB: MAGNESIUM
+test-patient-ui.js:128       CRITERIA SECTION (0 concepts):
+test-patient-ui.js:133       ORDER SECTION (0 concepts):
+test-patient-ui.js:126     TAB: POTASSIUM
+test-patient-ui.js:128       CRITERIA SECTION (0 concepts):
+test-patient-ui.js:133       ORDER SECTION (0 concepts):
+test-patient-ui.js:126     TAB: PHOSPHATE
+test-patient-ui.js:128       CRITERIA SECTION (0 concepts):
+test-patient-ui.js:133       ORDER SECTION (0 concepts):
+test-patient-ui.js:138     =====================================
+test-patient-ui.js:98 
+PATIENT: Elderly Patient (m7rtdxnwxotiz)
+test-patient-ui.js:109 
+  TEST CASE: Missing Criteria (m7ruepn5mq22y)
+test-patient-ui.js:118     Available concepts: 31
+test-patient-ui.js:1534 ===== STARTING CONCEPT GROUPING PROCESS =====
+test-patient-ui.js:1535 Grouping concepts by model configuration: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+test-patient-ui.js:1813 Invalid configuration structure: TABS array not found
+overrideMethod @ hook.js:608
+extractConceptsFromConfig @ test-patient-ui.js:1813
+groupConceptsByModelConfig @ test-patient-ui.js:1541
+(anonymous) @ test-patient-ui.js:121
+(anonymous) @ test-patient-ui.js:108
+debugShowConceptGroupings @ test-patient-ui.js:97
+loadModelConfiguration @ test-patient-ui.js:74
+await in loadModelConfiguration
+initialize @ test-patient-ui.js:35
+await in initialize
+initialize @ concept-integration.js:31
+await in initialize
+(anonymous) @ app.js:9
+Promise.then
+(anonymous) @ app.js:5
+e @ jquery-3.6.0.min.js:2
+t @ jquery-3.6.0.min.js:2
+setTimeout
+(anonymous) @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+fire @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+ready @ jquery-3.6.0.min.js:2
+B @ jquery-3.6.0.min.js:2
+test-patient-ui.js:1551 Tab magnesium:
+test-patient-ui.js:1552   Criteria concepts: 0
+test-patient-ui.js:1553   Order concepts: 0
+test-patient-ui.js:1554   Total concepts: 0
+test-patient-ui.js:1551 Tab potassium:
+test-patient-ui.js:1552   Criteria concepts: 0
+test-patient-ui.js:1553   Order concepts: 0
+test-patient-ui.js:1554   Total concepts: 0
+test-patient-ui.js:1551 Tab phosphate:
+test-patient-ui.js:1552   Criteria concepts: 0
+test-patient-ui.js:1553   Order concepts: 0
+test-patient-ui.js:1554   Total concepts: 0
+test-patient-ui.js:1564 Available concept names: (31) ['EALABMAGALERT', 'EACRITERIANODIALYSIS', 'EACRITERIAWEIGHT', 'WEIGHTDOSING', 'EACRITERIADIGOXINCARDIAC', 'EACRITERIACREATININECLEARANCE', 'EACRITERIASERUMCREATININE', 'EASHOWMAGORDERS', 'EAPROTOCOLMAGIV', 'EACRITERIAVALIDMAGRESULT4H', 'EALABMAGBTW00AND13', 'EAPROTOCOLMAGORAL', 'EACRITERIANOTNPO', 'EALABMAGBTW14AND19', 'EALABPOTALERT', 'EASHOWPOTORDERS', 'EAPROTOCOLPOT', 'EACRITERIAVALIDPOTRESULT4H', 'EALABPOTBTW00AND24', 'EALABPOTBTW25AND29', 'EALABPOTTODO', 'EALABPOTBTW30AND34', 'EALABPOTBTW35AND39', 'EALABPHOSALERT', 'EASHOWPHOSORDERS', 'EAPROTOCOLPHOSIV', 'EACRITERIAVALIDPHOSRESULT4H', 'EALABPHOSBTW00AND09', 'EAPROTOCOLPHOSORAL', 'ACTIVENPODIETORDER', 'EALABPHOSBTW10AND20']
+test-patient-ui.js:1565 Total unique categorized concepts: 0 out of 31
+test-patient-ui.js:1569 WARNING: Some concepts were not categorized:
+test-patient-ui.js:1574   - EALABMAGALERT
+test-patient-ui.js:1574   - EACRITERIANODIALYSIS
+test-patient-ui.js:1574   - EACRITERIAWEIGHT
+test-patient-ui.js:1574   - WEIGHTDOSING
+test-patient-ui.js:1574   - EACRITERIADIGOXINCARDIAC
+test-patient-ui.js:1574   - EACRITERIACREATININECLEARANCE
+test-patient-ui.js:1574   - EACRITERIASERUMCREATININE
+test-patient-ui.js:1574   - EASHOWMAGORDERS
+test-patient-ui.js:1574   - EAPROTOCOLMAGIV
+test-patient-ui.js:1574   - EACRITERIAVALIDMAGRESULT4H
+test-patient-ui.js:1574   - EALABMAGBTW00AND13
+test-patient-ui.js:1574   - EAPROTOCOLMAGORAL
+test-patient-ui.js:1574   - EACRITERIANOTNPO
+test-patient-ui.js:1574   - EALABMAGBTW14AND19
+test-patient-ui.js:1574   - EALABPOTALERT
+test-patient-ui.js:1574   - EASHOWPOTORDERS
+test-patient-ui.js:1574   - EAPROTOCOLPOT
+test-patient-ui.js:1574   - EACRITERIAVALIDPOTRESULT4H
+test-patient-ui.js:1574   - EALABPOTBTW00AND24
+test-patient-ui.js:1574   - EALABPOTBTW25AND29
+test-patient-ui.js:1574   - EALABPOTTODO
+test-patient-ui.js:1574   - EALABPOTBTW30AND34
+test-patient-ui.js:1574   - EALABPOTBTW35AND39
+test-patient-ui.js:1574   - EALABPHOSALERT
+test-patient-ui.js:1574   - EASHOWPHOSORDERS
+test-patient-ui.js:1574   - EAPROTOCOLPHOSIV
+test-patient-ui.js:1574   - EACRITERIAVALIDPHOSRESULT4H
+test-patient-ui.js:1574   - EALABPHOSBTW00AND09
+test-patient-ui.js:1574   - EAPROTOCOLPHOSORAL
+test-patient-ui.js:1574   - ACTIVENPODIETORDER
+test-patient-ui.js:1574   - EALABPHOSBTW10AND20
+test-patient-ui.js:1578 These concepts will NOT be displayed in the UI as they are not defined in the configuration.
+test-patient-ui.js:1581 ===== FINAL GROUPED CONCEPTS =====
+test-patient-ui.js:1582 {magnesium: {…}, potassium: {…}, phosphate: {…}}
+test-patient-ui.js:1583 ==================================
+test-patient-ui.js:124     ===== CONCEPT GROUPING RESULTS =====
+test-patient-ui.js:126     TAB: MAGNESIUM
+test-patient-ui.js:128       CRITERIA SECTION (0 concepts):
+test-patient-ui.js:133       ORDER SECTION (0 concepts):
+test-patient-ui.js:126     TAB: POTASSIUM
+test-patient-ui.js:128       CRITERIA SECTION (0 concepts):
+test-patient-ui.js:133       ORDER SECTION (0 concepts):
+test-patient-ui.js:126     TAB: PHOSPHATE
+test-patient-ui.js:128       CRITERIA SECTION (0 concepts):
+test-patient-ui.js:133       ORDER SECTION (0 concepts):
+test-patient-ui.js:138     =====================================
+test-patient-ui.js:142 ===== END DEBUG: CONCEPT GROUPINGS =====
+test-patient-ui.js:491 DEBUG: Test Patient Manager Data Structure
+test-patient-ui.js:492 All patients: (2) [{…}, {…}]
+test-patient-ui.js:495 Selected patient: {id: 'm7rtc0rq7lsh5', name: 'Adult Male Patient', details: {…}, testCases: Array(2), concepts: {…}}
+test-patient-ui.js:496 Cases for selected patient: (2) [{…}, {…}]
+test-patient-ui.js:499 Selected case: {id: 'm7rtcg9r0ok9u', name: 'Potassium Level 2.9', details: {…}, concepts: {…}}
+test-patient-ui.js:522 Concepts to display: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+test-patient-ui.js:625 Raw config tabs: {TAB_NAME: {…}, TAB_KEY: {…}, FLAG_ON_CONCEPT: {…}, CONCEPT_FOR_DISMISS: {…}, MNEMONICS: {…}, …}
+test-patient-ui.js:660 No tab names found in configuration, using defaults
+test-patient-ui.js:666 Tab names from configuration (in order): (3) ['Magnesium', 'Potassium', 'Phosphate']
+test-patient-ui.js:667 Tab order for lookup: (3) ['magnesium', 'potassium', 'phosphate']
+test-patient-ui.js:1534 ===== STARTING CONCEPT GROUPING PROCESS =====
+test-patient-ui.js:1535 Grouping concepts by model configuration: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+test-patient-ui.js:1813 Invalid configuration structure: TABS array not found
+overrideMethod @ hook.js:608
+extractConceptsFromConfig @ test-patient-ui.js:1813
+groupConceptsByModelConfig @ test-patient-ui.js:1541
+createConceptConfigModal @ test-patient-ui.js:675
+showConceptConfiguration @ test-patient-ui.js:525
+selectCase @ test-patient-ui.js:484
+(anonymous) @ test-patient-ui.js:442
+test-patient-ui.js:1551 Tab magnesium:
+test-patient-ui.js:1552   Criteria concepts: 0
+test-patient-ui.js:1553   Order concepts: 0
+test-patient-ui.js:1554   Total concepts: 0
+test-patient-ui.js:1551 Tab potassium:
+test-patient-ui.js:1552   Criteria concepts: 0
+test-patient-ui.js:1553   Order concepts: 0
+test-patient-ui.js:1554   Total concepts: 0
+test-patient-ui.js:1551 Tab phosphate:
+test-patient-ui.js:1552   Criteria concepts: 0
+test-patient-ui.js:1553   Order concepts: 0
+test-patient-ui.js:1554   Total concepts: 0
+test-patient-ui.js:1564 Available concept names: (31) ['EALABMAGALERT', 'EACRITERIANODIALYSIS', 'EACRITERIAWEIGHT', 'WEIGHTDOSING', 'EACRITERIADIGOXINCARDIAC', 'EACRITERIACREATININECLEARANCE', 'EACRITERIASERUMCREATININE', 'EASHOWMAGORDERS', 'EAPROTOCOLMAGIV', 'EACRITERIAVALIDMAGRESULT4H', 'EALABMAGBTW00AND13', 'EAPROTOCOLMAGORAL', 'EACRITERIANOTNPO', 'EALABMAGBTW14AND19', 'EALABPOTALERT', 'EASHOWPOTORDERS', 'EAPROTOCOLPOT', 'EACRITERIAVALIDPOTRESULT4H', 'EALABPOTBTW00AND24', 'EALABPOTBTW25AND29', 'EALABPOTTODO', 'EALABPOTBTW30AND34', 'EALABPOTBTW35AND39', 'EALABPHOSALERT', 'EASHOWPHOSORDERS', 'EAPROTOCOLPHOSIV', 'EACRITERIAVALIDPHOSRESULT4H', 'EALABPHOSBTW00AND09', 'EAPROTOCOLPHOSORAL', 'ACTIVENPODIETORDER', 'EALABPHOSBTW10AND20']
+test-patient-ui.js:1565 Total unique categorized concepts: 0 out of 31
+test-patient-ui.js:1569 WARNING: Some concepts were not categorized:
+test-patient-ui.js:1574   - EALABMAGALERT
+test-patient-ui.js:1574   - EACRITERIANODIALYSIS
+test-patient-ui.js:1574   - EACRITERIAWEIGHT
+test-patient-ui.js:1574   - WEIGHTDOSING
+test-patient-ui.js:1574   - EACRITERIADIGOXINCARDIAC
+test-patient-ui.js:1574   - EACRITERIACREATININECLEARANCE
+test-patient-ui.js:1574   - EACRITERIASERUMCREATININE
+test-patient-ui.js:1574   - EASHOWMAGORDERS
+test-patient-ui.js:1574   - EAPROTOCOLMAGIV
+test-patient-ui.js:1574   - EACRITERIAVALIDMAGRESULT4H
+test-patient-ui.js:1574   - EALABMAGBTW00AND13
+test-patient-ui.js:1574   - EAPROTOCOLMAGORAL
+test-patient-ui.js:1574   - EACRITERIANOTNPO
+test-patient-ui.js:1574   - EALABMAGBTW14AND19
+test-patient-ui.js:1574   - EALABPOTALERT
+test-patient-ui.js:1574   - EASHOWPOTORDERS
+test-patient-ui.js:1574   - EAPROTOCOLPOT
+test-patient-ui.js:1574   - EACRITERIAVALIDPOTRESULT4H
+test-patient-ui.js:1574   - EALABPOTBTW00AND24
+test-patient-ui.js:1574   - EALABPOTBTW25AND29
+test-patient-ui.js:1574   - EALABPOTTODO
+test-patient-ui.js:1574   - EALABPOTBTW30AND34
+test-patient-ui.js:1574   - EALABPOTBTW35AND39
+test-patient-ui.js:1574   - EALABPHOSALERT
+test-patient-ui.js:1574   - EASHOWPHOSORDERS
+test-patient-ui.js:1574   - EAPROTOCOLPHOSIV
+test-patient-ui.js:1574   - EACRITERIAVALIDPHOSRESULT4H
+test-patient-ui.js:1574   - EALABPHOSBTW00AND09
+test-patient-ui.js:1574   - EAPROTOCOLPHOSORAL
+test-patient-ui.js:1574   - ACTIVENPODIETORDER
+test-patient-ui.js:1574   - EALABPHOSBTW10AND20
+test-patient-ui.js:1578 These concepts will NOT be displayed in the UI as they are not defined in the configuration.
+test-patient-ui.js:1581 ===== FINAL GROUPED CONCEPTS =====
+test-patient-ui.js:1582 {magnesium: {…}, potassium: {…}, phosphate: {…}}
+test-patient-ui.js:1583 ==================================
+test-patient-ui.js:678 ===== DETAILED CONCEPT GROUPING FOR TROUBLESHOOTING =====
+test-patient-ui.js:680 TAB: MAGNESIUM
+test-patient-ui.js:682   CRITERIA SECTION (0 concepts):
+test-patient-ui.js:687   ORDER SECTION (0 concepts):
+test-patient-ui.js:680 TAB: POTASSIUM
+test-patient-ui.js:682   CRITERIA SECTION (0 concepts):
+test-patient-ui.js:687   ORDER SECTION (0 concepts):
+test-patient-ui.js:680 TAB: PHOSPHATE
+test-patient-ui.js:682   CRITERIA SECTION (0 concepts):
+test-patient-ui.js:687   ORDER SECTION (0 concepts):
+test-patient-ui.js:692 ========================================================
+test-patient-ui.js:752 Magnesium - criteria concepts: {}
+test-patient-ui.js:753 Magnesium - order concepts: {}
+test-patient-ui.js:752 Potassium - criteria concepts: {}
+test-patient-ui.js:753 Potassium - order concepts: {}
+test-patient-ui.js:752 Phosphate - criteria concepts: {}
+test-patient-ui.js:753 Phosphate - order concepts: {}

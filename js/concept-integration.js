@@ -6,6 +6,8 @@
  */
 
 import ConceptModal from './concept-modal.js';
+import testPatientUI from './test-patient-ui.js';
+import navbar from './navbar.js';
 
 // Create a class to handle the concept manager integration
 class ConceptIntegration {
@@ -25,6 +27,10 @@ class ConceptIntegration {
         try {
             // Initialize the concept modal
             await this.conceptModal.initialize();
+            
+            // Initialize the test patient UI
+            await testPatientUI.initialize(this.conceptModal.conceptManager);
+            
             this.initialized = true;
             return true;
         } catch (error) {
@@ -34,12 +40,23 @@ class ConceptIntegration {
     }
 
     /**
-     * Adds the settings icon to the specified container
-     * @param {string} containerId - The ID of the container element for the settings icon
+     * Adds the navbar to the application
+     * @param {string} containerId - The ID of the container element (not used for navbar, but kept for compatibility)
      */
     addSettingsIcon(containerId) {
+        // Initialize the navbar with required components
+        navbar.initialize(
+            this.conceptModal,
+            testPatientUI,
+            this.toggleDebugMode.bind(this),
+            this.debugMode
+        );
+        
+        // For backward compatibility, we'll keep these methods but they won't create visible elements
+        // due to the CSS hiding the original containers
         this.conceptModal.createSettingsIcon(containerId);
         this.createDebugButton(containerId);
+        testPatientUI.createTestPatientIcon(containerId);
     }
 
     /**
@@ -91,6 +108,9 @@ class ConceptIntegration {
     toggleDebugMode() {
         this.debugMode = !this.debugMode;
         
+        // Update the navbar debug button
+        navbar.updateDebugButton(this.debugMode);
+        
         // Dispatch an event to notify the application of the debug mode change
         const event = new CustomEvent('debugModeChanged', { 
             detail: { debugMode: this.debugMode } 
@@ -98,6 +118,11 @@ class ConceptIntegration {
         document.dispatchEvent(event);
         
         console.log(`Debug mode ${this.debugMode ? 'enabled' : 'disabled'}`);
+        
+        // Refresh the advisor to show debug information
+        if (window.initializeAdvisor) {
+            window.initializeAdvisor();
+        }
     }
 
     /**

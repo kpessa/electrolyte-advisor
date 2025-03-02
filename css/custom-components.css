@@ -17,11 +17,14 @@ html {
 .patient-header {
     background-color: #2b6ca3;
     color: white;
-    padding: 8px 12px; /* Reduced padding */
+    padding: 8px 12px 0px 12px; /* Reduced padding and removed bottom padding */
     display: flex;
     justify-content: space-between;
     width: 100%;
     box-sizing: border-box;
+    margin: 0; /* Ensure no margin */
+    border-bottom: none; /* Ensure no border */
+    line-height: 1.2; /* Tighter line height */
 }
 
 .patient-name {
@@ -29,14 +32,28 @@ html {
     font-size: 14px; /* Reduced from 1.1em */
 }
 
+.patient-info, .visit-info, .medical-record {
+    margin-bottom: 0; /* Ensure no bottom margin */
+    padding-bottom: 8px; /* Add consistent padding at the bottom */
+}
+
 .patient-details {
     margin-top: 3px; /* Reduced margin */
+    margin-bottom: 0; /* Ensure no bottom margin */
+}
+
+.patient-details div {
+    margin: 0; /* Remove any margin from child divs */
+    line-height: 1.2; /* Tighter line height */
 }
 
 /* Tabs */
 .uhspa-tabs-container {
     display: flex;
     background-color: #2b6ca3;
+    margin: 0; /* Ensure no margin */
+    padding: 0; /* No padding */
+    border-top: none; /* Remove the separator */
 }
 
 .uhspa-tab-button {
@@ -47,6 +64,9 @@ html {
     cursor: pointer;
     font-weight: bold;
     font-size: 12px; /* Explicit font size */
+    margin: 0; /* Ensure no margin */
+    height: auto; /* Let the content determine the height */
+    line-height: 1; /* Tighter line height */
 }
 
 .uhspa-tab-button.active {
@@ -54,11 +74,30 @@ html {
     color: #333;
 }
 
+/* Tab content container */
+.uhspa-tab-content-container {
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.uhspa-tab-content {
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 /* Content wrapper */
 .content-wrapper {
     display: flex;
     height: calc(100vh - 100px); /* Set a fixed height based on viewport minus headers */
     overflow: hidden; /* Prevent scrolling on the content wrapper */
+    margin: 0;
+    padding: 0;
 }
 
 /* Left column */
@@ -394,13 +433,15 @@ label {
 #advisor-container {
     overflow: hidden; /* Change from overflow-x: hidden and overflow-y: auto to prevent scrolling here */
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
 }
 
 .app-container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden; /* Prevent scrolling on app container */
+    position: relative;
+    width: 100%;
 }
 
 /* Order sections wrapper - add scrolling */
@@ -526,4 +567,14 @@ label {
 .debug-toggle-button.active {
     background-color: #2b6ca3;
     color: white;
+}
+
+/* div.patient-header element */
+div.patient-header {
+    padding-bottom: 0; /* Explicitly remove bottom padding */
+    margin-bottom: 0; /* Explicitly remove bottom margin */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    border-bottom: none;
 }

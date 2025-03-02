@@ -1,0 +1,2500 @@
+/**
+ * Test Patient UI
+ * 
+ * This file handles the UI for the test patient manager, including the modal dialog
+ * and interactions with the test patient manager.
+ */
+
+import TestPatientManager from './test-patient-manager.js';
+
+class TestPatientUI {
+    constructor() {
+        this.testPatientManager = new TestPatientManager();
+        this.conceptManager = null;
+        this.initialized = false;
+        this.selectedPatientId = null;
+        this.selectedCaseId = null;
+        this.modelConfig = null;
+    }
+
+    /**
+     * Initializes the test patient UI
+     * @param {Object} conceptManager - The concept manager instance
+     * @returns {Promise} - Promise that resolves when initialization is complete
+     */
+    async initialize(conceptManager) {
+        if (this.initialized) return;
+
+        try {
+            this.conceptManager = conceptManager;
+            
+            // Initialize the test patient manager
+            await this.testPatientManager.initialize(conceptManager);
+            
+            // Load the model configuration
+            await this.loadModelConfiguration();
+            
+            // Create the modal dialog
+            this.createModal();
+            
+            // Add CSS styles for the concept configuration modal
+            this.addConceptConfigStyles();
+            
+            this.initialized = true;
+            return true;
+        } catch (error) {
+            console.error('Error initializing test patient UI:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Loads the model configuration
+     * @returns {Promise} - Promise that resolves when the model is loaded
+     */
+    async loadModelConfiguration() {
+        try {
+            const response = await fetch('model/model.json');
+            if (!response.ok) {
+                throw new Error(`Failed to load model configuration: ${response.status} ${response.statusText}`);
+            }
+            
+            this.modelConfig = await response.json();
+            console.log('Model configuration loaded:', this.modelConfig);
+            
+            // Log the tab structure for debugging
+            if (this.modelConfig && this.modelConfig.value && this.modelConfig.value.RCONFIG && 
+                this.modelConfig.value.RCONFIG.value && this.modelConfig.value.RCONFIG.value.TABS && 
+                this.modelConfig.value.RCONFIG.value.TABS.value) {
+                
+                console.log('Tab structure from configuration:', this.modelConfig.value.RCONFIG.value.TABS.value);
+            }
+            
+            // Show concept groupings for debugging
+            this.debugShowConceptGroupings();
+            
+            return this.modelConfig;
+        } catch (error) {
+            console.error('Error loading model configuration:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * Debug method to show concept groupings when the app loads
+     */
+    debugShowConceptGroupings() {
+        // Get all test patients
+        const patients = this.testPatientManager.getTestPatients();
+        if (!patients || patients.length === 0) {
+            console.log('No test patients available for debugging concept groupings');
+            return;
+        }
+        
+        console.log('===== DEBUG: CONCEPT GROUPINGS FOR ALL TEST CASES =====');
+        
+        // Loop through each patient
+        patients.forEach(patient => {
+            console.log(`\nPATIENT: ${patient.name} (${patient.id})`);
+            
+            // Get test cases for this patient
+            const testCases = this.testPatientManager.getTestCases(patient.id);
+            if (!testCases || testCases.length === 0) {
+                console.log(`  No test cases for patient ${patient.name}`);
+                return;
+            }
+            
+            // Loop through each test case
+            testCases.forEach(testCase => {
+                console.log(`\n  TEST CASE: ${testCase.name} (${testCase.id})`);
+                
+                // Get concepts for this test case
+                const concepts = testCase.concepts;
+                if (!concepts || Object.keys(concepts).length === 0) {
+                    console.log(`    No concepts for test case ${testCase.name}`);
+                    return;
+                }
+                
+                console.log(`    Available concepts: ${Object.keys(concepts).length}`);
+                
+                // Group concepts based on the model configuration
+                const groupedConcepts = this.groupConceptsByModelConfig(concepts);
+                
+                // Log the detailed grouping for troubleshooting
+                console.log('    ===== CONCEPT GROUPING RESULTS =====');
+                Object.entries(groupedConcepts).forEach(([tabKey, sections]) => {
+                    console.log(`    TAB: ${tabKey.toUpperCase()}`);
+                    
+                    console.log(`      CRITERIA SECTION (${Object.keys(sections.criteria).length} concepts):`);
+                    Object.keys(sections.criteria).forEach(conceptName => {
+                        console.log(`        - ${conceptName}`);
+                    });
+                    
+                    console.log(`      ORDER SECTION (${Object.keys(sections.order).length} concepts):`);
+                    Object.keys(sections.order).forEach(conceptName => {
+                        console.log(`        - ${conceptName}`);
+                    });
+                });
+                console.log('    =====================================');
+            });
+        });
+        
+        console.log('===== END DEBUG: CONCEPT GROUPINGS =====');
+    }
+
+    /**
+     * Creates the test patient icon in the specified container
+     * @param {string} containerId - The ID of the container element
+     */
+    createTestPatientIcon(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) {
+            console.error(`Container element with ID "${containerId}" not found.`);
+            return;
+        }
+        
+        // Create test patient icon container
+        const iconContainer = document.createElement('div');
+        iconContainer.className = 'test-patient-icon-container';
+        
+        // Create test patient icon button
+        const iconButton = document.createElement('button');
+        iconButton.className = 'test-patient-icon';
+        iconButton.setAttribute('aria-label', 'Test Patient Manager');
+        iconButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" fill="currentColor"/></svg>';
+        
+        // Add click event listener
+        iconButton.addEventListener('click', () => {
+            this.openModal();
+        });
+        
+        iconContainer.appendChild(iconButton);
+        container.appendChild(iconContainer);
+    }
+
+    /**
+     * Creates the modal dialog for the test patient manager
+     */
+    createModal() {
+        // Create modal container
+        const modal = document.createElement('div');
+        modal.className = 'test-patient-modal';
+        modal.id = 'test-patient-modal';
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'test-patient-modal-content';
+        
+        // Create modal header
+        const modalHeader = document.createElement('div');
+        modalHeader.className = 'test-patient-modal-header';
+        
+        const modalTitle = document.createElement('h2');
+        modalTitle.className = 'test-patient-modal-title';
+        modalTitle.textContent = 'Test Patient Manager';
+        
+        const closeButton = document.createElement('button');
+        closeButton.className = 'test-patient-modal-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.addEventListener('click', () => {
+            this.closeModal();
+        });
+        
+        modalHeader.appendChild(modalTitle);
+        modalHeader.appendChild(closeButton);
+        
+        // Create modal body
+        const modalBody = document.createElement('div');
+        modalBody.className = 'test-patient-modal-body';
+        
+        // Create test patient section
+        const patientSection = document.createElement('div');
+        patientSection.className = 'test-patient-section';
+        
+        const addPatientButton = document.createElement('button');
+        addPatientButton.className = 'add-test-patient-btn';
+        addPatientButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> Add Test Patient';
+        addPatientButton.addEventListener('click', () => {
+            this.showAddPatientForm();
+        });
+        
+        const patientList = document.createElement('div');
+        patientList.className = 'test-patient-list';
+        patientList.id = 'test-patient-list';
+        
+        patientSection.appendChild(addPatientButton);
+        patientSection.appendChild(patientList);
+        
+        // Create test case section
+        const caseSection = document.createElement('div');
+        caseSection.className = 'test-case-section';
+        caseSection.id = 'test-case-section';
+        caseSection.style.display = 'none';
+        
+        const addCaseButton = document.createElement('button');
+        addCaseButton.className = 'add-test-case-btn';
+        addCaseButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> Add Test Case';
+        addCaseButton.addEventListener('click', () => {
+            this.showAddCaseForm();
+        });
+        
+        const caseList = document.createElement('div');
+        caseList.className = 'test-case-list';
+        caseList.id = 'test-case-list';
+        
+        caseSection.appendChild(addCaseButton);
+        caseSection.appendChild(caseList);
+        
+        // Create concept configuration section
+        const conceptSection = document.createElement('div');
+        conceptSection.className = 'concept-config-section';
+        conceptSection.id = 'concept-config-section';
+        conceptSection.style.display = 'none';
+        
+        const conceptTitle = document.createElement('h3');
+        conceptTitle.className = 'concept-config-title';
+        conceptTitle.textContent = 'Concept Configuration';
+        
+        const conceptContent = document.createElement('div');
+        conceptContent.className = 'concept-config-content';
+        conceptContent.id = 'concept-config-content';
+        
+        conceptSection.appendChild(conceptTitle);
+        conceptSection.appendChild(conceptContent);
+        
+        // Add sections to modal body
+        modalBody.appendChild(patientSection);
+        modalBody.appendChild(caseSection);
+        modalBody.appendChild(conceptSection);
+        
+        // Add header and body to modal content
+        modalContent.appendChild(modalHeader);
+        modalContent.appendChild(modalBody);
+        
+        // Add modal content to modal
+        modal.appendChild(modalContent);
+        
+        // Add modal to document body
+        document.body.appendChild(modal);
+    }
+
+    /**
+     * Opens the test patient manager modal
+     */
+    openModal() {
+        const modal = document.getElementById('test-patient-modal');
+        if (modal) {
+            modal.style.display = 'block';
+            this.refreshPatientList();
+        }
+    }
+
+    /**
+     * Closes the test patient manager modal
+     */
+    closeModal() {
+        const modal = document.getElementById('test-patient-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    /**
+     * Refreshes the test patient list
+     */
+    refreshPatientList() {
+        const patientList = document.getElementById('test-patient-list');
+        if (!patientList) return;
+        
+        // Clear the list
+        patientList.innerHTML = '';
+        
+        // Get all test patients
+        const patients = this.testPatientManager.getTestPatients();
+        
+        if (patients.length === 0) {
+            // Show empty state
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.innerHTML = '<p>No test patients yet.</p><p>Click "Add Test Patient" to create one.</p>';
+            patientList.appendChild(emptyState);
+            return;
+        }
+        
+        // Add each patient to the list
+        patients.forEach(patient => {
+            const patientItem = document.createElement('div');
+            patientItem.className = 'test-patient-item';
+            if (patient.id === this.selectedPatientId) {
+                patientItem.classList.add('selected');
+            }
+            
+            const patientName = document.createElement('div');
+            patientName.className = 'test-patient-name';
+            patientName.textContent = patient.name;
+            
+            const patientActions = document.createElement('div');
+            patientActions.className = 'test-patient-actions';
+            
+            const editButton = document.createElement('button');
+            editButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
+            editButton.setAttribute('title', 'Edit');
+            editButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.showEditPatientForm(patient.id);
+            });
+            
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
+            deleteButton.setAttribute('title', 'Delete');
+            deleteButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.deletePatient(patient.id);
+            });
+            
+            patientActions.appendChild(editButton);
+            patientActions.appendChild(deleteButton);
+            
+            patientItem.appendChild(patientName);
+            patientItem.appendChild(patientActions);
+            
+            // Add click event to select the patient
+            patientItem.addEventListener('click', () => {
+                this.selectPatient(patient.id);
+            });
+            
+            patientList.appendChild(patientItem);
+        });
+    }
+
+    /**
+     * Refreshes the test case list for the selected patient
+     */
+    refreshCaseList() {
+        const caseList = document.getElementById('test-case-list');
+        const caseSection = document.getElementById('test-case-section');
+        
+        if (!caseList || !caseSection) return;
+        
+        // Clear the list
+        caseList.innerHTML = '';
+        
+        // If no patient is selected, hide the case section
+        if (!this.selectedPatientId) {
+            caseSection.style.display = 'none';
+            return;
+        }
+        
+        // Show the case section
+        caseSection.style.display = 'block';
+        
+        // Get all test cases for the selected patient
+        const cases = this.testPatientManager.getTestCases(this.selectedPatientId);
+        
+        if (cases.length === 0) {
+            // Show empty state
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.innerHTML = '<p>No test cases yet.</p><p>Click "Add Test Case" to create one.</p>';
+            caseList.appendChild(emptyState);
+            return;
+        }
+        
+        // Add each case to the list
+        cases.forEach(testCase => {
+            const caseItem = document.createElement('div');
+            caseItem.className = 'test-case-item';
+            if (testCase.id === this.selectedCaseId) {
+                caseItem.classList.add('selected');
+            }
+            
+            const caseName = document.createElement('div');
+            caseName.className = 'test-case-name';
+            caseName.textContent = testCase.name;
+            
+            const caseActions = document.createElement('div');
+            caseActions.className = 'test-case-actions';
+            
+            const editButton = document.createElement('button');
+            editButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
+            editButton.setAttribute('title', 'Edit');
+            editButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.showEditCaseForm(testCase.id);
+            });
+            
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
+            deleteButton.setAttribute('title', 'Delete');
+            deleteButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.deleteCase(testCase.id);
+            });
+            
+            caseActions.appendChild(editButton);
+            caseActions.appendChild(deleteButton);
+            
+            caseItem.appendChild(caseName);
+            caseItem.appendChild(caseActions);
+            
+            // Add click event to select the case
+            caseItem.addEventListener('click', () => {
+                this.selectCase(testCase.id);
+            });
+            
+            caseList.appendChild(caseItem);
+        });
+    }
+
+    /**
+     * Selects a test patient
+     * @param {string} patientId - The ID of the patient to select
+     */
+    selectPatient(patientId) {
+        this.selectedPatientId = patientId;
+        this.selectedCaseId = null;
+        
+        // Refresh the patient list to update the selection
+        this.refreshPatientList();
+        
+        // Refresh the case list for the selected patient
+        this.refreshCaseList();
+        
+        // Hide the concept configuration section
+        const conceptSection = document.getElementById('concept-config-section');
+        if (conceptSection) {
+            conceptSection.style.display = 'none';
+        }
+    }
+
+    /**
+     * Selects a test case
+     * @param {string} caseId - The ID of the case to select
+     */
+    selectCase(caseId) {
+        this.selectedCaseId = caseId;
+        
+        // Debug: Log the test patient manager data structure
+        this.debugLogTestPatientData();
+        
+        // Refresh the case list to update the selection
+        this.refreshCaseList();
+        
+        // Show the concept configuration section
+        this.showConceptConfiguration();
+    }
+
+    /**
+     * Debug function to log the test patient data structure
+     */
+    debugLogTestPatientData() {
+        console.log('DEBUG: Test Patient Manager Data Structure');
+        console.log('All patients:', this.testPatientManager.getTestPatients());
+        
+        if (this.selectedPatientId) {
+            console.log('Selected patient:', this.testPatientManager.getTestPatient(this.selectedPatientId));
+            console.log('Cases for selected patient:', this.testPatientManager.getTestCases(this.selectedPatientId));
+            
+            if (this.selectedCaseId) {
+                console.log('Selected case:', this.testPatientManager.getTestCase(this.selectedPatientId, this.selectedCaseId));
+            }
+        }
+    }
+
+    /**
+     * Shows the concept configuration UI for the selected test case
+     */
+    showConceptConfiguration() {
+        // Get the concepts from the selected test case
+        if (!this.selectedPatientId || !this.selectedCaseId) {
+            console.log('No patient or case selected, cannot show concept configuration');
+            return;
+        }
+        
+        // Get the selected case from the test patient manager
+        const selectedCase = this.testPatientManager.getTestCase(this.selectedPatientId, this.selectedCaseId);
+        if (!selectedCase) {
+            console.log('Selected case not found, cannot show concept configuration');
+            return;
+        }
+        
+        const concepts = selectedCase.concepts;
+        console.log('Concepts to display:', concepts);
+        
+        // Create a new modal for concept configuration
+        this.createConceptConfigModal(selectedCase, concepts);
+    }
+    
+    /**
+     * Creates a modal for concept configuration
+     * @param {Object} selectedCase - The selected test case
+     * @param {Object} concepts - The concepts to display
+     */
+    createConceptConfigModal(selectedCase, concepts) {
+        // Create modal container if it doesn't exist
+        let modal = document.getElementById('concept-config-modal');
+        if (modal) {
+            // Remove existing modal
+            modal.remove();
+        }
+        
+        // Create new modal
+        modal = document.createElement('div');
+        modal.className = 'concept-config-modal';
+        modal.id = 'concept-config-modal';
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'concept-config-modal-content';
+        
+        // Create modal header
+        const modalHeader = document.createElement('div');
+        modalHeader.className = 'concept-config-modal-header';
+        
+        const modalTitle = document.createElement('h2');
+        modalTitle.textContent = `Concept Configuration: ${selectedCase.name}`;
+        
+        const closeButton = document.createElement('button');
+        closeButton.className = 'concept-config-modal-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        modalHeader.appendChild(modalTitle);
+        modalHeader.appendChild(closeButton);
+        
+        // Create modal body
+        const modalBody = document.createElement('div');
+        modalBody.className = 'concept-config-modal-body';
+        
+        // Add description
+        const description = document.createElement('p');
+        description.className = 'description';
+        description.textContent = 'Configure concepts by electrolyte type. Each tab contains criteria and order sections.';
+        modalBody.appendChild(description);
+        
+        // Add apply button
+        const applyButton = document.createElement('button');
+        applyButton.className = 'apply-button';
+        applyButton.textContent = 'Apply Test Case to Advisor';
+        applyButton.addEventListener('click', () => {
+            this.applyConceptsToAdvisor(concepts, 'test', selectedCase.name);
+        });
+        modalBody.appendChild(applyButton);
+        
+        // Create tabs container
+        const tabsContainer = document.createElement('div');
+        tabsContainer.className = 'electrolyte-tabs-container';
+        
+        // Create tabs list
+        const tabsList = document.createElement('ul');
+        tabsList.className = 'electrolyte-tabs';
+        tabsContainer.appendChild(tabsList);
+        
+        // Create tab content container
+        const tabContentContainer = document.createElement('div');
+        tabContentContainer.className = 'electrolyte-tab-content-container';
+        tabsContainer.appendChild(tabContentContainer);
+        
+        modalBody.appendChild(tabsContainer);
+        
+        // Add header and body to modal content
+        modalContent.appendChild(modalHeader);
+        modalContent.appendChild(modalBody);
+        
+        // Add modal content to modal
+        modal.appendChild(modalContent);
+        
+        // Add modal to document body
+        document.body.appendChild(modal);
+        
+        // Determine tab names from the model configuration
+        let tabNames = [];
+        let configTabOrder = [];
+        
+        if (this.modelConfig && 
+            this.modelConfig.value && 
+            this.modelConfig.value.RCONFIG && 
+            this.modelConfig.value.RCONFIG.value && 
+            this.modelConfig.value.RCONFIG.value.TABS && 
+            this.modelConfig.value.RCONFIG.value.TABS.value) {
+            
+            // Extract tab names from the model configuration
+            const configTabs = this.modelConfig.value.RCONFIG.value.TABS.value;
+            console.log('Raw config tabs:', configTabs);
+            
+            // First, check if we have a TAB_NAME property directly
+            if (configTabs.TAB_NAME && configTabs.TAB_NAME.value) {
+                console.log(`Found TAB_NAME in tabs: ${configTabs.TAB_NAME.value}`);
+                tabNames.push(configTabs.TAB_NAME.value);
+                configTabOrder.push(configTabs.TAB_NAME.value.toLowerCase());
+                
+                // Check if there are more tabs (TAB_NAME_1, TAB_NAME_2, etc.)
+                for (let i = 1; configTabs[`TAB_NAME_${i}`] && configTabs[`TAB_NAME_${i}`].value; i++) {
+                    console.log(`Found TAB_NAME_${i} in tabs: ${configTabs[`TAB_NAME_${i}`].value}`);
+                    tabNames.push(configTabs[`TAB_NAME_${i}`].value);
+                    configTabOrder.push(configTabs[`TAB_NAME_${i}`].value.toLowerCase());
+                }
+            } else if (Array.isArray(configTabs)) {
+                tabNames = configTabs.map(tab => {
+                    const name = tab.TAB_NAME?.value || 'Unknown';
+                    console.log(`Found tab name in array: ${name}`);
+                    configTabOrder.push(name.toLowerCase());
+                    return name;
+                });
+            } else {
+                // If it's not an array, try to extract tab names from the object structure
+                tabNames = [];
+                for (let i = 0; configTabs[i.toString()]; i++) {
+                    const tabName = configTabs[i.toString()].TAB_NAME?.value;
+                    if (tabName) {
+                        console.log(`Found tab name in object at index ${i}: ${tabName}`);
+                        tabNames.push(tabName);
+                        configTabOrder.push(tabName.toLowerCase());
+                    }
+                }
+                
+                // If we still couldn't find any tabs, use the default
+                if (tabNames.length === 0) {
+                    console.log('No tab names found in configuration, using defaults');
+                    tabNames = ['Magnesium', 'Potassium', 'Phosphate']; // Changed order to match expected
+                    configTabOrder = ['magnesium', 'potassium', 'phosphate']; // Changed order to match expected
+                }
+            }
+            
+            console.log('Tab names from configuration (in order):', tabNames);
+            console.log('Tab order for lookup:', configTabOrder);
+        } else {
+            console.log('No tab configuration found, using default tab names');
+            tabNames = ['Magnesium', 'Potassium', 'Phosphate']; // Changed order to match expected
+            configTabOrder = ['magnesium', 'potassium', 'phosphate']; // Changed order to match expected
+        }
+        
+        // Group concepts based on the model configuration
+        const groupedConcepts = this.groupConceptsByModelConfig(concepts);
+        
+        // Log the detailed grouping for troubleshooting
+        console.log('===== DETAILED CONCEPT GROUPING FOR TROUBLESHOOTING =====');
+        Object.entries(groupedConcepts).forEach(([tabKey, sections]) => {
+            console.log(`TAB: ${tabKey.toUpperCase()}`);
+            
+            console.log(`  CRITERIA SECTION (${Object.keys(sections.criteria).length} concepts):`);
+            Object.keys(sections.criteria).forEach(conceptName => {
+                console.log(`    - ${conceptName}`);
+            });
+            
+            console.log(`  ORDER SECTION (${Object.keys(sections.order).length} concepts):`);
+            Object.keys(sections.order).forEach(conceptName => {
+                console.log(`    - ${conceptName}`);
+            });
+        });
+        console.log('========================================================');
+        
+        // Create tabs and content for each tab - use configTabOrder to ensure correct order
+        configTabOrder.forEach((tabKey, index) => {
+            const tabName = tabNames[index];
+            
+            // Skip if this tab doesn't exist in our grouped concepts
+            if (!groupedConcepts[tabKey]) {
+                console.log(`Tab ${tabName} has no grouped concepts, initializing empty structure`);
+                groupedConcepts[tabKey] = {
+                    criteria: {},
+                    order: {}
+                };
+            }
+            
+            // Create tab
+            const tabItem = document.createElement('li');
+            tabItem.className = 'electrolyte-tab';
+            tabItem.setAttribute('data-tab', tabKey);
+            if (index === 0) {
+                tabItem.classList.add('active');
+            }
+            
+            const tabIcon = document.createElement('span');
+            tabIcon.className = 'tab-icon';
+            tabIcon.innerHTML = this.getElectrolyteIcon(tabKey);
+            
+            const tabText = document.createElement('span');
+            tabText.className = 'tab-text';
+            tabText.textContent = tabName;
+            
+            tabItem.appendChild(tabIcon);
+            tabItem.appendChild(tabText);
+            
+            // Add click event to switch tabs
+            tabItem.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.electrolyte-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelectorAll('.electrolyte-tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab and corresponding content
+                tabItem.classList.add('active');
+                document.querySelector(`.electrolyte-tab-content[data-tab="${tabKey}"]`).classList.add('active');
+            });
+            
+            tabsList.appendChild(tabItem);
+            
+            // Create tab content
+            const tabContent = document.createElement('div');
+            tabContent.className = 'electrolyte-tab-content';
+            tabContent.setAttribute('data-tab', tabKey);
+            if (index === 0) {
+                tabContent.classList.add('active');
+            }
+            
+            // Log the concepts for this tab
+            console.log(`${tabName} - criteria concepts:`, groupedConcepts[tabKey].criteria);
+            console.log(`${tabName} - order concepts:`, groupedConcepts[tabKey].order);
+            
+            // Create sections for this tab
+            ['criteria', 'order'].forEach(section => {
+                const sectionContainer = document.createElement('div');
+                sectionContainer.className = 'concept-section';
+                
+                // Create section header
+                const sectionHeader = document.createElement('div');
+                sectionHeader.className = 'section-header';
+                
+                const sectionIcon = document.createElement('span');
+                sectionIcon.className = 'section-icon';
+                sectionIcon.innerHTML = this.getSectionIcon(section);
+                
+                const sectionTitle = document.createElement('h3');
+                sectionTitle.textContent = this.formatSectionName(section);
+                
+                const sectionToggle = document.createElement('span');
+                sectionToggle.className = 'section-toggle';
+                sectionToggle.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                
+                sectionHeader.appendChild(sectionIcon);
+                sectionHeader.appendChild(sectionTitle);
+                sectionHeader.appendChild(sectionToggle);
+                
+                // Add click event to toggle section
+                sectionHeader.addEventListener('click', () => {
+                    sectionContainer.classList.toggle('collapsed');
+                    sectionToggle.innerHTML = sectionContainer.classList.contains('collapsed') 
+                        ? '<i class="fas fa-chevron-right"></i>' 
+                        : '<i class="fas fa-chevron-down"></i>';
+                });
+                
+                sectionContainer.appendChild(sectionHeader);
+                
+                // Create section content
+                const sectionContent = document.createElement('div');
+                sectionContent.className = 'section-content';
+                
+                // Create table for concepts
+                const table = document.createElement('table');
+                table.className = 'concept-table';
+                
+                // Create table header
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                
+                const conceptHeader = document.createElement('th');
+                conceptHeader.textContent = 'Concept';
+                headerRow.appendChild(conceptHeader);
+                
+                const activeHeader = document.createElement('th');
+                activeHeader.textContent = 'Active';
+                headerRow.appendChild(activeHeader);
+                
+                const valueHeader = document.createElement('th');
+                valueHeader.textContent = 'Value';
+                headerRow.appendChild(valueHeader);
+                
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+                
+                // Create table body
+                const tbody = document.createElement('tbody');
+                
+                // Add rows for each concept
+                Object.entries(groupedConcepts[tabKey][section]).forEach(([conceptName, conceptValue]) => {
+                    const row = document.createElement('tr');
+                    
+                    const conceptCell = document.createElement('td');
+                    conceptCell.textContent = conceptName;
+                    row.appendChild(conceptCell);
+                    
+                    const activeCell = document.createElement('td');
+                    const activeCheckbox = document.createElement('input');
+                    activeCheckbox.type = 'checkbox';
+                    activeCheckbox.checked = conceptValue.active !== false; // Default to true if not specified
+                    activeCheckbox.addEventListener('change', () => {
+                        conceptValue.active = activeCheckbox.checked;
+                    });
+                    activeCell.appendChild(activeCheckbox);
+                    row.appendChild(activeCell);
+                    
+                    const valueCell = document.createElement('td');
+                    const valueInput = document.createElement('input');
+                    valueInput.type = 'text';
+                    valueInput.value = conceptValue.value !== undefined ? conceptValue.value : '';
+                    valueInput.addEventListener('input', () => {
+                        conceptValue.value = valueInput.value;
+                    });
+                    valueCell.appendChild(valueInput);
+                    row.appendChild(valueCell);
+                    
+                    tbody.appendChild(row);
+                });
+                
+                table.appendChild(tbody);
+                sectionContent.appendChild(table);
+                sectionContainer.appendChild(sectionContent);
+                
+                tabContent.appendChild(sectionContainer);
+            });
+            
+            tabContentContainer.appendChild(tabContent);
+        });
+        
+        // Show the modal
+        modal.style.display = 'block';
+    }
+
+    /**
+     * Applies the concepts from a test patient or test case to the current advisor
+     * @param {Object} concepts - The concepts to apply
+     * @param {string} targetType - The type of target ('patient' or 'case')
+     * @param {string} targetName - The name of the target
+     */
+    applyConceptsToAdvisor(concepts, targetType, targetName) {
+        if (!this.conceptManager || !concepts) return;
+        
+        // Apply each concept to the concept manager
+        Object.entries(concepts).forEach(([name, concept]) => {
+            // Skip inactive concepts
+            if (concept.isActive === false) return;
+            
+            // Set the concept value in the concept manager
+            if (concept.value !== undefined) {
+                this.conceptManager.setConceptValue(name, concept.value);
+            }
+        });
+        
+        // Close the modal
+        this.closeModal();
+        
+        // Show a notification
+        this.showNotification(`Applied ${targetType} "${targetName}" to the advisor`);
+        
+        // Refresh the advisor to show the updated concepts
+        if (window.initializeAdvisor) {
+            window.initializeAdvisor();
+        }
+    }
+
+    /**
+     * Shows a notification message
+     * @param {string} message - The message to show
+     */
+    showNotification(message) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = 'test-patient-notification';
+        notification.textContent = message;
+        
+        // Add to document body
+        document.body.appendChild(notification);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.classList.add('fade-out');
+            setTimeout(() => {
+                notification.remove();
+            }, 500);
+        }, 3000);
+    }
+
+    /**
+     * Shows the form for adding a new test patient
+     */
+    showAddPatientForm() {
+        // Create a form for adding a new patient
+        const form = document.createElement('form');
+        form.className = 'add-patient-form';
+        
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        
+        const label = document.createElement('label');
+        label.textContent = 'Patient Name';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'name';
+        input.required = true;
+        
+        formGroup.appendChild(label);
+        formGroup.appendChild(input);
+        
+        const formActions = document.createElement('div');
+        formActions.className = 'form-actions';
+        
+        const cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.className = 'btn-cancel';
+        cancelButton.textContent = 'Cancel';
+        cancelButton.addEventListener('click', () => {
+            // Remove the form
+            form.remove();
+        });
+        
+        const saveButton = document.createElement('button');
+        saveButton.type = 'submit';
+        saveButton.className = 'btn-save';
+        saveButton.textContent = 'Save';
+        
+        formActions.appendChild(cancelButton);
+        formActions.appendChild(saveButton);
+        
+        form.appendChild(formGroup);
+        form.appendChild(formActions);
+        
+        // Add submit event listener
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = input.value.trim();
+            if (!name) return;
+            
+            // Create the new patient
+            const newPatient = this.testPatientManager.createTestPatient(name);
+            
+            // Select the new patient
+            this.selectPatient(newPatient.id);
+            
+            // Remove the form
+            form.remove();
+        });
+        
+        // Add the form to the patient list
+        const patientList = document.getElementById('test-patient-list');
+        if (patientList) {
+            patientList.prepend(form);
+        }
+    }
+
+    /**
+     * Shows the form for editing a test patient
+     * @param {string} patientId - The ID of the patient to edit
+     */
+    showEditPatientForm(patientId) {
+        const patient = this.testPatientManager.getTestPatient(patientId);
+        if (!patient) return;
+        
+        // Create a form for editing the patient
+        const form = document.createElement('form');
+        form.className = 'edit-patient-form';
+        
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        
+        const label = document.createElement('label');
+        label.textContent = 'Patient Name';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'name';
+        input.value = patient.name;
+        input.required = true;
+        
+        formGroup.appendChild(label);
+        formGroup.appendChild(input);
+        
+        const formActions = document.createElement('div');
+        formActions.className = 'form-actions';
+        
+        const cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.className = 'btn-cancel';
+        cancelButton.textContent = 'Cancel';
+        cancelButton.addEventListener('click', () => {
+            // Remove the form
+            form.remove();
+            
+            // Refresh the patient list
+            this.refreshPatientList();
+        });
+        
+        const saveButton = document.createElement('button');
+        saveButton.type = 'submit';
+        saveButton.className = 'btn-save';
+        saveButton.textContent = 'Save';
+        
+        formActions.appendChild(cancelButton);
+        formActions.appendChild(saveButton);
+        
+        form.appendChild(formGroup);
+        form.appendChild(formActions);
+        
+        // Add submit event listener
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = input.value.trim();
+            if (!name) return;
+            
+            // Update the patient
+            this.testPatientManager.updateTestPatient(patientId, { name });
+            
+            // Remove the form
+            form.remove();
+            
+            // Refresh the patient list
+            this.refreshPatientList();
+        });
+        
+        // Replace the patient item with the form
+        const patientItem = document.querySelector(`.test-patient-item.selected`);
+        if (patientItem) {
+            patientItem.replaceWith(form);
+        }
+    }
+
+    /**
+     * Deletes a test patient
+     * @param {string} patientId - The ID of the patient to delete
+     */
+    deletePatient(patientId) {
+        if (confirm('Are you sure you want to delete this test patient and all its test cases?')) {
+            // Delete the patient
+            this.testPatientManager.deleteTestPatient(patientId);
+            
+            // Clear the selection if the deleted patient was selected
+            if (this.selectedPatientId === patientId) {
+                this.selectedPatientId = null;
+                this.selectedCaseId = null;
+            }
+            
+            // Refresh the patient list
+            this.refreshPatientList();
+            
+            // Refresh the case list
+            this.refreshCaseList();
+        }
+    }
+
+    /**
+     * Shows the form for adding a new test case
+     */
+    showAddCaseForm() {
+        if (!this.selectedPatientId) return;
+        
+        // Create a form for adding a new case
+        const form = document.createElement('form');
+        form.className = 'add-case-form';
+        
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        
+        const label = document.createElement('label');
+        label.textContent = 'Case Name';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'name';
+        input.required = true;
+        
+        formGroup.appendChild(label);
+        formGroup.appendChild(input);
+        
+        const formActions = document.createElement('div');
+        formActions.className = 'form-actions';
+        
+        const cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.className = 'btn-cancel';
+        cancelButton.textContent = 'Cancel';
+        cancelButton.addEventListener('click', () => {
+            // Remove the form
+            form.remove();
+        });
+        
+        const saveButton = document.createElement('button');
+        saveButton.type = 'submit';
+        saveButton.className = 'btn-save';
+        saveButton.textContent = 'Save';
+        
+        formActions.appendChild(cancelButton);
+        formActions.appendChild(saveButton);
+        
+        form.appendChild(formGroup);
+        form.appendChild(formActions);
+        
+        // Add submit event listener
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = input.value.trim();
+            if (!name) return;
+            
+            // Create the new case
+            const newCase = this.testPatientManager.createTestCase(this.selectedPatientId, name);
+            
+            // Select the new case
+            this.selectCase(newCase.id);
+            
+            // Remove the form
+            form.remove();
+        });
+        
+        // Add the form to the case list
+        const caseList = document.getElementById('test-case-list');
+        if (caseList) {
+            caseList.prepend(form);
+        }
+    }
+
+    /**
+     * Shows the form for editing a test case
+     * @param {string} caseId - The ID of the case to edit
+     */
+    showEditCaseForm(caseId) {
+        if (!this.selectedPatientId) return;
+        
+        const testCase = this.testPatientManager.getTestCase(this.selectedPatientId, caseId);
+        if (!testCase) return;
+        
+        // Create a form for editing the case
+        const form = document.createElement('form');
+        form.className = 'edit-case-form';
+        
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+        
+        const label = document.createElement('label');
+        label.textContent = 'Case Name';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'name';
+        input.value = testCase.name;
+        input.required = true;
+        
+        formGroup.appendChild(label);
+        formGroup.appendChild(input);
+        
+        const formActions = document.createElement('div');
+        formActions.className = 'form-actions';
+        
+        const cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.className = 'btn-cancel';
+        cancelButton.textContent = 'Cancel';
+        cancelButton.addEventListener('click', () => {
+            // Remove the form
+            form.remove();
+            
+            // Refresh the case list
+            this.refreshCaseList();
+        });
+        
+        const saveButton = document.createElement('button');
+        saveButton.type = 'submit';
+        saveButton.className = 'btn-save';
+        saveButton.textContent = 'Save';
+        
+        formActions.appendChild(cancelButton);
+        formActions.appendChild(saveButton);
+        
+        form.appendChild(formGroup);
+        form.appendChild(formActions);
+        
+        // Add submit event listener
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = input.value.trim();
+            if (!name) return;
+            
+            // Update the case
+            this.testPatientManager.updateTestCase(this.selectedPatientId, caseId, { name });
+            
+            // Remove the form
+            form.remove();
+            
+            // Refresh the case list
+            this.refreshCaseList();
+        });
+        
+        // Replace the case item with the form
+        const caseItem = document.querySelector(`.test-case-item.selected`);
+        if (caseItem) {
+            caseItem.replaceWith(form);
+        }
+    }
+
+    /**
+     * Deletes a test case
+     * @param {string} caseId - The ID of the case to delete
+     */
+    deleteCase(caseId) {
+        if (!this.selectedPatientId) return;
+        
+        if (confirm('Are you sure you want to delete this test case?')) {
+            // Delete the case
+            this.testPatientManager.deleteTestCase(this.selectedPatientId, caseId);
+            
+            // Clear the selection if the deleted case was selected
+            if (this.selectedCaseId === caseId) {
+                this.selectedCaseId = null;
+            }
+            
+            // Refresh the case list
+            this.refreshCaseList();
+            
+            // Hide the concept configuration section
+            const conceptSection = document.getElementById('concept-config-section');
+            if (conceptSection) {
+                conceptSection.style.display = 'none';
+            }
+        }
+    }
+
+    /**
+     * Extracts a concept name from a concept expression
+     * @param {Object} conceptExpression - The concept expression object from the model
+     * @returns {string|null} - The extracted concept name or null if not found
+     */
+    extractConceptName(conceptExpression) {
+        if (!conceptExpression) {
+            console.log('Concept expression is null or undefined');
+            return null;
+        }
+        
+        console.log('Extracting concept name from:', conceptExpression);
+        
+        // If it's a string, check for special syntax patterns
+        if (typeof conceptExpression === 'string') {
+            console.log(`Concept expression is a string: ${conceptExpression}`);
+            
+            // Check for complex expressions with multiple concepts
+            // Example: "[%{EASHOWMAGORDERS} AND NOT {EAPROTOCOLMAGIV} AND {EACRITERIAVALIDMAGRESULT4H} AND {EALABMAGBTW00AND13}%]"
+            if (conceptExpression.includes(' AND ') || conceptExpression.includes(' OR ')) {
+                console.log('Complex expression with multiple concepts detected');
+                
+                // Extract the first concept as the primary one
+                const firstConceptMatch = conceptExpression.match(/\{([^}]+)\}/);
+                if (firstConceptMatch) {
+                    const extractedName = firstConceptMatch[1];
+                    console.log(`Extracted first concept from complex expression: ${extractedName}`);
+                    
+                    // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                    const pureName = extractedName.split('.')[0].split(' ')[0];
+                    console.log(`Pure concept name: ${pureName}`);
+                    return pureName;
+                }
+            }
+            
+            // Check for [%{CONCEPTNAME}%] pattern
+            const specialSyntaxMatch = conceptExpression.match(/\[%\{([^}]+)\}%\]/);
+            if (specialSyntaxMatch) {
+                const extractedName = specialSyntaxMatch[1];
+                console.log(`Extracted concept name from special syntax: ${extractedName}`);
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                console.log(`Pure concept name: ${pureName}`);
+                return pureName;
+            }
+            
+            // Check for {CONCEPTNAME} pattern (without [% %])
+            const simpleBraceMatch = conceptExpression.match(/\{([^}]+)\}/);
+            if (simpleBraceMatch) {
+                const extractedName = simpleBraceMatch[1];
+                console.log(`Extracted concept name from simple brace syntax: ${extractedName}`);
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                console.log(`Pure concept name: ${pureName}`);
+                return pureName;
+            }
+            
+            return conceptExpression;
+        }
+        
+        // If it has a value property that's a string, process it for special syntax
+        if (conceptExpression.value && typeof conceptExpression.value === 'string') {
+            console.log(`Concept expression has string value: ${conceptExpression.value}`);
+            
+            // Check for complex expressions with multiple concepts
+            if (conceptExpression.value.includes(' AND ') || conceptExpression.value.includes(' OR ')) {
+                console.log('Complex expression with multiple concepts detected in value');
+                
+                // Extract the first concept as the primary one
+                const firstConceptMatch = conceptExpression.value.match(/\{([^}]+)\}/);
+                if (firstConceptMatch) {
+                    const extractedName = firstConceptMatch[1];
+                    console.log(`Extracted first concept from complex expression in value: ${extractedName}`);
+                    
+                    // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                    const pureName = extractedName.split('.')[0].split(' ')[0];
+                    console.log(`Pure concept name: ${pureName}`);
+                    return pureName;
+                }
+            }
+            
+            // Check for [%{CONCEPTNAME}%] pattern
+            const specialSyntaxMatch = conceptExpression.value.match(/\[%\{([^}]+)\}%\]/);
+            if (specialSyntaxMatch) {
+                const extractedName = specialSyntaxMatch[1];
+                console.log(`Extracted concept name from special syntax in value: ${extractedName}`);
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                console.log(`Pure concept name: ${pureName}`);
+                return pureName;
+            }
+            
+            // Check for {CONCEPTNAME} pattern (without [% %])
+            const simpleBraceMatch = conceptExpression.value.match(/\{([^}]+)\}/);
+            if (simpleBraceMatch) {
+                const extractedName = simpleBraceMatch[1];
+                console.log(`Extracted concept name from simple brace syntax in value: ${extractedName}`);
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                console.log(`Pure concept name: ${pureName}`);
+                return pureName;
+            }
+            
+            return conceptExpression.value;
+        }
+        
+        // If it has a ui property with a value, try that
+        if (conceptExpression.ui && conceptExpression.ui.value) {
+            console.log(`Concept expression has ui.value: ${conceptExpression.ui.value}`);
+            
+            // Check for complex expressions with multiple concepts
+            if (conceptExpression.ui.value.includes(' AND ') || conceptExpression.ui.value.includes(' OR ')) {
+                console.log('Complex expression with multiple concepts detected in ui.value');
+                
+                // Extract the first concept as the primary one
+                const firstConceptMatch = conceptExpression.ui.value.match(/\{([^}]+)\}/);
+                if (firstConceptMatch) {
+                    const extractedName = firstConceptMatch[1];
+                    console.log(`Extracted first concept from complex expression in ui.value: ${extractedName}`);
+                    
+                    // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                    const pureName = extractedName.split('.')[0].split(' ')[0];
+                    console.log(`Pure concept name: ${pureName}`);
+                    return pureName;
+                }
+            }
+            
+            // Check for special syntax in ui.value
+            const specialSyntaxMatch = conceptExpression.ui.value.match(/\[%\{([^}]+)\}%\]/);
+            if (specialSyntaxMatch) {
+                const extractedName = specialSyntaxMatch[1];
+                console.log(`Extracted concept name from special syntax in ui.value: ${extractedName}`);
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                console.log(`Pure concept name: ${pureName}`);
+                return pureName;
+            }
+            
+            // Check for {CONCEPTNAME} pattern (without [% %])
+            const simpleBraceMatch = conceptExpression.ui.value.match(/\{([^}]+)\}/);
+            if (simpleBraceMatch) {
+                const extractedName = simpleBraceMatch[1];
+                console.log(`Extracted concept name from simple brace syntax in ui.value: ${extractedName}`);
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                console.log(`Pure concept name: ${pureName}`);
+                return pureName;
+            }
+            
+            return conceptExpression.ui.value;
+        }
+        
+        // Try to extract from more complex structures
+        if (typeof conceptExpression === 'object') {
+            // Look for properties that might contain the concept name
+            for (const key of ['CONCEPT_NAME', 'Concept', 'CONCEPT_NAME_KEY', 'name', 'id', 'key']) {
+                if (conceptExpression[key]) {
+                    if (typeof conceptExpression[key] === 'string') {
+                        console.log(`Found concept name in property ${key}: ${conceptExpression[key]}`);
+                        
+                        // Check for complex expressions with multiple concepts
+                        if (conceptExpression[key].includes(' AND ') || conceptExpression[key].includes(' OR ')) {
+                            console.log(`Complex expression with multiple concepts detected in ${key}`);
+                            
+                            // Extract the first concept as the primary one
+                            const firstConceptMatch = conceptExpression[key].match(/\{([^}]+)\}/);
+                            if (firstConceptMatch) {
+                                const extractedName = firstConceptMatch[1];
+                                console.log(`Extracted first concept from complex expression in ${key}: ${extractedName}`);
+                                
+                                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                                const pureName = extractedName.split('.')[0].split(' ')[0];
+                                console.log(`Pure concept name: ${pureName}`);
+                                return pureName;
+                            }
+                        }
+                        
+                        // Check for special syntax
+                        const specialSyntaxMatch = conceptExpression[key].match(/\[%\{([^}]+)\}%\]/);
+                        if (specialSyntaxMatch) {
+                            const extractedName = specialSyntaxMatch[1];
+                            console.log(`Extracted concept name from special syntax in ${key}: ${extractedName}`);
+                            
+                            // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                            const pureName = extractedName.split('.')[0].split(' ')[0];
+                            console.log(`Pure concept name: ${pureName}`);
+                            return pureName;
+                        }
+                        
+                        // Check for {CONCEPTNAME} pattern (without [% %])
+                        const simpleBraceMatch = conceptExpression[key].match(/\{([^}]+)\}/);
+                        if (simpleBraceMatch) {
+                            const extractedName = simpleBraceMatch[1];
+                            console.log(`Extracted concept name from simple brace syntax in ${key}: ${extractedName}`);
+                            
+                            // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                            const pureName = extractedName.split('.')[0].split(' ')[0];
+                            console.log(`Pure concept name: ${pureName}`);
+                            return pureName;
+                        }
+                        
+                        return conceptExpression[key];
+                    } else if (conceptExpression[key].value && typeof conceptExpression[key].value === 'string') {
+                        console.log(`Found concept name in property ${key}.value: ${conceptExpression[key].value}`);
+                        
+                        // Check for complex expressions with multiple concepts
+                        if (conceptExpression[key].value.includes(' AND ') || conceptExpression[key].value.includes(' OR ')) {
+                            console.log(`Complex expression with multiple concepts detected in ${key}.value`);
+                            
+                            // Extract the first concept as the primary one
+                            const firstConceptMatch = conceptExpression[key].value.match(/\{([^}]+)\}/);
+                            if (firstConceptMatch) {
+                                const extractedName = firstConceptMatch[1];
+                                console.log(`Extracted first concept from complex expression in ${key}.value: ${extractedName}`);
+                                
+                                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                                const pureName = extractedName.split('.')[0].split(' ')[0];
+                                console.log(`Pure concept name: ${pureName}`);
+                                return pureName;
+                            }
+                        }
+                        
+                        // Check for special syntax
+                        const specialSyntaxMatch = conceptExpression[key].value.match(/\[%\{([^}]+)\}%\]/);
+                        if (specialSyntaxMatch) {
+                            const extractedName = specialSyntaxMatch[1];
+                            console.log(`Extracted concept name from special syntax in ${key}.value: ${extractedName}`);
+                            
+                            // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                            const pureName = extractedName.split('.')[0].split(' ')[0];
+                            console.log(`Pure concept name: ${pureName}`);
+                            return pureName;
+                        }
+                        
+                        // Check for {CONCEPTNAME} pattern (without [% %])
+                        const simpleBraceMatch = conceptExpression[key].value.match(/\{([^}]+)\}/);
+                        if (simpleBraceMatch) {
+                            const extractedName = simpleBraceMatch[1];
+                            console.log(`Extracted concept name from simple brace syntax in ${key}.value: ${extractedName}`);
+                            
+                            // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                            const pureName = extractedName.split('.')[0].split(' ')[0];
+                            console.log(`Pure concept name: ${pureName}`);
+                            return pureName;
+                        }
+                        
+                        return conceptExpression[key].value;
+                    } else if (typeof conceptExpression[key] === 'object') {
+                        // Try to recursively extract from nested objects
+                        const nestedName = this.extractNestedConceptName(conceptExpression[key]);
+                        if (nestedName) {
+                            console.log(`Found nested concept name in property ${key}: ${nestedName}`);
+                            return nestedName;
+                        }
+                    }
+                }
+            }
+            
+            // If we still haven't found a name, try to look for any property that might be a concept name
+            for (const key in conceptExpression) {
+                // Skip type and value properties as they're common in the model structure
+                if (key === 'type' || key === 'value') continue;
+                
+                if (typeof conceptExpression[key] === 'string' && 
+                    (key.includes('CONCEPT') || key.includes('NAME') || key.toUpperCase() === key)) {
+                    console.log(`Found potential concept name in property ${key}: ${conceptExpression[key]}`);
+                    
+                    // Check for complex expressions with multiple concepts
+                    if (conceptExpression[key].includes(' AND ') || conceptExpression[key].includes(' OR ')) {
+                        console.log(`Complex expression with multiple concepts detected in ${key}`);
+                        
+                        // Extract the first concept as the primary one
+                        const firstConceptMatch = conceptExpression[key].match(/\{([^}]+)\}/);
+                        if (firstConceptMatch) {
+                            const extractedName = firstConceptMatch[1];
+                            console.log(`Extracted first concept from complex expression in ${key}: ${extractedName}`);
+                            
+                            // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                            const pureName = extractedName.split('.')[0].split(' ')[0];
+                            console.log(`Pure concept name: ${pureName}`);
+                            return pureName;
+                        }
+                    }
+                    
+                    // Check for special syntax
+                    const specialSyntaxMatch = conceptExpression[key].match(/\[%\{([^}]+)\}%\]/);
+                    if (specialSyntaxMatch) {
+                        const extractedName = specialSyntaxMatch[1];
+                        console.log(`Extracted concept name from special syntax in ${key}: ${extractedName}`);
+                        
+                        // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                        const pureName = extractedName.split('.')[0].split(' ')[0];
+                        console.log(`Pure concept name: ${pureName}`);
+                        return pureName;
+                    }
+                    
+                    // Check for {CONCEPTNAME} pattern (without [% %])
+                    const simpleBraceMatch = conceptExpression[key].match(/\{([^}]+)\}/);
+                    if (simpleBraceMatch) {
+                        const extractedName = simpleBraceMatch[1];
+                        console.log(`Extracted concept name from simple brace syntax in ${key}: ${extractedName}`);
+                        
+                        // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                        const pureName = extractedName.split('.')[0].split(' ')[0];
+                        console.log(`Pure concept name: ${pureName}`);
+                        return pureName;
+                    }
+                    
+                    return conceptExpression[key];
+                }
+            }
+        }
+        
+        console.log('Could not extract concept name from:', conceptExpression);
+        return null;
+    }
+    
+    /**
+     * Helper method to extract concept names from nested objects
+     * @param {Object} obj - The nested object to extract from
+     * @returns {string|null} - The extracted concept name or null if not found
+     */
+    extractNestedConceptName(obj) {
+        if (!obj) return null;
+        
+        // If it's a string, check for special syntax patterns
+        if (typeof obj === 'string') {
+            // Check for complex expressions with multiple concepts
+            if (obj.includes(' AND ') || obj.includes(' OR ')) {
+                // Extract the first concept as the primary one
+                const firstConceptMatch = obj.match(/\{([^}]+)\}/);
+                if (firstConceptMatch) {
+                    const extractedName = firstConceptMatch[1];
+                    
+                    // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                    const pureName = extractedName.split('.')[0].split(' ')[0];
+                    return pureName;
+                }
+            }
+            
+            // Check for [%{CONCEPTNAME}%] pattern
+            const specialSyntaxMatch = obj.match(/\[%\{([^}]+)\}%\]/);
+            if (specialSyntaxMatch) {
+                const extractedName = specialSyntaxMatch[1];
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                return pureName;
+            }
+            
+            // Check for {CONCEPTNAME} pattern (without [% %])
+            const simpleBraceMatch = obj.match(/\{([^}]+)\}/);
+            if (simpleBraceMatch) {
+                const extractedName = simpleBraceMatch[1];
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                return pureName;
+            }
+            
+            return obj;
+        }
+        
+        // If it has a value property that's a string, process it for special syntax
+        if (obj.value && typeof obj.value === 'string') {
+            // Check for complex expressions with multiple concepts
+            if (obj.value.includes(' AND ') || obj.value.includes(' OR ')) {
+                // Extract the first concept as the primary one
+                const firstConceptMatch = obj.value.match(/\{([^}]+)\}/);
+                if (firstConceptMatch) {
+                    const extractedName = firstConceptMatch[1];
+                    
+                    // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                    const pureName = extractedName.split('.')[0].split(' ')[0];
+                    return pureName;
+                }
+            }
+            
+            // Check for [%{CONCEPTNAME}%] pattern
+            const specialSyntaxMatch = obj.value.match(/\[%\{([^}]+)\}%\]/);
+            if (specialSyntaxMatch) {
+                const extractedName = specialSyntaxMatch[1];
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                return pureName;
+            }
+            
+            // Check for {CONCEPTNAME} pattern (without [% %])
+            const simpleBraceMatch = obj.value.match(/\{([^}]+)\}/);
+            if (simpleBraceMatch) {
+                const extractedName = simpleBraceMatch[1];
+                
+                // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                const pureName = extractedName.split('.')[0].split(' ')[0];
+                return pureName;
+            }
+            
+            return obj.value;
+        }
+        
+        // Check for common concept name properties
+        for (const key of ['CONCEPT_NAME', 'Concept', 'name', 'id', 'key', 'value']) {
+            if (obj[key]) {
+                if (typeof obj[key] === 'string') {
+                    // Check for complex expressions with multiple concepts
+                    if (obj[key].includes(' AND ') || obj[key].includes(' OR ')) {
+                        // Extract the first concept as the primary one
+                        const firstConceptMatch = obj[key].match(/\{([^}]+)\}/);
+                        if (firstConceptMatch) {
+                            const extractedName = firstConceptMatch[1];
+                            
+                            // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                            const pureName = extractedName.split('.')[0].split(' ')[0];
+                            return pureName;
+                        }
+                    }
+                    
+                    // Check for special syntax
+                    const specialSyntaxMatch = obj[key].match(/\[%\{([^}]+)\}%\]/);
+                    if (specialSyntaxMatch) {
+                        const extractedName = specialSyntaxMatch[1];
+                        
+                        // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                        const pureName = extractedName.split('.')[0].split(' ')[0];
+                        return pureName;
+                    }
+                    
+                    // Check for {CONCEPTNAME} pattern (without [% %])
+                    const simpleBraceMatch = obj[key].match(/\{([^}]+)\}/);
+                    if (simpleBraceMatch) {
+                        const extractedName = simpleBraceMatch[1];
+                        
+                        // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                        const pureName = extractedName.split('.')[0].split(' ')[0];
+                        return pureName;
+                    }
+                    
+                    return obj[key];
+                } else if (obj[key].value && typeof obj[key].value === 'string') {
+                    // Check for complex expressions with multiple concepts
+                    if (obj[key].value.includes(' AND ') || obj[key].value.includes(' OR ')) {
+                        // Extract the first concept as the primary one
+                        const firstConceptMatch = obj[key].value.match(/\{([^}]+)\}/);
+                        if (firstConceptMatch) {
+                            const extractedName = firstConceptMatch[1];
+                            
+                            // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                            const pureName = extractedName.split('.')[0].split(' ')[0];
+                            return pureName;
+                        }
+                    }
+                    
+                    // Check for special syntax
+                    const specialSyntaxMatch = obj[key].value.match(/\[%\{([^}]+)\}%\]/);
+                    if (specialSyntaxMatch) {
+                        const extractedName = specialSyntaxMatch[1];
+                        
+                        // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                        const pureName = extractedName.split('.')[0].split(' ')[0];
+                        return pureName;
+                    }
+                    
+                    // Check for {CONCEPTNAME} pattern (without [% %])
+                    const simpleBraceMatch = obj[key].value.match(/\{([^}]+)\}/);
+                    if (simpleBraceMatch) {
+                        const extractedName = simpleBraceMatch[1];
+                        
+                        // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                        const pureName = extractedName.split('.')[0].split(' ')[0];
+                        return pureName;
+                    }
+                    
+                    return obj[key].value;
+                }
+            }
+        }
+        
+        // Recursively check all object properties
+        for (const key in obj) {
+            if (typeof obj[key] === 'object') {
+                const nestedResult = this.extractNestedConceptName(obj[key]);
+                if (nestedResult) {
+                    return nestedResult;
+                }
+            } else if (typeof obj[key] === 'string' && 
+                      (key.includes('CONCEPT') || key.includes('NAME') || key.toUpperCase() === key)) {
+                // Check for complex expressions with multiple concepts
+                if (obj[key].includes(' AND ') || obj[key].includes(' OR ')) {
+                    // Extract the first concept as the primary one
+                    const firstConceptMatch = obj[key].match(/\{([^}]+)\}/);
+                    if (firstConceptMatch) {
+                        const extractedName = firstConceptMatch[1];
+                        
+                        // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                        const pureName = extractedName.split('.')[0].split(' ')[0];
+                        return pureName;
+                    }
+                }
+                
+                // Check for special syntax
+                const specialSyntaxMatch = obj[key].match(/\[%\{([^}]+)\}%\]/);
+                if (specialSyntaxMatch) {
+                    const extractedName = specialSyntaxMatch[1];
+                    
+                    // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                    const pureName = extractedName.split('.')[0].split(' ')[0];
+                    return pureName;
+                }
+                
+                // Check for {CONCEPTNAME} pattern (without [% %])
+                const simpleBraceMatch = obj[key].match(/\{([^}]+)\}/);
+                if (simpleBraceMatch) {
+                    const extractedName = simpleBraceMatch[1];
+                    
+                    // If there's additional logic after the concept name (like .COUNT < 1), remove it
+                    const pureName = extractedName.split('.')[0].split(' ')[0];
+                    return pureName;
+                }
+                
+                return obj[key];
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Adds CSS styles for the concept configuration modal
+     */
+    addConceptConfigStyles() {
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
+            .concept-config-modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+            
+            .concept-config-modal-content {
+                background-color: #fefefe;
+                margin: 5% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                max-width: 1000px;
+                border-radius: 5px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            
+            .concept-config-modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .concept-config-modal-header h2 {
+                margin: 0;
+                color: #333;
+            }
+            
+            .concept-config-modal-close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+            
+            .concept-config-modal-close:hover,
+            .concept-config-modal-close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+            
+            .concept-config-modal-body {
+                padding: 10px 0;
+            }
+            
+            .description {
+                margin-bottom: 20px;
+                color: #666;
+            }
+            
+            .apply-button {
+                padding: 8px 16px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-bottom: 20px;
+            }
+            
+            .apply-button:hover {
+                background-color: #45a049;
+            }
+            
+            .electrolyte-tabs-container {
+                margin-top: 20px;
+            }
+            
+            .electrolyte-tabs {
+                display: flex;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .electrolyte-tab {
+                padding: 10px 15px;
+                margin-right: 5px;
+                cursor: pointer;
+                border: 1px solid #ddd;
+                border-bottom: none;
+                border-radius: 5px 5px 0 0;
+                background-color: #f8f8f8;
+                display: flex;
+                align-items: center;
+            }
+            
+            .electrolyte-tab.active {
+                background-color: white;
+                border-bottom: 1px solid white;
+                margin-bottom: -1px;
+            }
+            
+            .tab-icon {
+                margin-right: 8px;
+                display: inline-flex;
+                align-items: center;
+            }
+            
+            .tab-text {
+                font-weight: 500;
+            }
+            
+            .electrolyte-tab-content-container {
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-top: none;
+                background-color: white;
+            }
+            
+            .electrolyte-tab-content {
+                display: none;
+            }
+            
+            .electrolyte-tab-content.active {
+                display: block;
+            }
+            
+            .concept-section {
+                margin-bottom: 20px;
+                border: 1px solid #eee;
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            
+            .section-header {
+                display: flex;
+                align-items: center;
+                padding: 10px 15px;
+                background-color: #f5f5f5;
+                cursor: pointer;
+            }
+            
+            .section-icon {
+                margin-right: 10px;
+                display: inline-flex;
+                align-items: center;
+            }
+            
+            .section-header h3 {
+                margin: 0;
+                flex-grow: 1;
+                font-size: 16px;
+            }
+            
+            .section-toggle {
+                font-size: 14px;
+                color: #666;
+            }
+            
+            .concept-section.collapsed .section-content {
+                display: none;
+            }
+            
+            .section-content {
+                padding: 15px;
+            }
+            
+            .concept-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            
+            .concept-table th, .concept-table td {
+                padding: 8px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .concept-table th {
+                background-color: #f8f8f8;
+                font-weight: 500;
+            }
+            
+            .concept-table input[type="text"] {
+                width: 100%;
+                padding: 6px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+        `;
+        document.head.appendChild(styleElement);
+    }
+
+    /**
+     * Groups concepts based on the model configuration
+     * @param {Object} concepts - The concepts to group
+     * @returns {Object} - Grouped concepts by tab and section
+     */
+    groupConceptsByModelConfig(concepts) {
+        console.log('===== STARTING CONCEPT GROUPING PROCESS =====');
+        console.log('Grouping concepts by model configuration:', concepts);
+        console.log('Available concept names:', Object.keys(concepts));
+        
+        // Initialize the result structure
+        var result = {};
+        
+        // If we don't have the model config, use a fallback approach
+        if (!this.modelConfig || !this.modelConfig.value || !this.modelConfig.value.RCONFIG || 
+            !this.modelConfig.value.RCONFIG.value || !this.modelConfig.value.RCONFIG.value.TABS || 
+            !this.modelConfig.value.RCONFIG.value.TABS.value) {
+            
+            console.log('Model configuration not available, using fallback grouping');
+            return this.fallbackGroupConcepts(concepts);
+        }
+        
+        var tabs = this.modelConfig.value.RCONFIG.value.TABS.value;
+        console.log('Processing tabs from model configuration:', tabs);
+        
+        // Determine tab names from the configuration
+        var tabNames = [];
+        var tabKeys = [];
+        
+        // Extract tab names based on the structure
+        if (tabs.TAB_NAME && tabs.TAB_NAME.value) {
+            console.log(`Found TAB_NAME in tabs: ${tabs.TAB_NAME.value}`);
+            tabNames.push(tabs.TAB_NAME.value);
+            tabKeys.push(tabs.TAB_NAME.value.toLowerCase());
+            
+            // Check if there are more tabs (TAB_NAME_1, TAB_NAME_2, etc.)
+            for (var i = 1; tabs[`TAB_NAME_${i}`] && tabs[`TAB_NAME_${i}`].value; i++) {
+                console.log(`Found TAB_NAME_${i} in tabs: ${tabs[`TAB_NAME_${i}`].value}`);
+                tabNames.push(tabs[`TAB_NAME_${i}`].value);
+                tabKeys.push(tabs[`TAB_NAME_${i}`].value.toLowerCase());
+            }
+        } else if (Array.isArray(tabs)) {
+            console.log('Tabs is an array, extracting tab names');
+            tabs.forEach(tab => {
+                if (tab.TAB_NAME && tab.TAB_NAME.value) {
+                    console.log(`Found tab name in array: ${tab.TAB_NAME.value}`);
+                    tabNames.push(tab.TAB_NAME.value);
+                    tabKeys.push(tab.TAB_NAME.value.toLowerCase());
+                }
+            });
+        } else {
+            // If it's not an array, try to extract tab names from the object structure
+            console.log('Tabs is an object, extracting tab names');
+            for (var j = 0; tabs[j.toString()]; j++) {
+                if (tabs[j.toString()].TAB_NAME && tabs[j.toString()].TAB_NAME.value) {
+                    var tabName = tabs[j.toString()].TAB_NAME.value;
+                    console.log(`Found tab name in object at index ${j}: ${tabName}`);
+                    tabNames.push(tabName);
+                    tabKeys.push(tabName.toLowerCase());
+                }
+            }
+        }
+        
+        // If we still couldn't find any tabs, use the default
+        if (tabNames.length === 0) {
+            console.log('No tab names found in configuration, using defaults');
+            tabNames = ['Magnesium', 'Potassium', 'Phosphate'];
+            tabKeys = ['magnesium', 'potassium', 'phosphate'];
+        }
+        
+        console.log('Tab names from configuration:', tabNames);
+        console.log('Tab keys for lookup:', tabKeys);
+        
+        // Initialize the result structure for each tab
+        tabKeys.forEach(tabKey => {
+            result[tabKey] = {
+                criteria: {},
+                order: {}
+            };
+        });
+        
+        console.log(`Processing ${tabKeys.length} tabs`);
+        
+        // Process each tab
+        tabKeys.forEach((tabKey, tabIndex) => {
+            console.log(`Processing tab: ${tabKey} (${tabNames[tabIndex]})`);
+            
+            var tabConfig = null;
+            
+            // Find the tab configuration
+            if (tabs.TAB_NAME && tabs.TAB_NAME.value === tabNames[tabIndex]) {
+                tabConfig = tabs;
+            } else if (tabs[`TAB_NAME_${tabIndex}`] && tabs[`TAB_NAME_${tabIndex}`].value === tabNames[tabIndex]) {
+                tabConfig = tabs;
+            } else if (Array.isArray(tabs)) {
+                tabConfig = tabs.find(tab => tab.TAB_NAME && tab.TAB_NAME.value === tabNames[tabIndex]);
+            } else {
+                tabConfig = tabs[tabIndex.toString()];
+            }
+            
+            if (!tabConfig) {
+                console.log(`No configuration found for tab ${tabKey}, skipping`);
+                return;
+            }
+            
+            console.log(`Found configuration for tab ${tabKey}:`, tabConfig);
+            
+            // Process CRITERIA section
+            if (tabConfig.CRITERIA && tabConfig.CRITERIA.value) {
+                console.log(`Processing CRITERIA section for tab ${tabKey}`);
+                
+                var criteriaItems = tabConfig.CRITERIA.value;
+                
+                // Handle different structures of criteria items
+                if (Array.isArray(criteriaItems)) {
+                    console.log(`CRITERIA is an array with ${criteriaItems.length} items`);
+                    
+                    criteriaItems.forEach((item, index) => {
+                        console.log(`Processing criteria item ${index}:`, item);
+                        
+                        var conceptName = this.extractConceptName(item);
+                        if (conceptName && concepts[conceptName]) {
+                            console.log(`Found concept ${conceptName} in criteria item ${index}`);
+                            result[tabKey].criteria[conceptName] = concepts[conceptName];
+                        } else {
+                            console.log(`Concept ${conceptName} not found in available concepts for criteria item ${index}`);
+                        }
+                    });
+                } else if (typeof criteriaItems === 'object') {
+                    console.log('CRITERIA is an object, processing properties');
+                    
+                    // Process each property in the criteria object
+                    for (var criteriaKey in criteriaItems) {
+                        if (criteriaKey === 'type' || criteriaKey === 'value') continue;
+                        
+                        console.log(`Processing criteria property ${criteriaKey}:`, criteriaItems[criteriaKey]);
+                        
+                        var criteriaConceptName = this.extractConceptName(criteriaItems[criteriaKey]);
+                        if (criteriaConceptName && concepts[criteriaConceptName]) {
+                            console.log(`Found concept ${criteriaConceptName} in criteria property ${criteriaKey}`);
+                            result[tabKey].criteria[criteriaConceptName] = concepts[criteriaConceptName];
+                        } else {
+                            console.log(`Concept ${criteriaConceptName} not found in available concepts for criteria property ${criteriaKey}`);
+                        }
+                    }
+                }
+            } else {
+                console.log(`No CRITERIA section found for tab ${tabKey}`);
+            }
+            
+            // Process ORDER_SECTIONS section
+            if (tabConfig.ORDER_SECTIONS && tabConfig.ORDER_SECTIONS.value) {
+                console.log(`Processing ORDER_SECTIONS for tab ${tabKey}`);
+                
+                var orderSections = tabConfig.ORDER_SECTIONS.value;
+                
+                // Handle different structures of order sections
+                if (Array.isArray(orderSections)) {
+                    console.log(`ORDER_SECTIONS is an array with ${orderSections.length} items`);
+                    
+                    orderSections.forEach((section, index) => {
+                        console.log(`Processing order section ${index}:`, section);
+                        
+                        var sectionConceptName = this.extractConceptName(section);
+                        if (sectionConceptName && concepts[sectionConceptName]) {
+                            console.log(`Found concept ${sectionConceptName} in order section ${index}`);
+                            result[tabKey].order[sectionConceptName] = concepts[sectionConceptName];
+                        } else {
+                            console.log(`Concept ${sectionConceptName} not found in available concepts for order section ${index}`);
+                        }
+                    });
+                } else if (typeof orderSections === 'object') {
+                    console.log('ORDER_SECTIONS is an object, processing properties');
+                    
+                    // Process each property in the order sections object
+                    for (var sectionKey in orderSections) {
+                        if (sectionKey === 'type' || sectionKey === 'value') continue;
+                        
+                        console.log(`Processing order section property ${sectionKey}:`, orderSections[sectionKey]);
+                        
+                        var sectionConceptName = this.extractConceptName(orderSections[sectionKey]);
+                        if (sectionConceptName && concepts[sectionConceptName]) {
+                            console.log(`Found concept ${sectionConceptName} in order section property ${sectionKey}`);
+                            result[tabKey].order[sectionConceptName] = concepts[sectionConceptName];
+                        } else {
+                            console.log(`Concept ${sectionConceptName} not found in available concepts for order section property ${sectionKey}`);
+                        }
+                    }
+                }
+            } else {
+                console.log(`No ORDER_SECTIONS found for tab ${tabKey}`);
+            }
+            
+            // Process CONCEPTS section (general concepts that might be in either criteria or order)
+            if (tabConfig.CONCEPTS && tabConfig.CONCEPTS.value) {
+                console.log(`Processing CONCEPTS section for tab ${tabKey}`);
+                
+                var conceptItems = tabConfig.CONCEPTS.value;
+                
+                // Handle different structures of concept items
+                if (Array.isArray(conceptItems)) {
+                    console.log(`CONCEPTS is an array with ${conceptItems.length} items`);
+                    
+                    conceptItems.forEach((item, index) => {
+                        console.log(`Processing concept item ${index}:`, item);
+                        
+                        var generalConceptName = this.extractConceptName(item);
+                        if (generalConceptName && concepts[generalConceptName]) {
+                            console.log(`Found concept ${generalConceptName} in concept item ${index}`);
+                            
+                            // Determine if it's a criteria or order concept based on naming convention
+                            if (generalConceptName.toLowerCase().includes('criteria')) {
+                                result[tabKey].criteria[generalConceptName] = concepts[generalConceptName];
+                            } else if (generalConceptName.toLowerCase().includes('order')) {
+                                result[tabKey].order[generalConceptName] = concepts[generalConceptName];
+                            } else {
+                                // Default to criteria if we can't determine
+                                result[tabKey].criteria[generalConceptName] = concepts[generalConceptName];
+                            }
+                        } else {
+                            console.log(`Concept ${generalConceptName} not found in available concepts for concept item ${index}`);
+                        }
+                    });
+                } else if (typeof conceptItems === 'object') {
+                    console.log('CONCEPTS is an object, processing properties');
+                    
+                    // Process each property in the concepts object
+                    for (var conceptKey in conceptItems) {
+                        if (conceptKey === 'type' || conceptKey === 'value') continue;
+                        
+                        console.log(`Processing concept property ${conceptKey}:`, conceptItems[conceptKey]);
+                        
+                        var generalConceptName = this.extractConceptName(conceptItems[conceptKey]);
+                        if (generalConceptName && concepts[generalConceptName]) {
+                            console.log(`Found concept ${generalConceptName} in concept property ${conceptKey}`);
+                            
+                            // Determine if it's a criteria or order concept based on naming convention
+                            if (generalConceptName.toLowerCase().includes('criteria')) {
+                                result[tabKey].criteria[generalConceptName] = concepts[generalConceptName];
+                            } else if (generalConceptName.toLowerCase().includes('order')) {
+                                result[tabKey].order[generalConceptName] = concepts[generalConceptName];
+                            } else {
+                                // Default to criteria if we can't determine
+                                result[tabKey].criteria[generalConceptName] = concepts[generalConceptName];
+                            }
+                        } else {
+                            console.log(`Concept ${generalConceptName} not found in available concepts for concept property ${conceptKey}`);
+                        }
+                    }
+                }
+            } else {
+                console.log(`No CONCEPTS section found for tab ${tabKey}`);
+            }
+        });
+        
+        // Check if we have any concepts that weren't categorized
+        var categorizedConcepts = new Set();
+        
+        // Collect all categorized concepts
+        Object.keys(result).forEach(tabKey => {
+            Object.keys(result[tabKey].criteria).forEach(conceptName => {
+                categorizedConcepts.add(conceptName);
+            });
+            
+            Object.keys(result[tabKey].order).forEach(conceptName => {
+                categorizedConcepts.add(conceptName);
+            });
+        });
+        
+        console.log(`Categorized ${categorizedConcepts.size} concepts out of ${Object.keys(concepts).length}`);
+        
+        // If we have uncategorized concepts, use the fallback method to categorize them
+        if (categorizedConcepts.size < Object.keys(concepts).length) {
+            console.log('Some concepts were not categorized, using fallback for remaining concepts');
+            
+            var uncategorizedConcepts = {};
+            Object.keys(concepts).forEach(conceptName => {
+                if (!categorizedConcepts.has(conceptName)) {
+                    uncategorizedConcepts[conceptName] = concepts[conceptName];
+                }
+            });
+            
+            var fallbackResult = this.fallbackGroupConcepts(uncategorizedConcepts);
+            
+            // Merge the fallback result with the main result
+            Object.keys(fallbackResult).forEach(tabKey => {
+                if (!result[tabKey]) {
+                    result[tabKey] = fallbackResult[tabKey];
+                } else {
+                    // Merge criteria
+                    Object.keys(fallbackResult[tabKey].criteria).forEach(conceptName => {
+                        if (!result[tabKey].criteria[conceptName]) {
+                            result[tabKey].criteria[conceptName] = fallbackResult[tabKey].criteria[conceptName];
+                        }
+                    });
+                    
+                    // Merge order
+                    Object.keys(fallbackResult[tabKey].order).forEach(conceptName => {
+                        if (!result[tabKey].order[conceptName]) {
+                            result[tabKey].order[conceptName] = fallbackResult[tabKey].order[conceptName];
+                        }
+                    });
+                }
+            });
+        }
+        
+        console.log('===== FINAL GROUPED CONCEPTS =====');
+        console.log(result);
+        console.log('==================================');
+        
+        return result;
+    }
+    
+    /**
+     * Fallback method to group concepts when model configuration is not available
+     * @param {Object} concepts - The concepts to group
+     * @returns {Object} - Grouped concepts by tab and section
+     */
+    fallbackGroupConcepts(concepts) {
+        console.log('===== STARTING FALLBACK CONCEPT GROUPING =====');
+        console.log('Grouping concepts using fallback method:', concepts);
+        
+        // Initialize the result structure with default tabs
+        var result = {
+            magnesium: {
+                criteria: {},
+                order: {}
+            },
+            potassium: {
+                criteria: {},
+                order: {}
+            },
+            phosphate: {
+                criteria: {},
+                order: {}
+            }
+        };
+        
+        // Group concepts based on their names
+        Object.keys(concepts).forEach(conceptName => {
+            var concept = concepts[conceptName];
+            var lowerName = conceptName.toLowerCase();
+            
+            console.log(`Processing concept: ${conceptName}`);
+            
+            // Check for magnesium concepts
+            if (lowerName.includes('mag')) {
+                console.log(`${conceptName} identified as a magnesium concept`);
+                
+                if (lowerName.includes('criteria')) {
+                    console.log(`${conceptName} is a magnesium criteria concept`);
+                    result.magnesium.criteria[conceptName] = concept;
+                } else if (lowerName.includes('order')) {
+                    console.log(`${conceptName} is a magnesium order concept`);
+                    result.magnesium.order[conceptName] = concept;
+                } else {
+                    // Default to criteria if we can't determine
+                    console.log(`${conceptName} defaulting to magnesium criteria`);
+                    result.magnesium.criteria[conceptName] = concept;
+                }
+            }
+            // Check for potassium concepts
+            else if (lowerName.includes('potassium') || lowerName.includes('potas') || lowerName.includes('pota') || lowerName.includes('pot')) {
+                console.log(`${conceptName} identified as a potassium concept`);
+                
+                if (lowerName.includes('criteria')) {
+                    console.log(`${conceptName} is a potassium criteria concept`);
+                    result.potassium.criteria[conceptName] = concept;
+                } else if (lowerName.includes('order')) {
+                    console.log(`${conceptName} is a potassium order concept`);
+                    result.potassium.order[conceptName] = concept;
+                } else {
+                    // Default to criteria if we can't determine
+                    console.log(`${conceptName} defaulting to potassium criteria`);
+                    result.potassium.criteria[conceptName] = concept;
+                }
+            }
+            // Check for phosphate concepts
+            else if (lowerName.includes('phosphate') || lowerName.includes('phos')) {
+                console.log(`${conceptName} identified as a phosphate concept`);
+                
+                if (lowerName.includes('criteria')) {
+                    console.log(`${conceptName} is a phosphate criteria concept`);
+                    result.phosphate.criteria[conceptName] = concept;
+                } else if (lowerName.includes('order')) {
+                    console.log(`${conceptName} is a phosphate order concept`);
+                    result.phosphate.order[conceptName] = concept;
+                } else {
+                    // Default to criteria if we can't determine
+                    console.log(`${conceptName} defaulting to phosphate criteria`);
+                    result.phosphate.criteria[conceptName] = concept;
+                }
+            }
+            // If we can't determine the electrolyte type, try to infer from other patterns
+            else {
+                console.log(`${conceptName} has no clear electrolyte type, trying to infer`);
+                
+                // Try to infer from other patterns in the name
+                if (lowerName.includes('mg')) {
+                    console.log(`${conceptName} inferred as magnesium from 'mg' in name`);
+                    
+                    if (lowerName.includes('criteria')) {
+                        result.magnesium.criteria[conceptName] = concept;
+                    } else if (lowerName.includes('order')) {
+                        result.magnesium.order[conceptName] = concept;
+                    } else {
+                        result.magnesium.criteria[conceptName] = concept;
+                    }
+                } else if (lowerName.includes('k') && !lowerName.includes('check')) {
+                    console.log(`${conceptName} inferred as potassium from 'k' in name`);
+                    
+                    if (lowerName.includes('criteria')) {
+                        result.potassium.criteria[conceptName] = concept;
+                    } else if (lowerName.includes('order')) {
+                        result.potassium.order[conceptName] = concept;
+                    } else {
+                        result.potassium.criteria[conceptName] = concept;
+                    }
+                } else if (lowerName.includes('p') && !lowerName.includes('patient') && !lowerName.includes('protocol')) {
+                    console.log(`${conceptName} inferred as phosphate from 'p' in name`);
+                    
+                    if (lowerName.includes('criteria')) {
+                        result.phosphate.criteria[conceptName] = concept;
+                    } else if (lowerName.includes('order')) {
+                        result.phosphate.order[conceptName] = concept;
+                    } else {
+                        result.phosphate.criteria[conceptName] = concept;
+                    }
+                } else {
+                    // If we still can't determine, put in magnesium as default
+                    console.log(`${conceptName} cannot be categorized, defaulting to magnesium criteria`);
+                    result.magnesium.criteria[conceptName] = concept;
+                }
+            }
+        });
+        
+        console.log('===== FINAL FALLBACK GROUPED CONCEPTS =====');
+        console.log(result);
+        console.log('==========================================');
+        
+        return result;
+    }
+
+    /**
+     * Gets an icon for an electrolyte tab
+     * @param {string} electrolyte - The electrolyte type
+     * @returns {string} - SVG icon HTML
+     */
+    getElectrolyteIcon(electrolyte) {
+        switch (electrolyte.toLowerCase()) {
+            case 'magnesium':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>';
+            case 'potassium':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-3-5h6v2H9zm0-7h2v5H9zm4 0h2v5h-2z"/></svg>';
+            case 'phosphate':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-10h2v6h-2zm0-4h2v2h-2z"/></svg>';
+            default:
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>';
+        }
+    }
+
+    /**
+     * Gets an icon for a section
+     * @param {string} section - The section type
+     * @returns {string} - SVG icon HTML
+     */
+    getSectionIcon(section) {
+        switch (section.toLowerCase()) {
+            case 'criteria':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
+            case 'order':
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>';
+            default:
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>';
+        }
+    }
+
+    /**
+     * Formats a section name for display
+     * @param {string} section - The section type
+     * @returns {string} - Formatted section name
+     */
+    formatSectionName(section) {
+        switch (section.toLowerCase()) {
+            case 'criteria':
+                return 'Criteria';
+            case 'order':
+                return 'Order';
+            default:
+                return section.charAt(0).toUpperCase() + section.slice(1);
+        }
+    }
+}
+
+// Create and export a singleton instance
+var testPatientUI = new TestPatientUI();
+export default testPatientUI;
+
+// Also make it available globally for testing
+window.testPatientUI = testPatientUI; 

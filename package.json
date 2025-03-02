@@ -1,0 +1,13 @@
+{
+  "name": "electrolyte-advisor",
+  "version": "1.0.0",
+  "description": "Electrolyte Advisor Application",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test-grouping.js",
+    "test:grouping": "node test-concept-grouping.js"
+  },
+  "author": "",
+  "license": "ISC"
+} 
