@@ -1,5 +1,24 @@
+/* Add this at the top to ensure the entire page doesn't scroll horizontally */
+html, body {
+    overflow-x: hidden;
+}
+
 .toggle-editor-btn {
-    left: 20px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.toggle-editor-btn:hover {
+    background: #0069d9;
 }
 
 .app-container, .editor-container {
@@ -9,12 +28,15 @@
     width: 100%;
     height: 100%;
     transition: transform 0.3s ease;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .editor-container {
     background: #2d2d2d;
     z-index: 10;
     transform: translateX(100%);
+    display: block; /* Always display but transform off-screen */
 }
 
 .editor-container.active {
@@ -50,24 +72,6 @@
 
 .editor-toolbar button:hover {
     background: #5a5a5a;
-}
-
-.toggle-editor-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 100;
-    padding: 10px 15px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.toggle-editor-btn:hover {
-    background: #0069d9;
 }
 
 /* Mini-editor styles */

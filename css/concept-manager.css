@@ -1,0 +1,237 @@
+/* Concept Manager Styles */
+
+.concept-manager {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Search Container */
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 5px;
+    padding: 8px 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 5px;
+}
+
+.search-icon {
+    margin-right: 10px;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 5px 0;
+}
+
+.search-input::placeholder {
+    color: #aaa;
+}
+
+/* No Results Message */
+.no-results-message {
+    text-align: center;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    color: #666;
+    font-style: italic;
+    margin-top: 10px;
+    border: 1px dashed #ddd;
+}
+
+/* Concepts Section */
+.concepts-section {
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.concepts-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+
+.concepts-summary {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Concepts Table */
+.concepts-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: white;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.concepts-table-header {
+    display: flex;
+    background-color: #f0f0f0;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.concepts-table-row {
+    display: flex;
+    border-bottom: 1px solid #eee;
+}
+
+.concepts-table-row:last-child {
+    border-bottom: none;
+}
+
+.concepts-table-row:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.concept-column {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.concept-name-column {
+    flex: 2;
+    font-weight: 500;
+    color: #444;
+}
+
+.concept-active-column {
+    flex: 1;
+    justify-content: center;
+}
+
+.concept-value-column {
+    flex: 2;
+}
+
+.concept-active-checkbox {
+    margin: 0;
+    width: 18px;
+    height: 18px;
+}
+
+.concept-value-input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 90%;
+    font-size: 0.9rem;
+}
+
+/* Expressions Section */
+.expressions-section {
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.expressions-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+}
+
+.expressions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.expression-item {
+    padding: 10px;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.expression-text {
+    font-family: monospace;
+    background-color: #f5f5f5;
+    padding: 8px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.expression-result {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.result-value {
+    font-weight: bold;
+}
+
+.result-true {
+    color: #4CAF50;
+}
+
+.result-false {
+    color: #F44336;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .concepts-table-header,
+    .concepts-table-row {
+        flex-direction: column;
+    }
+    
+    .concept-column {
+        width: 100%;
+        padding: 8px 10px;
+    }
+    
+    .concept-name-column {
+        font-weight: bold;
+        background-color: #f5f5f5;
+    }
+    
+    .concept-value-input {
+        width: 100%;
+    }
+} 

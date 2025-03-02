@@ -1,5 +1,32 @@
 // Initialize the application
 $(document).ready(function() {
+    // Import the concept integration module
+    import('./concept-integration.js')
+        .then(module => {
+            const conceptIntegration = module.default;
+            
+            // Initialize the concept manager
+            conceptIntegration.initialize().then(() => {
+                // Add the settings icon to the app container
+                conceptIntegration.addSettingsIcon('app-container');
+                
+                // Make the openConceptManager function available globally for testing
+                window.openConceptManager = () => {
+                    conceptIntegration.openConceptManager().catch(error => {
+                        console.error('Failed to open concept manager:', error);
+                        showError('Failed to open concept manager. Please check the console for details.');
+                    });
+                };
+            }).catch(error => {
+                console.error('Error initializing concept integration:', error);
+                showError('Failed to initialize concept integration. Please check the console for details.');
+            });
+        })
+        .catch(error => {
+            console.error('Error importing concept integration:', error);
+            showError('Failed to import concept integration. Please check the console for details.');
+        });
+    
     // Load configuration
     $.getJSON('config/config.json', function(config) {
         // Store the default configuration globally
@@ -19,6 +46,17 @@ $(document).ready(function() {
 
     // Make initializeAdvisor globally accessible
     window.initializeAdvisor = initializeAdvisor;
+
+    // Helper function to show error messages
+    function showError(message) {
+        const errorElement = $('<div class="error-message"></div>').text(message);
+        $('body').append(errorElement);
+        
+        // Remove the error message after 5 seconds
+        setTimeout(() => {
+            errorElement.remove();
+        }, 5000);
+    }
 
     function initializeAdvisor(config) {
         // If no config is provided, use the current config
@@ -69,7 +107,7 @@ $(document).ready(function() {
                     <div>FIN: ATK500000000036 48888582</div>
                 </div>
             </div>
-        `).appendTo('body');
+        `).appendTo('#advisor-container');
     }
     
     function renderTabContent(tab, container) {
@@ -475,6 +513,9 @@ $(document).ready(function() {
 
     // Helper function to render the advisor
     function renderAdvisor(config, cclResponse) {
+        // Clear the advisor container first
+        $('#advisor-container').empty();
+        
         // Create patient header
         createPatientHeader();
         
@@ -616,6 +657,15 @@ $(document).ready(function() {
                 
                 // Reinitialize the advisor with the updated configuration
                 initializeAdvisor(window.currentConfig);
+                
+                // Notify the full-screen editor of the configuration change
+                if (window.CodeMirror && document.getElementById("config-editor")) {
+                    // Create a custom event to notify the editor.js that the config has changed
+                    const configChangeEvent = new CustomEvent('configChanged', {
+                        detail: { config: window.currentConfig }
+                    });
+                    document.dispatchEvent(configChangeEvent);
+                }
                 
                 // Close the mini-editor
                 miniEditorContainer.remove();
@@ -835,6 +885,22 @@ $(document).ready(function() {
                 
                 // Reinitialize the advisor with the updated configuration
                 initializeAdvisor(window.currentConfig);
+                
+                // Update the full-screen editor if it's available
+                if (window.CodeMirror && document.getElementById("config-editor")) {
+                    // We need to access the existing CodeMirror instance
+                    // The instance is likely stored in a variable in editor.js
+                    // Let's make the editor instance accessible globally
+                    
+                    // First, update the window.currentConfig
+                    // This ensures that when the full editor is opened, it will load the updated config
+                    
+                    // Create a custom event to notify the editor.js that the config has changed
+                    const configChangeEvent = new CustomEvent('configChanged', {
+                        detail: { config: window.currentConfig }
+                    });
+                    document.dispatchEvent(configChangeEvent);
+                }
                 
                 // Close the mini-editor
                 miniEditorContainer.remove();

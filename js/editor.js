@@ -124,6 +124,30 @@ $(document).ready(function() {
         
         // Load the configuration directly
         loadConfigDirectly();
+        
+        // Make the editor instance accessible globally
+        window.fullScreenEditor = editor;
+        
+        // Listen for config changes from mini-editors
+        document.addEventListener('configChanged', function(event) {
+            if (event.detail && event.detail.config) {
+                // Update the editor's content with the new config
+                editorDefaultConfig = JSON.parse(JSON.stringify(event.detail.config));
+                
+                // Only update the editor content if it's currently visible
+                if ($('.editor-container').hasClass('active')) {
+                    try {
+                        const configString = JSON.stringify(event.detail.config, null, 2);
+                        editor.setValue(configString);
+                        
+                        // Apply custom highlighting after the editor content is set
+                        setTimeout(() => applyCustomHighlighting(editor), 100);
+                    } catch (e) {
+                        console.error("Error updating editor content:", e);
+                    }
+                }
+            }
+        });
     }
     
     // Load the configuration file directly
@@ -258,217 +282,189 @@ $(document).ready(function() {
                         }
                     }
                 }
-                
-                // Also check for string values that might not be directly after a key
-                const stringRegex = /"([^"\\]*(\\.[^"\\]*)*)"/g;
-                let match;
-                while ((match = stringRegex.exec(line)) !== null) {
-                    // Skip if this is a key (keys are followed by a colon)
-                    const afterString = line.substring(match.index + match[0].length).trim();
-                    if (afterString.startsWith(':')) {
-                        continue;
-                    }
-                    
-                    const stringContent = match[1];
-                    const startPos = match.index + 1; // +1 to skip the opening quote
-                    
-                    // Check for HTML content
-                    if (stringContent.includes('<') && stringContent.includes('>')) {
-                        highlightHtmlInString(stringContent, startPos, lineIndex, editorInstance);
-                    }
-                    
-                    // Check for operators
-                    highlightInString(stringContent, /([<>]=?|==|!=|<=|>=|=)/g, "highlight-operator", startPos, lineIndex, editorInstance);
-                    
-                    // Check for keywords
-                    highlightInString(stringContent, /\b(AND|OR)\b/g, "highlight-keyword", startPos, lineIndex, editorInstance);
-                    
-                    // Check for numbers
-                    highlightInString(stringContent, /\b(\d+)\b/g, "highlight-number", startPos, lineIndex, editorInstance);
-                    
-                    // Check for brackets
-                    highlightInString(stringContent, /(\{|\})/g, "highlight-bracket", startPos, lineIndex, editorInstance);
-                }
             });
         } catch (e) {
-            console.error("Error in custom highlighting:", e);
+            console.error("Error applying custom highlighting:", e);
         }
     }
     
     // Helper function to find the end of a string
     function findStringEnd(line, startPos) {
+        let pos = startPos;
         let inEscape = false;
-        for (let i = startPos + 1; i < line.length; i++) {
-            if (inEscape) {
+        
+        while (pos < line.length) {
+            const char = line[pos];
+            if (char === '\\') {
+                inEscape = !inEscape;
+            } else {
+                if (char === '"' && !inEscape) {
+                    return pos + 1;
+                }
                 inEscape = false;
-            } else if (line[i] === '\\') {
-                inEscape = true;
-            } else if (line[i] === '"') {
-                return i + 1;
             }
+            pos++;
         }
-        return line.length;
+        
+        return startPos; // If no end found, return the start position
     }
     
-    // Helper function to highlight patterns within strings
+    // Helper function to highlight patterns in strings
     function highlightInString(text, pattern, className, startOffset, lineIndex, editorInstance) {
         let match;
-        pattern.lastIndex = 0; // Reset regex
-        
         while ((match = pattern.exec(text)) !== null) {
-            const start = { line: lineIndex, ch: startOffset + match.index };
-            const end = { line: lineIndex, ch: startOffset + match.index + match[0].length };
-            
-            editorInstance.markText(start, end, { className: "cm-" + className });
+            editorInstance.markText(
+                {line: lineIndex, ch: startOffset + match.index},
+                {line: lineIndex, ch: startOffset + match.index + match[0].length},
+                {className: `cm-${className}`}
+            );
         }
     }
     
     // Helper function to highlight HTML in strings
     function highlightHtmlInString(text, startOffset, lineIndex, editorInstance) {
         // Highlight HTML tags
-        const tagRegex = /<\/?([a-zA-Z][a-zA-Z0-9]*)[^>]*>/g;
+        const tagPattern = /<\/?[a-zA-Z][^>]*>/g;
         let match;
         
-        while ((match = tagRegex.exec(text)) !== null) {
-            const tagStart = { line: lineIndex, ch: startOffset + match.index };
-            const tagEnd = { line: lineIndex, ch: startOffset + match.index + match[0].length };
+        while ((match = tagPattern.exec(text)) !== null) {
+            const tagText = match[0];
+            const tagStart = match.index;
+            const tagEnd = tagStart + tagText.length;
             
-            editorInstance.markText(tagStart, tagEnd, { className: "cm-html-tag" });
+            // Highlight the entire tag
+            editorInstance.markText(
+                {line: lineIndex, ch: startOffset + tagStart},
+                {line: lineIndex, ch: startOffset + tagEnd},
+                {className: "cm-html-tag"}
+            );
             
             // Highlight attributes within the tag
-            const tagContent = match[0];
-            const attrRegex = /([a-zA-Z][a-zA-Z0-9-]*)=["']([^"']*)["']/g;
+            const attrPattern = /([a-zA-Z-]+)=["']([^"']*)["']/g;
             let attrMatch;
             
-            while ((attrMatch = attrRegex.exec(tagContent)) !== null) {
-                // Highlight attribute name
-                const attrNameStart = { line: lineIndex, ch: startOffset + match.index + attrMatch.index };
-                const attrNameEnd = { line: lineIndex, ch: startOffset + match.index + attrMatch.index + attrMatch[1].length };
+            while ((attrMatch = attrPattern.exec(tagText)) !== null) {
+                // Attribute name
+                editorInstance.markText(
+                    {line: lineIndex, ch: startOffset + tagStart + attrMatch.index},
+                    {line: lineIndex, ch: startOffset + tagStart + attrMatch.index + attrMatch[1].length},
+                    {className: "cm-html-attribute"}
+                );
                 
-                editorInstance.markText(attrNameStart, attrNameEnd, { className: "cm-html-attribute" });
-                
-                // Highlight attribute value
-                const valueStart = { line: lineIndex, ch: startOffset + match.index + attrMatch.index + attrMatch[1].length + 2 }; // +2 for = and quote
-                const valueEnd = { line: lineIndex, ch: startOffset + match.index + attrMatch.index + attrMatch[0].length - 1 }; // -1 for closing quote
-                
-                editorInstance.markText(valueStart, valueEnd, { className: "cm-html-string" });
+                // Attribute value
+                const valueStart = attrMatch.index + attrMatch[1].length + 2; // +2 for = and quote
+                editorInstance.markText(
+                    {line: lineIndex, ch: startOffset + tagStart + valueStart},
+                    {line: lineIndex, ch: startOffset + tagStart + valueStart + attrMatch[2].length},
+                    {className: "cm-html-string"}
+                );
             }
-        }
-        
-        // Highlight content between tags
-        const contentRegex = />([^<]+)</g;
-        while ((match = contentRegex.exec(text)) !== null) {
-            const contentStart = { line: lineIndex, ch: startOffset + match.index + 1 }; // +1 for >
-            const contentEnd = { line: lineIndex, ch: startOffset + match.index + 1 + match[1].length };
-            
-            editorInstance.markText(contentStart, contentEnd, { className: "cm-html-content" });
         }
     }
     
-    // Toggle between editor and advisor views
+    // Toggle editor visibility
     function toggleEditor() {
         const editorContainer = $('.editor-container');
         const appContainer = $('.app-container');
+        const toggleButton = $('#toggle-editor-btn');
         
         if (editorContainer.hasClass('active')) {
+            // Hide editor
             editorContainer.removeClass('active');
             appContainer.removeClass('inactive');
+            toggleButton.text('Edit Configuration');
+            
+            // If there are any changes, ask if the user wants to save
+            const currentConfig = editor.getValue();
+            const defaultConfig = JSON.stringify(editorDefaultConfig, null, 2);
+            
+            if (currentConfig !== defaultConfig) {
+                if (confirm('You have unsaved changes. Do you want to save them before closing?')) {
+                    saveConfig();
+                }
+            }
         } else {
+            // Show editor
             editorContainer.addClass('active');
             appContainer.addClass('inactive');
+            toggleButton.text('Close Editor');
             
-            // Make sure the editor content is up to date
+            // Load the latest configuration from window.currentConfig
             if (window.currentConfig) {
                 try {
                     const configString = JSON.stringify(window.currentConfig, null, 2);
                     editor.setValue(configString);
                     
+                    // Update editorDefaultConfig to match window.currentConfig
+                    editorDefaultConfig = JSON.parse(JSON.stringify(window.currentConfig));
+                    
                     // Apply custom highlighting after the editor content is set
                     setTimeout(() => applyCustomHighlighting(editor), 100);
                 } catch (e) {
-                    console.error("Error using window.currentConfig:", e);
-                    
-                    // Fall back to our local copy
-                    if (editorDefaultConfig) {
-                        editor.setValue(JSON.stringify(editorDefaultConfig, null, 2));
-                        setTimeout(() => applyCustomHighlighting(editor), 100);
-                    } else {
-                        editor.setValue("{}");
-                    }
+                    console.error("Error loading current configuration:", e);
                 }
-            } else if (editorDefaultConfig) {
-                editor.setValue(JSON.stringify(editorDefaultConfig, null, 2));
-                setTimeout(() => applyCustomHighlighting(editor), 100);
-            } else {
-                editor.setValue("{}");
             }
+            
+            // Refresh the editor to ensure proper rendering
+            setTimeout(() => {
+                editor.refresh();
+            }, 300); // Wait for the transition to complete
         }
     }
     
-    // Save the edited configuration and apply it
+    // Save and apply the configuration
     function saveConfig() {
         try {
             // Get the editor content
-            const editorContent = editor.getValue();
+            const configString = editor.getValue();
             
             // Parse the JSON to validate it
-            const newConfig = JSON.parse(editorContent);
+            const config = JSON.parse(configString);
             
-            // Update the current configuration
-            window.currentConfig = newConfig;
+            // Here you would typically send the config to the server
+            // For this example, we'll just update the default config
+            editorDefaultConfig = config;
             
-            // Also update our local copy
-            editorDefaultConfig = JSON.parse(JSON.stringify(newConfig));
+            // Update the window.currentConfig to ensure changes are reflected in the app
+            window.currentConfig = JSON.parse(JSON.stringify(config));
             
-            // Reinitialize the advisor with the new configuration
-            if (typeof window.initializeAdvisor === 'function') {
-                window.initializeAdvisor(newConfig);
-                
-                // Switch back to the advisor view
-                toggleEditor();
-                
-                // Show success message
-                alert("Configuration updated successfully!");
-            } else {
-                console.error("initializeAdvisor function not found");
-                alert("Error: initializeAdvisor function not found");
+            // Apply the configuration to the application by reinitializing the advisor
+            if (window.initializeAdvisor) {
+                window.initializeAdvisor(window.currentConfig);
             }
+            
+            // Apply the configuration to the application
+            // This would typically trigger a reload or update of the application
+            alert('Configuration saved and applied successfully!');
+            
+            // Reinitialize the concept manager without opening it
+            if (window.conceptIntegration) {
+                window.conceptIntegration.initialize().catch(error => {
+                    console.error('Failed to reinitialize concept manager:', error);
+                });
+            }
+            
+            // Hide the editor
+            toggleEditor();
         } catch (e) {
-            // Show error message
-            console.error("Error in saveConfig:", e);
-            alert("Error parsing JSON: " + e.message);
+            alert(`Error saving configuration: ${e.message}`);
         }
     }
     
-    // Reset to the default configuration
+    // Reset the configuration to default
     function resetConfig() {
-        if (confirm("Are you sure you want to reset to the default configuration?")) {
-            if (window.defaultConfig) {
-                // Reset the editor content
-                try {
-                    const configString = JSON.stringify(window.defaultConfig, null, 2);
-                    editor.setValue(configString);
-                    setTimeout(() => applyCustomHighlighting(editor), 100);
-                    
-                    // Reset the current configuration
-                    window.currentConfig = JSON.parse(JSON.stringify(window.defaultConfig));
-                    
-                    // Reinitialize the advisor
-                    if (typeof window.initializeAdvisor === 'function') {
-                        window.initializeAdvisor(window.currentConfig);
-                        
-                        // Show success message
-                        alert("Configuration reset to default!");
-                    } else {
-                        console.error("initializeAdvisor function not found");
-                        alert("Error: initializeAdvisor function not found");
-                    }
-                } catch (e) {
-                    console.error("Error resetting editor value:", e);
-                }
-            } else {
-                console.error("Default configuration not available");
-                alert("Error: Default configuration not available");
+        if (confirm('Are you sure you want to reset the configuration to default? All changes will be lost.')) {
+            // Reset the editor content to the default configuration
+            try {
+                const configString = JSON.stringify(editorDefaultConfig, null, 2);
+                editor.setValue(configString);
+                
+                // Apply custom highlighting after the editor content is set
+                setTimeout(() => applyCustomHighlighting(editor), 100);
+                
+                alert('Configuration reset to default.');
+            } catch (e) {
+                alert(`Error resetting configuration: ${e.message}`);
             }
         }
     }
@@ -477,49 +473,12 @@ $(document).ready(function() {
     initializeEditor();
     
     // Set up event handlers
-    $('#toggle-editor-btn').click(function() {
-        toggleEditor();
-    });
+    $('#toggle-editor-btn').on('click', toggleEditor);
+    $('#save-config-btn').on('click', saveConfig);
+    $('#reset-config-btn').on('click', resetConfig);
+    $('#close-editor-btn').on('click', toggleEditor);
     
-    $('#close-editor-btn').click(function() {
-        toggleEditor();
-    });
-    
-    $('#save-config-btn').click(function() {
-        saveConfig();
-    });
-    
-    $('#reset-config-btn').click(function() {
-        resetConfig();
-    });
-    
-    // Add change handler to reapply highlighting when content changes
-    editor.on("change", function() {
-        // Use setTimeout to avoid applying during the change operation
-        clearTimeout(editor.highlightTimeout);
-        editor.highlightTimeout = setTimeout(() => applyCustomHighlighting(editor), 500);
-    });
-    
-    // Add global keyboard shortcut for Ctrl+S when in editor mode
-    $(document).keydown(function(e) {
-        // Check if the editor is active
-        if ($('.editor-container').hasClass('active')) {
-            // Check for Ctrl+S (keyCode 83)
-            if (e.ctrlKey && e.keyCode === 83) {
-                // Prevent the browser's save dialog
-                e.preventDefault();
-                // Save and apply the configuration
-                saveConfig();
-                return false;
-            }
-        }
-    });
-    
-    // Export functions for use in mini-editor
-    window.jsonEditorHelpers = {
-        applyCustomHighlighting,
-        findStringEnd,
-        highlightInString,
-        highlightHtmlInString
-    };
+    // Make sure the editor container is not active initially
+    $('.editor-container').removeClass('active');
+    $('.app-container').removeClass('inactive');
 }); 
