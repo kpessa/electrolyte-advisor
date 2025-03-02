@@ -131,6 +131,13 @@ body {
     border-bottom: 1px solid #2b6ca3;
     color: #000; /* Changed to black for better match */
     font-size: 12px; /* Standard size */
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.section-name {
+    flex-grow: 1;
 }
 
 .orders-list {
@@ -259,4 +266,84 @@ body {
 
 label {
     vertical-align: middle;
+}
+
+/* Styles for section visibility toggle */
+.section-visibility-toggle {
+    margin-left: 10px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    float: right;
+}
+
+.section-visibility-toggle:hover {
+    opacity: 1;
+}
+
+/* Completely hidden section styles */
+.completely-hidden {
+    display: none !important;
+}
+
+/* Context menu styles */
+.context-menu {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 5px 0;
+    z-index: 1000;
+}
+
+.context-menu-item {
+    padding: 8px 15px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.context-menu-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Show All Sections button */
+.show-all-sections-btn {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.show-all-sections-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Show All button container */
+.show-all-button-container {
+    margin-bottom: 10px;
+}
+
+/* Section wrapper for positioning the visibility toggle */
+.order-section-wrapper {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+/* Order section styles */
+.order-section {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+.order-section-header {
+    font-weight: bold;
+    margin-bottom: 8px;
+    position: relative;
 }

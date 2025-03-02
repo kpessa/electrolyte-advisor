@@ -295,12 +295,40 @@ $(document).ready(function() {
     
     function renderOrderSections(tab, container) {
         if (tab.ORDER_SECTIONS && tab.ORDER_SECTIONS.length > 0) {
-            tab.ORDER_SECTIONS.forEach((section, sectionIndex) => {
-                // In a real app, we would evaluate CONCEPT_NAME to determine if section should be shown
-                // For this demo, we'll show all sections
+            // Create a container for the "Show All Sections" button, but don't add it yet
+            const showAllButtonContainer = $('<div class="show-all-button-container" style="display: none;"></div>').appendTo(container);
+            
+            // Create the "Show All Sections" button
+            const showAllButton = $('<button class="show-all-sections-btn">Show All Hidden Sections</button>');
+            showAllButton.on('click', function() {
+                // Show all hidden sections
+                $('.order-section.completely-hidden').removeClass('completely-hidden');
                 
+                // Update section count and hide the button if no sections are hidden
+                updateHiddenSectionCount(showAllButtonContainer);
+            });
+            showAllButtonContainer.append(showAllButton);
+            
+            tab.ORDER_SECTIONS.forEach((section, sectionIndex) => {
+                // Create the order section
                 const orderSection = $('<div class="order-section" data-section-index="' + sectionIndex + '"></div>').appendTo(container);
-                $(`<div class="order-section-header">${section.SECTION_NAME}</div>`).appendTo(orderSection);
+                
+                // Create header
+                const sectionHeader = $(`<div class="order-section-header"></div>`).appendTo(orderSection);
+                
+                // Add section name
+                $(`<span class="section-name">${section.SECTION_NAME}</span>`).appendTo(sectionHeader);
+                
+                // Add visibility toggle icon on the right side
+                const visibilityToggle = $('<span class="section-visibility-toggle" title="Hide Section">👁️</span>');
+                visibilityToggle.appendTo(sectionHeader);
+                
+                // Add click handler for visibility toggle
+                visibilityToggle.on('click', function(e) {
+                    e.stopPropagation(); // Prevent triggering other click handlers
+                    toggleSectionVisibility(orderSection, showAllButtonContainer);
+                    $('.context-menu').remove(); // Remove any open context menus
+                });
                 
                 if (section.ORDERS && section.ORDERS.length > 0) {
                     const ordersList = $('<div class="orders-list"></div>').appendTo(orderSection);
@@ -341,9 +369,78 @@ $(document).ready(function() {
                     // Open mini-editor for this section
                     openMiniEditor(activeTabKey, sectionIndex);
                 });
+                
+                // Add right-click context menu
+                orderSection.on('contextmenu', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove any existing context menus
+                    $('.context-menu').remove();
+                    
+                    // Create context menu
+                    const contextMenu = $('<div class="context-menu"></div>');
+                    
+                    // Add hide option
+                    const hideOption = $('<div class="context-menu-item">Hide Section</div>');
+                    hideOption.on('click', function() {
+                        toggleSectionVisibility(orderSection, showAllButtonContainer);
+                        $('.context-menu').remove();
+                    });
+                    contextMenu.append(hideOption);
+                    
+                    // Add edit option
+                    const editOption = $('<div class="context-menu-item">Edit Section</div>');
+                    editOption.on('click', function() {
+                        const sectionIndex = orderSection.data('section-index');
+                        const activeTabButton = $('.uhspa-tab-button.active');
+                        const activeTabKey = activeTabButton.data('tab-key');
+                        openMiniEditor(activeTabKey, sectionIndex);
+                        $('.context-menu').remove();
+                    });
+                    contextMenu.append(editOption);
+                    
+                    // Position and show the context menu
+                    contextMenu.css({
+                        top: e.pageY + 'px',
+                        left: e.pageX + 'px'
+                    });
+                    
+                    $('body').append(contextMenu);
+                    
+                    // Close context menu when clicking elsewhere
+                    $(document).on('click', function() {
+                        $('.context-menu').remove();
+                    });
+                });
             });
         } else {
             $('<div class="no-orders-message">No order sections available for this tab.</div>').appendTo(container);
+        }
+    }
+    
+    // Helper function to toggle section visibility
+    function toggleSectionVisibility(section, showAllButtonContainer) {
+        // Completely hide the section
+        section.addClass('completely-hidden');
+        
+        // Update the hidden section count and show/hide the "Show All" button
+        updateHiddenSectionCount(showAllButtonContainer);
+    }
+    
+    // Helper function to update hidden section count and show/hide the button
+    function updateHiddenSectionCount(showAllButtonContainer) {
+        const hiddenSectionCount = $('.order-section.completely-hidden').length;
+        
+        if (hiddenSectionCount > 0) {
+            // Update button text with count
+            const buttonText = `Show All Hidden Sections (${hiddenSectionCount})`;
+            showAllButtonContainer.find('.show-all-sections-btn').text(buttonText);
+            
+            // Show the button container
+            showAllButtonContainer.show();
+        } else {
+            // Hide the button container if no sections are hidden
+            showAllButtonContainer.hide();
         }
     }
     
@@ -384,20 +481,18 @@ $(document).ready(function() {
         // Create content wrapper
         const contentWrapper = $('<div class="content-wrapper"></div>').appendTo('#advisor-container');
         
-        // Create tabs
+        // Create tabs - ensure only the first tab is active
         tabs.forEach((tab, index) => {
             const tabButton = $(`<div class="uhspa-tab-button" data-tab-key="${tab.TAB_KEY}">${tab.TAB_NAME}</div>`);
-            // Default to first tab or Phosphate tab if it exists
-            if (index === 0 || tab.TAB_KEY === "PHOSPHATE") {
+            // Only set the first tab as active
+            if (index === 0) {
                 tabButton.addClass('active');
             }
             tabButton.appendTo(tabsContainer);
         });
         
-        // Create tab content for the active tab
-        const activeTabButton = $('.uhspa-tab-button.active');
-        const activeTabKey = activeTabButton.data('tab-key');
-        const activeTab = tabs.find(tab => tab.TAB_KEY === activeTabKey) || tabs[0];
+        // Create tab content for the active tab (first tab)
+        const activeTab = tabs[0];
         
         renderTabContent(activeTab, contentWrapper);
         
