@@ -137,11 +137,11 @@ $(document).ready(function() {
     
     function renderOrderSections(tab, container) {
         if (tab.ORDER_SECTIONS && tab.ORDER_SECTIONS.length > 0) {
-            tab.ORDER_SECTIONS.forEach(section => {
+            tab.ORDER_SECTIONS.forEach((section, sectionIndex) => {
                 // In a real app, we would evaluate CONCEPT_NAME to determine if section should be shown
                 // For this demo, we'll show all sections
                 
-                const orderSection = $('<div class="order-section"></div>').appendTo(container);
+                const orderSection = $('<div class="order-section" data-section-index="' + sectionIndex + '"></div>').appendTo(container);
                 $(`<div class="order-section-header">${section.SECTION_NAME}</div>`).appendTo(orderSection);
                 
                 if (section.ORDERS && section.ORDERS.length > 0) {
@@ -168,6 +168,21 @@ $(document).ready(function() {
                 } else {
                     $('<div class="no-orders">No orders available</div>').appendTo(orderSection);
                 }
+                
+                // Add double-click handler to open mini-editor
+                orderSection.dblclick(function(e) {
+                    // Don't trigger if clicking on a checkbox or label
+                    if ($(e.target).is('input') || $(e.target).is('label')) {
+                        return;
+                    }
+                    
+                    const sectionIndex = $(this).data('section-index');
+                    const activeTabButton = $('.uhspa-tab-button.active');
+                    const activeTabKey = activeTabButton.data('tab-key');
+                    
+                    // Open mini-editor for this section
+                    openMiniEditor(activeTabKey, sectionIndex);
+                });
             });
         } else {
             $('<div class="no-orders-message">No order sections available for this tab.</div>').appendTo(container);
@@ -239,6 +254,121 @@ $(document).ready(function() {
             // Clear and render new content
             contentWrapper.empty();
             renderTabContent(selectedTab, contentWrapper);
+        });
+    }
+
+    // Add this new function to handle the mini-editor
+    function openMiniEditor(tabKey, sectionIndex) {
+        // Find the tab and section in the configuration
+        const tab = window.currentConfig.RCONFIG.TABS.find(tab => tab.TAB_KEY === tabKey);
+        if (!tab || !tab.ORDER_SECTIONS || !tab.ORDER_SECTIONS[sectionIndex]) {
+            console.error("Section not found in configuration");
+            return;
+        }
+        
+        const section = tab.ORDER_SECTIONS[sectionIndex];
+        
+        // Close any existing mini-editors
+        $('.mini-editor-container').remove();
+        
+        // Create mini-editor container
+        const miniEditorContainer = $(`
+            <div class="mini-editor-container">
+                <div class="mini-editor-header">
+                    <span>Editing: ${section.SECTION_NAME}</span>
+                    <div class="mini-editor-actions">
+                        <button class="mini-editor-save">Save</button>
+                        <button class="mini-editor-cancel">Cancel</button>
+                    </div>
+                </div>
+                <div class="mini-editor-content">
+                    <textarea class="mini-editor-textarea"></textarea>
+                </div>
+            </div>
+        `);
+        
+        // Append to the order section
+        const orderSection = $(`.order-section[data-section-index="${sectionIndex}"]`);
+        miniEditorContainer.insertAfter(orderSection);
+        
+        // Set the content of the textarea
+        const sectionJson = JSON.stringify(section, null, 2);
+        miniEditorContainer.find('.mini-editor-textarea').val(sectionJson);
+        
+        // Initialize CodeMirror on the textarea
+        const miniEditor = CodeMirror.fromTextArea(miniEditorContainer.find('.mini-editor-textarea')[0], {
+            mode: { name: "javascript", json: true },
+            theme: "material-ocean",
+            lineNumbers: true,
+            matchBrackets: true,
+            autoCloseBrackets: true,
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+            indentUnit: 2,
+            tabSize: 2,
+            lineWrapping: true
+        });
+        
+        // Calculate the appropriate height based on content
+        const contentLines = sectionJson.split('\n').length;
+        const lineHeight = 20; // Approximate height of each line in pixels
+        const paddingHeight = 10; // Additional padding
+        const minHeight = 100; // Minimum height
+        const maxHeight = 400; // Maximum height
+        
+        // Calculate height based on content (line count * line height + padding)
+        let autoHeight = (contentLines * lineHeight) + paddingHeight;
+        
+        // Ensure height is within min/max bounds
+        autoHeight = Math.max(minHeight, Math.min(autoHeight, maxHeight));
+        
+        // Set editor size with auto-calculated height
+        miniEditor.setSize("100%", autoHeight + "px");
+        
+        // Apply custom highlighting if available
+        if (window.jsonEditorHelpers && window.jsonEditorHelpers.applyCustomHighlighting) {
+            setTimeout(() => window.jsonEditorHelpers.applyCustomHighlighting(miniEditor), 100);
+            
+            // Add change handler to reapply highlighting when content changes
+            miniEditor.on("change", function() {
+                clearTimeout(miniEditor.highlightTimeout);
+                miniEditor.highlightTimeout = setTimeout(() => window.jsonEditorHelpers.applyCustomHighlighting(miniEditor), 500);
+                
+                // Update height when content changes
+                const currentLines = miniEditor.getValue().split('\n').length;
+                let newHeight = (currentLines * lineHeight) + paddingHeight;
+                newHeight = Math.max(minHeight, Math.min(newHeight, maxHeight));
+                miniEditor.setSize("100%", newHeight + "px");
+            });
+        }
+        
+        // Handle save button click
+        miniEditorContainer.find('.mini-editor-save').click(function() {
+            try {
+                // Get the edited content
+                const editedContent = miniEditor.getValue();
+                
+                // Parse the JSON to validate it
+                const editedSection = JSON.parse(editedContent);
+                
+                // Update the section in the configuration
+                tab.ORDER_SECTIONS[sectionIndex] = editedSection;
+                
+                // Reinitialize the advisor with the updated configuration
+                initializeAdvisor(window.currentConfig);
+                
+                // Close the mini-editor
+                miniEditorContainer.remove();
+            } catch (e) {
+                // Show error message
+                console.error("Error saving section:", e);
+                alert("Error parsing JSON: " + e.message);
+            }
+        });
+        
+        // Handle cancel button click
+        miniEditorContainer.find('.mini-editor-cancel').click(function() {
+            miniEditorContainer.remove();
         });
     }
 });

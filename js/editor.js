@@ -8,34 +8,85 @@ $(document).ready(function() {
     function initializeEditor() {
         // Add custom CSS for enhanced highlighting
         const customCSS = `
-            /* Basic JSON syntax */
-            .cm-property { color: #f92672; font-weight: bold; }
-            .cm-string { color: #a6e22e; }
-            .cm-number { color: #ae81ff; }
-            .cm-atom { color: #66d9ef; font-style: italic; }
-            .cm-keyword { color: #ff79c6; font-weight: bold; }
-            .cm-operator { color: #ff5555; }
-            .cm-punctuation { color: #f8f8f2; }
-            
             /* Custom markers for content inside strings */
-            .cm-json-key { color: #f92672; font-weight: bold; }
-            .cm-json-value { color: #a6e22e; }
-            .cm-json-string-value { color: #e6db74; }
-            .cm-json-number-value { color: #ae81ff; }
-            .cm-json-boolean-value { color: #66d9ef; font-style: italic; }
-            .cm-json-null-value { color: #fd971f; font-style: italic; }
+            .cm-json-key { color: #f07178; font-weight: bold; }
+            .cm-json-value { color: #c3e88d; }
+            .cm-json-string-value { color: #c3e88d; }
+            .cm-json-number-value { color: #f78c6c; }
+            .cm-json-boolean-value { color: #89ddff; }
+            .cm-json-null-value { color: #c792ea; }
             
             /* Operators and keywords in strings */
-            .cm-highlight-operator { color: #ff5555 !important; font-weight: bold !important; }
-            .cm-highlight-keyword { color: #ff79c6 !important; font-weight: bold !important; }
-            .cm-highlight-number { color: #bd93f9 !important; }
-            .cm-highlight-bracket { color: #ffb86c !important; font-weight: bold !important; }
+            .cm-highlight-operator { color: #89ddff !important; font-weight: bold !important; }
+            .cm-highlight-keyword { color: #c792ea !important; font-weight: bold !important; }
+            .cm-highlight-number { color: #f78c6c !important; }
+            .cm-highlight-bracket { color: #ffcb6b !important; font-weight: bold !important; }
             
             /* HTML in strings */
-            .cm-html-tag { color: #ff79c6 !important; }
-            .cm-html-attribute { color: #50fa7b !important; }
-            .cm-html-string { color: #f1fa8c !important; }
-            .cm-html-content { color: #f8f8f2 !important; }
+            .cm-html-tag { color: #f07178 !important; }
+            .cm-html-attribute { color: #ffcb6b !important; }
+            .cm-html-string { color: #c3e88d !important; }
+            .cm-html-content { color: #eeffff !important; }
+            
+            /* Mini-editor specific styles */
+            .mini-editor-container {
+                border: 1px solid #464b5d;
+                border-radius: 4px;
+                overflow: hidden;
+                background: #0f111a;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                margin: 10px 0;
+            }
+            
+            .mini-editor-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 12px;
+                background: #1a1c25;
+                color: #eeffff;
+                font-size: 14px;
+                border-bottom: 1px solid #464b5d;
+            }
+            
+            .mini-editor-actions button {
+                margin-left: 8px;
+                padding: 4px 10px;
+                background: #464b5d;
+                color: #eeffff;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+                font-size: 12px;
+                transition: background-color 0.2s;
+            }
+            
+            .mini-editor-actions button:hover {
+                background: #5a5f73;
+            }
+            
+            .mini-editor-save {
+                background: #c3e88d !important;
+                color: #0f111a !important;
+            }
+            
+            .mini-editor-save:hover {
+                background: #a5d672 !important;
+            }
+            
+            .mini-editor-cancel {
+                background: #f07178 !important;
+                color: #0f111a !important;
+            }
+            
+            .mini-editor-cancel:hover {
+                background: #e25f67 !important;
+            }
+            
+            .mini-editor-content .CodeMirror {
+                height: 200px;
+                font-size: 12px;
+            }
         `;
         
         // Add the custom CSS to the document
@@ -44,7 +95,7 @@ $(document).ready(function() {
         // Initialize CodeMirror with standard JSON mode
         editor = CodeMirror.fromTextArea(document.getElementById("config-editor"), {
             mode: { name: "javascript", json: true },
-            theme: "monokai",
+            theme: "material-ocean",
             lineNumbers: true,
             matchBrackets: true,
             autoCloseBrackets: true,
@@ -52,6 +103,7 @@ $(document).ready(function() {
             gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
             indentUnit: 2,
             tabSize: 2,
+            lineWrapping: true,
             extraKeys: {
                 "Ctrl-Space": "autocomplete",
                 "Ctrl-Q": function(cm) {
@@ -85,7 +137,7 @@ $(document).ready(function() {
                 editor.setValue(configString);
                 
                 // Apply custom highlighting after the editor content is set
-                setTimeout(applyCustomHighlighting, 100);
+                setTimeout(() => applyCustomHighlighting(editor), 100);
             } catch (e) {
                 console.error("Error setting editor value:", e);
                 editor.setValue("{}");
@@ -97,13 +149,13 @@ $(document).ready(function() {
     }
     
     // Apply custom highlighting to string content
-    function applyCustomHighlighting() {
+    function applyCustomHighlighting(editorInstance) {
         try {
             // Clear any existing marks
-            editor.getAllMarks().forEach(mark => mark.clear());
+            editorInstance.getAllMarks().forEach(mark => mark.clear());
             
             // Get the document content
-            const content = editor.getValue();
+            const content = editorInstance.getValue();
             
             // Parse the JSON to understand the structure
             let jsonObj;
@@ -124,7 +176,7 @@ $(document).ready(function() {
                     const keyEnd = line.indexOf('"', keyStart + 1);
                     
                     // Highlight the key
-                    editor.markText(
+                    editorInstance.markText(
                         {line: lineIndex, ch: keyStart},
                         {line: lineIndex, ch: keyEnd + 1},
                         {className: "cm-json-key"}
@@ -151,7 +203,7 @@ $(document).ready(function() {
                                     const stringContent = line.substring(actualValueStart + 1, stringEnd - 1);
                                     
                                     // Highlight the entire string
-                                    editor.markText(
+                                    editorInstance.markText(
                                         {line: lineIndex, ch: actualValueStart},
                                         {line: lineIndex, ch: stringEnd},
                                         {className: "cm-json-string-value"}
@@ -159,27 +211,27 @@ $(document).ready(function() {
                                     
                                     // Check for HTML content
                                     if (stringContent.includes('<') && stringContent.includes('>')) {
-                                        highlightHtmlInString(stringContent, actualValueStart + 1, lineIndex);
+                                        highlightHtmlInString(stringContent, actualValueStart + 1, lineIndex, editorInstance);
                                     }
                                     
                                     // Check for operators
-                                    highlightInString(stringContent, /([<>]=?|==|!=|<=|>=|=)/g, "highlight-operator", actualValueStart + 1, lineIndex);
+                                    highlightInString(stringContent, /([<>]=?|==|!=|<=|>=|=)/g, "highlight-operator", actualValueStart + 1, lineIndex, editorInstance);
                                     
                                     // Check for keywords
-                                    highlightInString(stringContent, /\b(AND|OR)\b/g, "highlight-keyword", actualValueStart + 1, lineIndex);
+                                    highlightInString(stringContent, /\b(AND|OR)\b/g, "highlight-keyword", actualValueStart + 1, lineIndex, editorInstance);
                                     
                                     // Check for numbers
-                                    highlightInString(stringContent, /\b(\d+)\b/g, "highlight-number", actualValueStart + 1, lineIndex);
+                                    highlightInString(stringContent, /\b(\d+)\b/g, "highlight-number", actualValueStart + 1, lineIndex, editorInstance);
                                     
                                     // Check for brackets
-                                    highlightInString(stringContent, /(\{|\})/g, "highlight-bracket", actualValueStart + 1, lineIndex);
+                                    highlightInString(stringContent, /(\{|\})/g, "highlight-bracket", actualValueStart + 1, lineIndex, editorInstance);
                                 }
                             }
                             // Check for number values
                             else if (/^-?\d+(\.\d+)?/.test(restOfLine)) {
                                 const match = restOfLine.match(/^-?\d+(\.\d+)?/);
                                 if (match) {
-                                    editor.markText(
+                                    editorInstance.markText(
                                         {line: lineIndex, ch: actualValueStart},
                                         {line: lineIndex, ch: actualValueStart + match[0].length},
                                         {className: "cm-json-number-value"}
@@ -189,7 +241,7 @@ $(document).ready(function() {
                             // Check for boolean values
                             else if (restOfLine.startsWith('true') || restOfLine.startsWith('false')) {
                                 const boolLength = restOfLine.startsWith('true') ? 4 : 5;
-                                editor.markText(
+                                editorInstance.markText(
                                     {line: lineIndex, ch: actualValueStart},
                                     {line: lineIndex, ch: actualValueStart + boolLength},
                                     {className: "cm-json-boolean-value"}
@@ -197,7 +249,7 @@ $(document).ready(function() {
                             }
                             // Check for null values
                             else if (restOfLine.startsWith('null')) {
-                                editor.markText(
+                                editorInstance.markText(
                                     {line: lineIndex, ch: actualValueStart},
                                     {line: lineIndex, ch: actualValueStart + 4},
                                     {className: "cm-json-null-value"}
@@ -222,20 +274,20 @@ $(document).ready(function() {
                     
                     // Check for HTML content
                     if (stringContent.includes('<') && stringContent.includes('>')) {
-                        highlightHtmlInString(stringContent, startPos, lineIndex);
+                        highlightHtmlInString(stringContent, startPos, lineIndex, editorInstance);
                     }
                     
                     // Check for operators
-                    highlightInString(stringContent, /([<>]=?|==|!=|<=|>=|=)/g, "highlight-operator", startPos, lineIndex);
+                    highlightInString(stringContent, /([<>]=?|==|!=|<=|>=|=)/g, "highlight-operator", startPos, lineIndex, editorInstance);
                     
                     // Check for keywords
-                    highlightInString(stringContent, /\b(AND|OR)\b/g, "highlight-keyword", startPos, lineIndex);
+                    highlightInString(stringContent, /\b(AND|OR)\b/g, "highlight-keyword", startPos, lineIndex, editorInstance);
                     
                     // Check for numbers
-                    highlightInString(stringContent, /\b(\d+)\b/g, "highlight-number", startPos, lineIndex);
+                    highlightInString(stringContent, /\b(\d+)\b/g, "highlight-number", startPos, lineIndex, editorInstance);
                     
                     // Check for brackets
-                    highlightInString(stringContent, /(\{|\})/g, "highlight-bracket", startPos, lineIndex);
+                    highlightInString(stringContent, /(\{|\})/g, "highlight-bracket", startPos, lineIndex, editorInstance);
                 }
             });
         } catch (e) {
@@ -259,7 +311,7 @@ $(document).ready(function() {
     }
     
     // Helper function to highlight patterns within strings
-    function highlightInString(text, pattern, className, startOffset, lineIndex) {
+    function highlightInString(text, pattern, className, startOffset, lineIndex, editorInstance) {
         let match;
         pattern.lastIndex = 0; // Reset regex
         
@@ -267,12 +319,12 @@ $(document).ready(function() {
             const start = { line: lineIndex, ch: startOffset + match.index };
             const end = { line: lineIndex, ch: startOffset + match.index + match[0].length };
             
-            editor.markText(start, end, { className: "cm-" + className });
+            editorInstance.markText(start, end, { className: "cm-" + className });
         }
     }
     
     // Helper function to highlight HTML in strings
-    function highlightHtmlInString(text, startOffset, lineIndex) {
+    function highlightHtmlInString(text, startOffset, lineIndex, editorInstance) {
         // Highlight HTML tags
         const tagRegex = /<\/?([a-zA-Z][a-zA-Z0-9]*)[^>]*>/g;
         let match;
@@ -281,7 +333,7 @@ $(document).ready(function() {
             const tagStart = { line: lineIndex, ch: startOffset + match.index };
             const tagEnd = { line: lineIndex, ch: startOffset + match.index + match[0].length };
             
-            editor.markText(tagStart, tagEnd, { className: "cm-html-tag" });
+            editorInstance.markText(tagStart, tagEnd, { className: "cm-html-tag" });
             
             // Highlight attributes within the tag
             const tagContent = match[0];
@@ -293,13 +345,13 @@ $(document).ready(function() {
                 const attrNameStart = { line: lineIndex, ch: startOffset + match.index + attrMatch.index };
                 const attrNameEnd = { line: lineIndex, ch: startOffset + match.index + attrMatch.index + attrMatch[1].length };
                 
-                editor.markText(attrNameStart, attrNameEnd, { className: "cm-html-attribute" });
+                editorInstance.markText(attrNameStart, attrNameEnd, { className: "cm-html-attribute" });
                 
                 // Highlight attribute value
                 const valueStart = { line: lineIndex, ch: startOffset + match.index + attrMatch.index + attrMatch[1].length + 2 }; // +2 for = and quote
                 const valueEnd = { line: lineIndex, ch: startOffset + match.index + attrMatch.index + attrMatch[0].length - 1 }; // -1 for closing quote
                 
-                editor.markText(valueStart, valueEnd, { className: "cm-html-string" });
+                editorInstance.markText(valueStart, valueEnd, { className: "cm-html-string" });
             }
         }
         
@@ -309,7 +361,7 @@ $(document).ready(function() {
             const contentStart = { line: lineIndex, ch: startOffset + match.index + 1 }; // +1 for >
             const contentEnd = { line: lineIndex, ch: startOffset + match.index + 1 + match[1].length };
             
-            editor.markText(contentStart, contentEnd, { className: "cm-html-content" });
+            editorInstance.markText(contentStart, contentEnd, { className: "cm-html-content" });
         }
     }
     
@@ -332,21 +384,21 @@ $(document).ready(function() {
                     editor.setValue(configString);
                     
                     // Apply custom highlighting after the editor content is set
-                    setTimeout(applyCustomHighlighting, 100);
+                    setTimeout(() => applyCustomHighlighting(editor), 100);
                 } catch (e) {
                     console.error("Error using window.currentConfig:", e);
                     
                     // Fall back to our local copy
                     if (editorDefaultConfig) {
                         editor.setValue(JSON.stringify(editorDefaultConfig, null, 2));
-                        setTimeout(applyCustomHighlighting, 100);
+                        setTimeout(() => applyCustomHighlighting(editor), 100);
                     } else {
                         editor.setValue("{}");
                     }
                 }
             } else if (editorDefaultConfig) {
                 editor.setValue(JSON.stringify(editorDefaultConfig, null, 2));
-                setTimeout(applyCustomHighlighting, 100);
+                setTimeout(() => applyCustomHighlighting(editor), 100);
             } else {
                 editor.setValue("{}");
             }
@@ -396,7 +448,7 @@ $(document).ready(function() {
                 try {
                     const configString = JSON.stringify(window.defaultConfig, null, 2);
                     editor.setValue(configString);
-                    setTimeout(applyCustomHighlighting, 100);
+                    setTimeout(() => applyCustomHighlighting(editor), 100);
                     
                     // Reset the current configuration
                     window.currentConfig = JSON.parse(JSON.stringify(window.defaultConfig));
@@ -445,7 +497,7 @@ $(document).ready(function() {
     editor.on("change", function() {
         // Use setTimeout to avoid applying during the change operation
         clearTimeout(editor.highlightTimeout);
-        editor.highlightTimeout = setTimeout(applyCustomHighlighting, 500);
+        editor.highlightTimeout = setTimeout(() => applyCustomHighlighting(editor), 500);
     });
     
     // Add global keyboard shortcut for Ctrl+S when in editor mode
@@ -462,4 +514,12 @@ $(document).ready(function() {
             }
         }
     });
+    
+    // Export functions for use in mini-editor
+    window.jsonEditorHelpers = {
+        applyCustomHighlighting,
+        findStringEnd,
+        highlightInString,
+        highlightHtmlInString
+    };
 }); 
