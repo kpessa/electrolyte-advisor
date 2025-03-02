@@ -70,6 +70,7 @@ class ConceptManager {
     setConceptValue(conceptName, value) {
         if (this.conceptInstantiation[conceptName]) {
             this.conceptInstantiation[conceptName].value = value;
+            this.refreshAdvisor();
         }
     }
 
@@ -81,6 +82,7 @@ class ConceptManager {
     setConceptActive(conceptName, isActive) {
         if (this.conceptInstantiation[conceptName]) {
             this.conceptInstantiation[conceptName].isActive = isActive;
+            this.refreshAdvisor();
         }
     }
 
@@ -91,6 +93,16 @@ class ConceptManager {
      */
     evaluateExpression(expression) {
         return evaluateConceptExpression(expression, this.conceptInstantiation);
+    }
+
+    /**
+     * Refreshes the advisor to reflect concept changes
+     */
+    refreshAdvisor() {
+        // Refresh the advisor if the initializeAdvisor function is available
+        if (window.initializeAdvisor) {
+            window.initializeAdvisor();
+        }
     }
 
     /**

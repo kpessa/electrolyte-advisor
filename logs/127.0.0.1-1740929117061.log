@@ -1,0 +1,618 @@
+app.js:1033 Creating CCL response from config
+app.js:1043 Processing tab: Magnesium (MAGNESIUM)
+app.js:1047 Tab has 6 criteria items
+app.js:1048 Criteria structure: [
+  {
+    "LABEL": "Patient not on dialysis",
+    "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "No active dialysis order"
+  },
+  {
+    "LABEL": "Dosing Weight > 50 kg",
+    "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+    "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+    "TOOLTIP": "Dosing weight"
+  },
+  {
+    "LABEL": "No active Insulin Advisor (DKA/HHS)",
+    "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+    "DISPLAY": "",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+    "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+  },
+  {
+    "LABEL": "Est Creat Clear > 30 mL/min",
+    "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min ",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Serum Creatinine < 2 mg/dL",
+    "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL "
+  }
+]
+app.js:1043 Processing tab: Potassium (POTASSIUM)
+app.js:1047 Tab has 6 criteria items
+app.js:1048 Criteria structure: [
+  {
+    "LABEL": "Patient not on dialysis",
+    "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "No active dialysis order"
+  },
+  {
+    "LABEL": "Dosing Weight > 50 kg",
+    "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+    "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+    "TOOLTIP": "Dosing weight"
+  },
+  {
+    "LABEL": "No active Insulin Advisor (DKA/HHS)",
+    "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+    "DISPLAY": "",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+    "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+  },
+  {
+    "LABEL": "Est Creat Clear > 30 mL/min",
+    "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Serum Creatinine < 2 mg/dL",
+    "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL "
+  }
+]
+app.js:1043 Processing tab: Phosphate (PHOSPHATE)
+app.js:1047 Tab has 6 criteria items
+app.js:1048 Criteria structure: [
+  {
+    "LABEL": "Patient not on dialysis",
+    "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "No active dialysis order"
+  },
+  {
+    "LABEL": "Dosing Weight > 50 kg",
+    "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+    "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+    "TOOLTIP": "Dosing weight"
+  },
+  {
+    "LABEL": "No active Insulin Advisor (DKA/HHS)",
+    "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+    "DISPLAY": "",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+    "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+  },
+  {
+    "LABEL": "Est Creat Clear > 30 mL/min",
+    "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Serum Creatinine < 2 mg/dL",
+    "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL"
+  }
+]
+app.js:1099 CCL response created successfully
+app.js:123 Rendering tab content for Magnesium (MAGNESIUM)
+app.js:174 Rendering 6 criteria items for tab MAGNESIUM
+app.js:177 Rendering criterion 0: {LABEL: 'Patient not on dialysis', CONCEPT_NAME: '[%{EACRITERIANODIALYSIS}%]', DISPLAY: '', TOOLTIP: 'No active dialysis order'}
+app.js:189 Display value for criterion 0: 
+app.js:177 Rendering criterion 1: {LABEL: 'Dosing Weight > 50 kg', CONCEPT_NAME: '[%{EACRITERIAWEIGHT}%]', DISPLAY: '@concept{WEIGHTDOSING.value} kg', TOOLTIP: 'Dosing weight'}
+app.js:189 Display value for criterion 1: 70 kg
+app.js:177 Rendering criterion 2: {LABEL: 'No active Insulin Advisor (DKA/HHS)', CONCEPT_NAME: '[%{EACRITERIANODKAHHS}.COUNT < 1%]', DISPLAY: '', TOOLTIP: ''}
+app.js:189 Display value for criterion 2: 
+app.js:177 Rendering criterion 3: {LABEL: 'Cardiac/Tele monitor for Digoxin Order', CONCEPT_NAME: '[%{EACRITERIADIGOXINCARDIAC}%]', DISPLAY: '', TOOLTIP: 'Cardiac monitoring required for patients also receiving digoxin due to risk of heart block'}
+app.js:189 Display value for criterion 3: 
+app.js:177 Rendering criterion 4: {LABEL: 'Est Creat Clear > 30 mL/min', CONCEPT_NAME: '[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIACREATININECLEARANCE.value} mL/min ', TOOLTIP: ''}
+app.js:189 Display value for criterion 4: 138.61 mL/min 
+app.js:177 Rendering criterion 5: {LABEL: 'Serum Creatinine < 2 mg/dL', CONCEPT_NAME: '[%{EACRITERIASERUMCREATININE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIASERUMCREATININE.value} mg/dL '}
+app.js:189 Display value for criterion 5: 0.500 mg/dL 
+app.js:123 Rendering tab content for Potassium (POTASSIUM)
+app.js:174 Rendering 6 criteria items for tab POTASSIUM
+app.js:177 Rendering criterion 0: {LABEL: 'Patient not on dialysis', CONCEPT_NAME: '[%{EACRITERIANODIALYSIS}%]', DISPLAY: '', TOOLTIP: 'No active dialysis order'}
+app.js:189 Display value for criterion 0: 
+app.js:177 Rendering criterion 1: {LABEL: 'Dosing Weight > 50 kg', CONCEPT_NAME: '[%{EACRITERIAWEIGHT}%]', DISPLAY: '@concept{WEIGHTDOSING.value} kg', TOOLTIP: 'Dosing weight'}
+app.js:189 Display value for criterion 1: 70 kg
+app.js:177 Rendering criterion 2: {LABEL: 'No active Insulin Advisor (DKA/HHS)', CONCEPT_NAME: '[%{EACRITERIANODKAHHS}.COUNT < 1%]', DISPLAY: '', TOOLTIP: ''}
+app.js:189 Display value for criterion 2: 
+app.js:177 Rendering criterion 3: {LABEL: 'Cardiac/Tele monitor for Digoxin Order', CONCEPT_NAME: '[%{EACRITERIADIGOXINCARDIAC}%]', DISPLAY: '', TOOLTIP: 'Cardiac monitoring required for patients also receiving digoxin due to risk of heart block'}
+app.js:189 Display value for criterion 3: 
+app.js:177 Rendering criterion 4: {LABEL: 'Est Creat Clear > 30 mL/min', CONCEPT_NAME: '[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIACREATININECLEARANCE.value} mL/min', TOOLTIP: ''}
+app.js:189 Display value for criterion 4: 138.61 mL/min
+app.js:177 Rendering criterion 5: {LABEL: 'Serum Creatinine < 2 mg/dL', CONCEPT_NAME: '[%{EACRITERIASERUMCREATININE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIASERUMCREATININE.value} mg/dL '}
+app.js:189 Display value for criterion 5: 0.500 mg/dL 
+app.js:123 Rendering tab content for Phosphate (PHOSPHATE)
+app.js:174 Rendering 6 criteria items for tab PHOSPHATE
+app.js:177 Rendering criterion 0: {LABEL: 'Patient not on dialysis', CONCEPT_NAME: '[%{EACRITERIANODIALYSIS}%]', DISPLAY: '', TOOLTIP: 'No active dialysis order'}
+app.js:189 Display value for criterion 0: 
+app.js:177 Rendering criterion 1: {LABEL: 'Dosing Weight > 50 kg', CONCEPT_NAME: '[%{EACRITERIAWEIGHT}%]', DISPLAY: '@concept{WEIGHTDOSING.value} kg', TOOLTIP: 'Dosing weight'}
+app.js:189 Display value for criterion 1: 70 kg
+app.js:177 Rendering criterion 2: {LABEL: 'No active Insulin Advisor (DKA/HHS)', CONCEPT_NAME: '[%{EACRITERIANODKAHHS}.COUNT < 1%]', DISPLAY: '', TOOLTIP: ''}
+app.js:189 Display value for criterion 2: 
+app.js:177 Rendering criterion 3: {LABEL: 'Cardiac/Tele monitor for Digoxin Order', CONCEPT_NAME: '[%{EACRITERIADIGOXINCARDIAC}%]', DISPLAY: '', TOOLTIP: 'Cardiac monitoring required for patients also receiving digoxin due to risk of heart block'}
+app.js:189 Display value for criterion 3: 
+app.js:177 Rendering criterion 4: {LABEL: 'Est Creat Clear > 30 mL/min', CONCEPT_NAME: '[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIACREATININECLEARANCE.value} mL/min', TOOLTIP: ''}
+app.js:189 Display value for criterion 4: 138.61 mL/min
+app.js:177 Rendering criterion 5: {LABEL: 'Serum Creatinine < 2 mg/dL', CONCEPT_NAME: '[%{EACRITERIASERUMCREATININE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIASERUMCREATININE.value} mg/dL'}
+app.js:189 Display value for criterion 5: 0.500 mg/dL
+concept-parser.js:194 Error evaluating concept expression: SyntaxError: Unexpected token 'false'
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:192:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at concept-manager.js:271:44
+    at Array.forEach (<anonymous>)
+    at ConceptManager.createConceptUI (concept-manager.js:250:33)
+    at ConceptModal.createModal (concept-modal.js:131:29)
+    at ConceptModal.initialize (concept-modal.js:30:18)
+    at async ConceptIntegration.initialize (concept-integration.js:27:13)
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:194
+evaluateExpression @ concept-manager.js:95
+(anonymous) @ concept-manager.js:271
+createConceptUI @ concept-manager.js:250
+createModal @ concept-modal.js:131
+initialize @ concept-modal.js:30
+await in initialize
+initialize @ concept-integration.js:27
+(anonymous) @ app.js:9
+Promise.then
+(anonymous) @ app.js:5
+e @ jquery-3.6.0.min.js:2
+t @ jquery-3.6.0.min.js:2
+setTimeout
+(anonymous) @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+fire @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+ready @ jquery-3.6.0.min.js:2
+B @ jquery-3.6.0.min.js:2
+concept-parser.js:194 Error evaluating concept expression: SyntaxError: Unexpected token 'false'
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:192:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at concept-manager.js:271:44
+    at Array.forEach (<anonymous>)
+    at ConceptManager.createConceptUI (concept-manager.js:250:33)
+    at ConceptModal.createModal (concept-modal.js:131:29)
+    at ConceptModal.initialize (concept-modal.js:30:18)
+    at async ConceptIntegration.initialize (concept-integration.js:27:13)
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:194
+evaluateExpression @ concept-manager.js:95
+(anonymous) @ concept-manager.js:271
+createConceptUI @ concept-manager.js:250
+createModal @ concept-modal.js:131
+initialize @ concept-modal.js:30
+await in initialize
+initialize @ concept-integration.js:27
+(anonymous) @ app.js:9
+Promise.then
+(anonymous) @ app.js:5
+e @ jquery-3.6.0.min.js:2
+t @ jquery-3.6.0.min.js:2
+setTimeout
+(anonymous) @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+fire @ jquery-3.6.0.min.js:2
+c @ jquery-3.6.0.min.js:2
+fireWith @ jquery-3.6.0.min.js:2
+ready @ jquery-3.6.0.min.js:2
+B @ jquery-3.6.0.min.js:2
+app.js:159 Edit criteria button clicked
+app.js:162 Active tab key: MAGNESIUM
+app.js:846 openCriteriaMiniEditor called for tab MAGNESIUM
+app.js:855 Found tab in configuration: {TAB_NAME: 'Magnesium', TAB_KEY: 'MAGNESIUM', MNEMONICS: Array(4), CRITERIA: Array(6), ORDER_SECTIONS: Array(9), …}
+app.js:864 Found criteria in tab.CRITERIA: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+app.js:865 Criteria data structure: [
+  {
+    "LABEL": "Patient not on dialysis",
+    "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "No active dialysis order"
+  },
+  {
+    "LABEL": "Dosing Weight > 50 kg",
+    "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+    "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+    "TOOLTIP": "Dosing weight"
+  },
+  {
+    "LABEL": "No active Insulin Advisor (DKA/HHS)",
+    "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+    "DISPLAY": "",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+    "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+  },
+  {
+    "LABEL": "Est Creat Clear > 30 mL/min",
+    "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min ",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Serum Creatinine < 2 mg/dL",
+    "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL "
+  }
+]
+app.js:891 Creating mini-editor container
+app.js:911 Found criteria section: Yes
+app.js:919 Mini-editor container inserted after criteria section
+app.js:924 Set textarea content with criteria JSON
+app.js:939 CodeMirror initialized on textarea
+app.js:956 Set editor size to 400 px
+app.js:1019 Mini-editor setup complete
+app.js:159 Edit criteria button clicked
+app.js:162 Active tab key: MAGNESIUM
+app.js:846 openCriteriaMiniEditor called for tab MAGNESIUM
+app.js:855 Found tab in configuration: {TAB_NAME: 'Magnesium', TAB_KEY: 'MAGNESIUM', MNEMONICS: Array(4), CRITERIA: Array(6), ORDER_SECTIONS: Array(9), …}
+app.js:864 Found criteria in tab.CRITERIA: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+app.js:865 Criteria data structure: [
+  {
+    "LABEL": "Patient not on dialysis",
+    "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "No active dialysis order"
+  },
+  {
+    "LABEL": "Dosing Weight > 50 kg",
+    "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+    "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+    "TOOLTIP": "Dosing weight"
+  },
+  {
+    "LABEL": "No active Insulin Advisor (DKA/HHS)",
+    "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+    "DISPLAY": "",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+    "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+  },
+  {
+    "LABEL": "Est Creat Clear > 30 mL/min",
+    "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min ",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Serum Creatinine < 2 mg/dL",
+    "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL "
+  }
+]
+app.js:891 Creating mini-editor container
+app.js:911 Found criteria section: Yes
+app.js:919 Mini-editor container inserted after criteria section
+app.js:924 Set textarea content with criteria JSON
+app.js:939 CodeMirror initialized on textarea
+app.js:956 Set editor size to 400 px
+app.js:1019 Mini-editor setup complete
+app.js:980 Save button clicked (direct DOM event)
+app.js:984 Retrieved edited content from CodeMirror
+app.js:988 Successfully parsed edited JSON
+app.js:989 Edited criteria: (6) [{…}, {…}, {…}, {…}, {…}, {…}]
+app.js:993 Updated tab.CRITERIA with edited data
+app.js:996 Reinitializing advisor with updated configuration
+app.js:1033 Creating CCL response from config
+app.js:1043 Processing tab: Magnesium (MAGNESIUM)
+app.js:1047 Tab has 6 criteria items
+app.js:1048 Criteria structure: [
+  {
+    "LABEL": "Patient not on dialysis",
+    "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "No active dialysis order"
+  },
+  {
+    "LABEL": "Dosing Weight > 50 kg",
+    "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+    "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+    "TOOLTIP": "Dosing weight"
+  },
+  {
+    "LABEL": "No active Insulin Advisor (DKA/HHS)",
+    "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+    "DISPLAY": "",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+    "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+  },
+  {
+    "LABEL": "Est Creat Clear > 30 mL/min",
+    "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min ",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Serum Creatinine < 2 mg/dL",
+    "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL "
+  }
+]
+app.js:1043 Processing tab: Potassium (POTASSIUM)
+app.js:1047 Tab has 6 criteria items
+app.js:1048 Criteria structure: [
+  {
+    "LABEL": "Patient not on dialysis",
+    "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "No active dialysis order"
+  },
+  {
+    "LABEL": "Dosing Weight > 50 kg",
+    "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+    "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+    "TOOLTIP": "Dosing weight"
+  },
+  {
+    "LABEL": "No active Insulin Advisor (DKA/HHS)",
+    "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+    "DISPLAY": "",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+    "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+  },
+  {
+    "LABEL": "Est Creat Clear > 30 mL/min",
+    "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Serum Creatinine < 2 mg/dL",
+    "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL "
+  }
+]
+app.js:1043 Processing tab: Phosphate (PHOSPHATE)
+app.js:1047 Tab has 6 criteria items
+app.js:1048 Criteria structure: [
+  {
+    "LABEL": "Patient not on dialysis",
+    "CONCEPT_NAME": "[%{EACRITERIANODIALYSIS}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "No active dialysis order"
+  },
+  {
+    "LABEL": "Dosing Weight > 50 kg",
+    "CONCEPT_NAME": "[%{EACRITERIAWEIGHT}%]",
+    "DISPLAY": "@concept{WEIGHTDOSING.value} kg",
+    "TOOLTIP": "Dosing weight"
+  },
+  {
+    "LABEL": "No active Insulin Advisor (DKA/HHS)",
+    "CONCEPT_NAME": "[%{EACRITERIANODKAHHS}.COUNT < 1%]",
+    "DISPLAY": "",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Cardiac/Tele monitor for Digoxin Order",
+    "CONCEPT_NAME": "[%{EACRITERIADIGOXINCARDIAC}%]",
+    "DISPLAY": "",
+    "TOOLTIP": "Cardiac monitoring required for patients also receiving digoxin due to risk of heart block"
+  },
+  {
+    "LABEL": "Est Creat Clear > 30 mL/min",
+    "CONCEPT_NAME": "[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIACREATININECLEARANCE.value} mL/min",
+    "TOOLTIP": ""
+  },
+  {
+    "LABEL": "Serum Creatinine < 2 mg/dL",
+    "CONCEPT_NAME": "[%{EACRITERIASERUMCREATININE}.COUNT = 1%]",
+    "DISPLAY": "@concept{EACRITERIASERUMCREATININE.value} mg/dL"
+  }
+]
+app.js:1099 CCL response created successfully
+app.js:123 Rendering tab content for Magnesium (MAGNESIUM)
+app.js:174 Rendering 6 criteria items for tab MAGNESIUM
+app.js:177 Rendering criterion 0: {LABEL: 'Patient not on dialysis', CONCEPT_NAME: '[%{EACRITERIANODIALYSIS}%]', DISPLAY: '', TOOLTIP: 'No active dialysis order'}
+app.js:189 Display value for criterion 0: 
+app.js:177 Rendering criterion 1: {LABEL: 'Dosing Weight > 50 kg', CONCEPT_NAME: '[%{EACRITERIAWEIGHT}%]', DISPLAY: '@concept{WEIGHTDOSING.value} kg', TOOLTIP: 'Dosing weight'}
+app.js:189 Display value for criterion 1: 70 kg
+app.js:177 Rendering criterion 2: {LABEL: 'No active Insulin Advisor (DKA/HHS)', CONCEPT_NAME: '[%{EACRITERIANODKAHHS}.COUNT < 1%]', DISPLAY: '', TOOLTIP: ''}
+app.js:189 Display value for criterion 2: 
+app.js:177 Rendering criterion 3: {LABEL: 'Cardiac/Tele monitor for Digoxin Order', CONCEPT_NAME: '[%{EACRITERIADIGOXINCARDIAC}%]', DISPLAY: '', TOOLTIP: 'Cardiac monitoring required for patients also receiving digoxin due to risk of heart block'}
+app.js:189 Display value for criterion 3: 
+app.js:177 Rendering criterion 4: {LABEL: 'Est Creat Clear > 30 mL/min', CONCEPT_NAME: '[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIACREATININECLEARANCE.value} mL/min ', TOOLTIP: ''}
+app.js:189 Display value for criterion 4: 138.61 mL/min 
+app.js:177 Rendering criterion 5: {LABEL: 'Serum Creatinine < 2 mg/dL', CONCEPT_NAME: '[%{EACRITERIASERUMCREATININE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIASERUMCREATININE.value} mg/dL '}
+app.js:189 Display value for criterion 5: 0.500 mg/dL 
+concept-parser.js:194 Error evaluating concept expression: SyntaxError: Invalid left-hand side in assignment
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:192:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:347:46)
+    at app.js:420:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:415:28)
+    at renderTabContent (app.js:224:9)
+    at renderTab (app.js:1027:9)
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:194
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:347
+(anonymous) @ app.js:420
+renderOrderSections @ app.js:415
+renderTabContent @ app.js:224
+renderTab @ app.js:1027
+(anonymous) @ app.js:665
+renderAdvisor @ app.js:633
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:997
+concept-parser.js:194 Error evaluating concept expression: SyntaxError: Unexpected token 'false'
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:192:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:347:46)
+    at app.js:420:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:415:28)
+    at renderTabContent (app.js:224:9)
+    at renderTab (app.js:1027:9)
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:194
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:347
+(anonymous) @ app.js:420
+renderOrderSections @ app.js:415
+renderTabContent @ app.js:224
+renderTab @ app.js:1027
+(anonymous) @ app.js:665
+renderAdvisor @ app.js:633
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:997
+app.js:123 Rendering tab content for Potassium (POTASSIUM)
+app.js:174 Rendering 6 criteria items for tab POTASSIUM
+app.js:177 Rendering criterion 0: {LABEL: 'Patient not on dialysis', CONCEPT_NAME: '[%{EACRITERIANODIALYSIS}%]', DISPLAY: '', TOOLTIP: 'No active dialysis order'}
+app.js:189 Display value for criterion 0: 
+app.js:177 Rendering criterion 1: {LABEL: 'Dosing Weight > 50 kg', CONCEPT_NAME: '[%{EACRITERIAWEIGHT}%]', DISPLAY: '@concept{WEIGHTDOSING.value} kg', TOOLTIP: 'Dosing weight'}
+app.js:189 Display value for criterion 1: 70 kg
+app.js:177 Rendering criterion 2: {LABEL: 'No active Insulin Advisor (DKA/HHS)', CONCEPT_NAME: '[%{EACRITERIANODKAHHS}.COUNT < 1%]', DISPLAY: '', TOOLTIP: ''}
+app.js:189 Display value for criterion 2: 
+app.js:177 Rendering criterion 3: {LABEL: 'Cardiac/Tele monitor for Digoxin Order', CONCEPT_NAME: '[%{EACRITERIADIGOXINCARDIAC}%]', DISPLAY: '', TOOLTIP: 'Cardiac monitoring required for patients also receiving digoxin due to risk of heart block'}
+app.js:189 Display value for criterion 3: 
+app.js:177 Rendering criterion 4: {LABEL: 'Est Creat Clear > 30 mL/min', CONCEPT_NAME: '[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIACREATININECLEARANCE.value} mL/min', TOOLTIP: ''}
+app.js:189 Display value for criterion 4: 138.61 mL/min
+app.js:177 Rendering criterion 5: {LABEL: 'Serum Creatinine < 2 mg/dL', CONCEPT_NAME: '[%{EACRITERIASERUMCREATININE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIASERUMCREATININE.value} mg/dL '}
+app.js:189 Display value for criterion 5: 0.500 mg/dL 
+concept-parser.js:194 Error evaluating concept expression: SyntaxError: Invalid left-hand side in assignment
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:192:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:347:46)
+    at app.js:420:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:415:28)
+    at renderTabContent (app.js:224:9)
+    at renderTab (app.js:1027:9)
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:194
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:347
+(anonymous) @ app.js:420
+renderOrderSections @ app.js:415
+renderTabContent @ app.js:224
+renderTab @ app.js:1027
+(anonymous) @ app.js:665
+renderAdvisor @ app.js:633
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:997
+app.js:123 Rendering tab content for Phosphate (PHOSPHATE)
+app.js:174 Rendering 6 criteria items for tab PHOSPHATE
+app.js:177 Rendering criterion 0: {LABEL: 'Patient not on dialysis', CONCEPT_NAME: '[%{EACRITERIANODIALYSIS}%]', DISPLAY: '', TOOLTIP: 'No active dialysis order'}
+app.js:189 Display value for criterion 0: 
+app.js:177 Rendering criterion 1: {LABEL: 'Dosing Weight > 50 kg', CONCEPT_NAME: '[%{EACRITERIAWEIGHT}%]', DISPLAY: '@concept{WEIGHTDOSING.value} kg', TOOLTIP: 'Dosing weight'}
+app.js:189 Display value for criterion 1: 70 kg
+app.js:177 Rendering criterion 2: {LABEL: 'No active Insulin Advisor (DKA/HHS)', CONCEPT_NAME: '[%{EACRITERIANODKAHHS}.COUNT < 1%]', DISPLAY: '', TOOLTIP: ''}
+app.js:189 Display value for criterion 2: 
+app.js:177 Rendering criterion 3: {LABEL: 'Cardiac/Tele monitor for Digoxin Order', CONCEPT_NAME: '[%{EACRITERIADIGOXINCARDIAC}%]', DISPLAY: '', TOOLTIP: 'Cardiac monitoring required for patients also receiving digoxin due to risk of heart block'}
+app.js:189 Display value for criterion 3: 
+app.js:177 Rendering criterion 4: {LABEL: 'Est Creat Clear > 30 mL/min', CONCEPT_NAME: '[%{EACRITERIACREATININECLEARANCE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIACREATININECLEARANCE.value} mL/min', TOOLTIP: ''}
+app.js:189 Display value for criterion 4: 138.61 mL/min
+app.js:177 Rendering criterion 5: {LABEL: 'Serum Creatinine < 2 mg/dL', CONCEPT_NAME: '[%{EACRITERIASERUMCREATININE}.COUNT = 1%]', DISPLAY: '@concept{EACRITERIASERUMCREATININE.value} mg/dL'}
+app.js:189 Display value for criterion 5: 0.500 mg/dL
+concept-parser.js:194 Error evaluating concept expression: SyntaxError: Invalid left-hand side in assignment
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:192:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:347:46)
+    at app.js:420:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:415:28)
+    at renderTabContent (app.js:224:9)
+    at renderTab (app.js:1027:9)
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:194
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:347
+(anonymous) @ app.js:420
+renderOrderSections @ app.js:415
+renderTabContent @ app.js:224
+renderTab @ app.js:1027
+(anonymous) @ app.js:665
+renderAdvisor @ app.js:633
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:997
+concept-parser.js:194 Error evaluating concept expression: SyntaxError: Unexpected token 'false'
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:192:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:347:46)
+    at app.js:420:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:415:28)
+    at renderTabContent (app.js:224:9)
+    at renderTab (app.js:1027:9)
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:194
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:347
+(anonymous) @ app.js:420
+renderOrderSections @ app.js:415
+renderTabContent @ app.js:224
+renderTab @ app.js:1027
+(anonymous) @ app.js:665
+renderAdvisor @ app.js:633
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:997
+app.js:1001 Notifying full-screen editor of configuration change
+app.js:1010 Removing mini-editor container
+app.js:1014 Error saving criteria: TypeError: Cannot read properties of null (reading 'remove')
+    at HTMLButtonElement.<anonymous> (app.js:1011:65)
+overrideMethod @ hook.js:608
+(anonymous) @ app.js:1014

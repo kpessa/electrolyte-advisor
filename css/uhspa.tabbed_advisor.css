@@ -56,11 +56,14 @@ body {
 .uhspa-content-container {
     display: flex;
     min-height: 400px;
+    overflow: hidden;
+    height: calc(100vh - 100px);
 }
 
 .uhspa-tab-content {
     display: none;
     width: 100%;
+    overflow: hidden;
 }
 
 .uhspa-tab-content.active {
@@ -107,6 +110,8 @@ body {
 .uhspa-order-container {
     flex: 1;
     padding: 10px;
+    overflow: hidden;
+    height: 100%;
 }
 
 .uhspa-order-header {

@@ -156,8 +156,16 @@ function createConceptInstantiation(concepts) {
  * @returns {boolean} - Result of the evaluation
  */
 function evaluateConceptExpression(expression, conceptValues) {
+    // Handle simple true/false expressions directly
+    if (expression === '[%true%]') return true;
+    if (expression === '[%false%]') return false;
+    
     // Remove the [% and %] wrapper
     let expr = expression.replace(/^\[\%/, '').replace(/\%\]$/, '');
+    
+    // Check if the expression is just a simple true/false string
+    if (expr === 'true') return true;
+    if (expr === 'false') return false;
     
     // Replace concept references with their values
     expr = expr.replace(CONCEPT_REGEX, (match, conceptName) => {
@@ -165,6 +173,7 @@ function evaluateConceptExpression(expression, conceptValues) {
         const concept = parts[0];
         
         if (!conceptValues[concept]) {
+            // If concept doesn't exist, return string 'false' for the expression evaluation
             return 'false';
         }
         
@@ -177,13 +186,18 @@ function evaluateConceptExpression(expression, conceptValues) {
             return conceptValues[concept].isActive ? '1' : '0';
         }
         
+        // Return string 'true' or 'false' for the expression evaluation
         return conceptValues[concept].isActive ? 'true' : 'false';
     });
     
-    // Replace logical operators
-    expr = expr.replace(/ AND /g, ' && ');
-    expr = expr.replace(/ OR /g, ' || ');
-    expr = expr.replace(/ NOT /g, ' !');
+    // Replace logical operators - handle NOT with or without spaces
+    expr = expr.replace(/\bAND\b/g, '&&');
+    expr = expr.replace(/\bOR\b/g, '||');
+    expr = expr.replace(/\bNOT\b/g, '!');
+    
+    // Handle equality operators - replace single equals with double equals for comparison
+    // But be careful not to replace equals that are already part of ==, ===, !=, !==
+    expr = expr.replace(/([^=!><])=([^=])/g, '$1==$2');
     
     try {
         // Use Function constructor to evaluate the expression
@@ -191,7 +205,11 @@ function evaluateConceptExpression(expression, conceptValues) {
         // but is used here for demonstration purposes
         return new Function('return ' + expr)();
     } catch (error) {
-        console.error('Error evaluating concept expression:', error);
+        console.error('Error evaluating concept expression:', error, 'Expression:', expr);
+        // Log more details to help with debugging
+        console.log('Original expression:', expression);
+        console.log('Processed expression:', expr);
+        console.log('Concept values:', conceptValues);
         return false;
     }
 }

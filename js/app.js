@@ -17,6 +17,15 @@ $(document).ready(function() {
                         showError('Failed to open concept manager. Please check the console for details.');
                     });
                 };
+                
+                // Add event listener for debug mode changes
+                document.addEventListener('debugModeChanged', function(event) {
+                    console.log('Debug mode changed:', event.detail.debugMode);
+                    // Refresh the advisor to show debug information
+                    if (window.initializeAdvisor) {
+                        window.initializeAdvisor();
+                    }
+                });
             }).catch(error => {
                 console.error('Error initializing concept integration:', error);
                 showError('Failed to initialize concept integration. Please check the console for details.');
@@ -145,7 +154,6 @@ $(document).ready(function() {
         });
         
         editButton.on('click', function() {
-            console.log("Edit criteria button clicked");
             const activeTabButton = $('.uhspa-tab-button.active');
             const activeTabKey = activeTabButton.data('tab-key');
             openCriteriaMiniEditor(activeTabKey);
@@ -159,15 +167,21 @@ $(document).ready(function() {
         
         // Add criteria items from the tab configuration
         if (tab.CRITERIA && tab.CRITERIA.length > 0) {
-            tab.CRITERIA.forEach(criterion => {
+            tab.CRITERIA.forEach((criterion, index) => {
                 // In a real app, we would evaluate CONCEPT_NAME to determine if criteria is met
                 // For this demo, we'll show all criteria as satisfied
+                let displayValue = criterion.DISPLAY || '';
+                
+                // Replace concept placeholders with values
+                displayValue = displayValue
+                    .replace('@concept{WEIGHTDOSING.value}', '70')
+                    .replace('@concept{EACRITERIACREATININECLEARANCE.value}', '138.61')
+                    .replace('@concept{EACRITERIASERUMCREATININE.value}', '0.500');
+                    
                 addCriterionItem(
                     criteriaItemsContainer, 
                     criterion.LABEL, 
-                    criterion.DISPLAY.replace('@concept{WEIGHTDOSING.value}', '70')
-                        .replace('@concept{EACRITERIACREATININECLEARANCE.value}', '138.61')
-                        .replace('@concept{EACRITERIASERUMCREATININE.value}', '0.500'),
+                    displayValue,
                     criterion.TOOLTIP || "Double-click to edit criteria"
                 );
             });
@@ -175,7 +189,6 @@ $(document).ready(function() {
         
         // Add double-click handler to the entire criteria section
         criteriaSection.on('dblclick', function(e) {
-            console.log("Double-click detected on criteria section");
             const activeTabButton = $('.uhspa-tab-button.active');
             const activeTabKey = activeTabButton.data('tab-key');
             openCriteriaMiniEditor(activeTabKey);
@@ -310,181 +323,253 @@ $(document).ready(function() {
         }
     }
     
-    function renderOrderSections(tab, container) {
-        if (tab.ORDER_SECTIONS && tab.ORDER_SECTIONS.length > 0) {
-            // Create a container for the "Show All Sections" button, but don't add it yet
-            const showAllButtonContainer = $('<div class="show-all-button-container" style="display: none;"></div>').appendTo(container);
-            
-            // Create the "Show All Sections" button
-            const showAllButton = $('<button class="show-all-sections-btn">Show All Hidden Sections</button>');
-            showAllButton.on('click', function() {
-                // Show all hidden sections
-                $('.order-section.completely-hidden').removeClass('completely-hidden');
-                
-                // Update section count and hide the button if no sections are hidden
-                updateHiddenSectionCount(showAllButtonContainer);
-            });
-            showAllButtonContainer.append(showAllButton);
-            
-            tab.ORDER_SECTIONS.forEach((section, sectionIndex) => {
-                // Create the order section
-                const orderSection = $('<div class="order-section" data-section-index="' + sectionIndex + '"></div>').appendTo(container);
-                
-                // Create header
-                const sectionHeader = $(`<div class="order-section-header"></div>`).appendTo(orderSection);
-                
-                // Add section name
-                $(`<span class="section-name">${section.SECTION_NAME}</span>`).appendTo(sectionHeader);
-                
-                // Add visibility toggle icon on the right side
-                const visibilityToggle = $('<span class="section-visibility-toggle" title="Hide Section">👁️</span>');
-                visibilityToggle.appendTo(sectionHeader);
-                
-                // Add click handler for visibility toggle
-                visibilityToggle.on('click', function(e) {
-                    e.stopPropagation(); // Prevent triggering other click handlers
-                    toggleSectionVisibility(orderSection, showAllButtonContainer);
-                    $('.context-menu').remove(); // Remove any open context menus
-                });
-                
-                if (section.ORDERS && section.ORDERS.length > 0) {
-                    const ordersList = $('<div class="orders-list"></div>').appendTo(orderSection);
-                    
-                    // Check if this section should use single select (radio buttons) or multi-select (checkboxes)
-                    const isSingleSelect = section.SINGLE_SELECT === 1;
-                    const inputType = isSingleSelect ? 'radio' : 'checkbox';
-                    const inputName = isSingleSelect ? `order-group-${sectionIndex}` : ''; // Radio buttons need the same name to work as a group
-                    
-                    section.ORDERS.forEach(order => {
-                        const orderItem = $('<div class="order-item"></div>').appendTo(ordersList);
-                        
-                        const inputId = `order-${order.MNEMONIC.replace(/\s+/g, '-')}-${Math.random().toString(36).substring(2, 8)}`;
-                        
-                        // Create input element (radio or checkbox based on SINGLE_SELECT)
-                        const input = $(`<input type="${inputType}" id="${inputId}" class="order-input" ${isSingleSelect ? `name="${inputName}"` : ''}>`);
-                        input.appendTo(orderItem);
-                        
-                        // Create a content container for all text content
-                        const contentContainer = $('<div class="order-content"></div>').appendTo(orderItem);
-                        
-                        const label = $(`<label for="${inputId}">${order.MNEMONIC}</label>`);
-                        label.appendTo(contentContainer);
-                        
-                        if (order.ORDER_SENTENCE) {
-                            $(`<div class="order-details">${order.ORDER_SENTENCE}</div>`).appendTo(contentContainer);
-                        }
-                        
-                        if (order.COMMENT) {
-                            $(`<div class="order-comment">${order.COMMENT}</div>`).appendTo(contentContainer);
-                        }
+    // Helper function to evaluate concept expressions
+    function evaluateConceptExpression(expression) {
+        // If there's no expression, return true (always visible)
+        if (!expression) return true;
+        
+        // Check if the concept integration is available
+        if (window.conceptIntegration) {
+            // Use the concept integration to evaluate the expression
+            return window.conceptIntegration.evaluateConceptExpression(expression);
+        }
+        
+        // Fallback for when concept integration is not available
+        // Check if it's a simple expression like [%true%] or [%false%]
+        if (expression === '[%true%]') return true;
+        if (expression === '[%false%]') return false;
+        
+        // For all other expressions, return false by default
+        // This simulates all concepts being inactive on initial load
+        return false;
+    }
 
-                        // Make the entire order item clickable
-                        orderItem.on('click', function(e) {
-                            // Don't handle click if it's on the input itself (let the default behavior work)
-                            if (!$(e.target).is('input')) {
-                                const checkbox = $(this).find('input');
-                                // For radio buttons, only select if not already selected
-                                if (checkbox.attr('type') === 'radio') {
-                                    if (!checkbox.prop('checked')) {
-                                        checkbox.prop('checked', true).trigger('change');
-                                    }
-                                } else {
-                                    // For checkboxes, toggle the state
-                                    checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
-                                }
-                            }
-                        });
+    function renderOrderSections(tab, container) {
+        // Create a container for the "Show All Sections" button
+        const showAllButtonContainer = $('<div class="show-all-button-container"></div>').appendTo(container);
+        
+        // Add debug mode toggle button if debug mode is enabled
+        if (window.conceptIntegration && window.conceptIntegration.isDebugModeEnabled()) {
+            const debugToggleContainer = $('<div class="debug-toggle-container"></div>').appendTo(container);
+            const showAllButton = $('<button class="debug-toggle-button active">Show Matching Sections</button>').appendTo(debugToggleContainer);
+            const showAllSectionsButton = $('<button class="debug-toggle-button">Show All Sections</button>').appendTo(debugToggleContainer);
+            
+            showAllButton.on('click', function() {
+                if (!$(this).hasClass('active')) {
+                    $(this).addClass('active');
+                    showAllSectionsButton.removeClass('active');
+                    
+                    // Hide sections that don't match their concept expression
+                    $('.order-section-wrapper').each(function() {
+                        const conceptResult = $(this).data('concept-result');
+                        if (conceptResult === false) {
+                            $(this).addClass('completely-hidden');
+                        }
                     });
+                    
+                    // Update the count of hidden sections
+                    updateHiddenSectionCount(showAllButtonContainer);
+                }
+            });
+            
+            showAllSectionsButton.on('click', function() {
+                if (!$(this).hasClass('active')) {
+                    $(this).addClass('active');
+                    showAllButton.removeClass('active');
+                    
+                    // Show all sections
+                    $('.order-section-wrapper').removeClass('completely-hidden');
+                    
+                    // Hide the "Show All Sections" button since all sections are now visible
+                    showAllButtonContainer.empty();
+                }
+            });
+        }
+        
+        // Check if there are any order sections
+        if (!tab.ORDER_SECTIONS || tab.ORDER_SECTIONS.length === 0) {
+            $('<div class="no-orders-message">No order sections defined for this tab.</div>').appendTo(container);
+            return;
+        }
+        
+        // Create a wrapper for all order sections
+        const orderSectionsWrapper = $('<div class="order-sections-wrapper"></div>').appendTo(container);
+        
+        // Track hidden sections count
+        let hiddenSections = 0;
+        
+        // Render each order section
+        tab.ORDER_SECTIONS.forEach((section, index) => {
+            // Create a wrapper for the order section
+            const sectionWrapper = $('<div class="order-section-wrapper"></div>').appendTo(orderSectionsWrapper);
+            
+            // Evaluate the concept expression if it exists
+            let conceptResult = evaluateConceptExpression(section.CONCEPT_NAME);
+            
+            // Store the concept result as data attribute
+            sectionWrapper.data('concept-result', conceptResult);
+            
+            // If debug mode is enabled, show the concept expression and result
+            if (window.conceptIntegration && window.conceptIntegration.isDebugModeEnabled()) {
+                const debugInfo = $('<div class="debug-info"></div>');
+                
+                if (section.CONCEPT_NAME) {
+                    const expression = $('<span class="debug-expression"></span>').text(section.CONCEPT_NAME);
+                    const result = $('<span class="debug-result"></span>')
+                        .text(conceptResult ? 'TRUE' : 'FALSE')
+                        .addClass(conceptResult ? 'true' : 'false');
+                    
+                    debugInfo.append('Concept Expression: ').append(expression).append(' → ').append(result);
                 } else {
-                    $('<div class="no-orders">No orders available</div>').appendTo(orderSection);
+                    debugInfo.append('No Concept Expression → ').append(
+                        $('<span class="debug-result true">ALWAYS VISIBLE</span>')
+                    );
                 }
                 
-                // Add double-click handler to open mini-editor
-                orderSection.dblclick(function(e) {
-                    // Don't trigger if clicking on a checkbox or label
-                    if ($(e.target).is('input') || $(e.target).is('label')) {
-                        return;
+                sectionWrapper.append(debugInfo);
+            }
+            
+            // Hide the section if the concept expression evaluates to false and we're not in debug mode
+            // or if we're in debug mode but not showing all sections
+            if (!conceptResult) {
+                if (!window.conceptIntegration || !window.conceptIntegration.isDebugModeEnabled()) {
+                    sectionWrapper.addClass('completely-hidden');
+                    hiddenSections++;
+                } else {
+                    // In debug mode, check if we should show all sections
+                    const showAllActive = $('.debug-toggle-button:contains("Show All Sections")').hasClass('active');
+                    if (!showAllActive) {
+                        sectionWrapper.addClass('completely-hidden');
+                        hiddenSections++;
+                    }
+                }
+            }
+            
+            // Create the order section
+            const orderSection = $('<div class="order-section"></div>').appendTo(sectionWrapper);
+            
+            // Create the section header
+            const sectionHeader = $('<div class="order-section-header"></div>').appendTo(orderSection);
+            
+            // Add section name
+            $(`<div class="section-name">${section.SECTION_NAME}</div>`).appendTo(sectionHeader);
+            
+            // Add edit button
+            const editButton = $('<button class="section-edit-button">Edit</button>');
+            editButton.css({
+                'margin-left': '10px',
+                'font-size': '11px',
+                'padding': '2px 8px',
+                'background-color': '#89ddff',
+                'color': '#0f111a',
+                'border': 'none',
+                'border-radius': '3px',
+                'cursor': 'pointer'
+            });
+            
+            editButton.on('click', function(e) {
+                e.stopPropagation();
+                openMiniEditor(tab.TAB_KEY, index);
+            });
+            
+            sectionHeader.append(editButton);
+            
+            // Add visibility toggle button
+            const toggleButton = $('<button class="section-visibility-toggle">▼</button>');
+            toggleButton.on('click', function() {
+                toggleSectionVisibility(orderSection, showAllButtonContainer);
+            });
+            sectionHeader.append(toggleButton);
+            
+            // Create orders list
+            const ordersList = $('<div class="orders-list"></div>').appendTo(orderSection);
+            
+            // Add orders if they exist
+            if (section.ORDERS && section.ORDERS.length > 0) {
+                section.ORDERS.forEach(order => {
+                    const orderItem = $('<div class="order-item"></div>').appendTo(ordersList);
+                    
+                    // Create radio button or checkbox based on SINGLE_SELECT
+                    const inputType = section.SINGLE_SELECT ? 'radio' : 'checkbox';
+                    const inputName = section.SINGLE_SELECT ? `order-group-${index}` : `order-${index}-${Math.random().toString(36).substring(2, 11)}`;
+                    
+                    const orderInput = $(`<input type="${inputType}" name="${inputName}" class="order-input">`).appendTo(orderItem);
+                    
+                    // Create order content
+                    const orderContent = $('<div class="order-content"></div>').appendTo(orderItem);
+                    
+                    // Add order mnemonic
+                    $(`<div>${order.MNEMONIC}</div>`).appendTo(orderContent);
+                    
+                    // Add order sentence if it exists
+                    if (order.ORDER_SENTENCE) {
+                        $(`<div class="order-details">${order.ORDER_SENTENCE}</div>`).appendTo(orderContent);
                     }
                     
-                    const sectionIndex = $(this).data('section-index');
-                    const activeTabButton = $('.uhspa-tab-button.active');
-                    const activeTabKey = activeTabButton.data('tab-key');
+                    // Add comment if it exists
+                    if (order.COMMENT) {
+                        $(`<div class="order-comment">${order.COMMENT}</div>`).appendTo(orderContent);
+                    }
                     
-                    // Open mini-editor for this section
-                    openMiniEditor(activeTabKey, sectionIndex);
-                });
-                
-                // Add right-click context menu
-                orderSection.on('contextmenu', function(e) {
-                    e.preventDefault();
-                    
-                    // Remove any existing context menus
-                    $('.context-menu').remove();
-                    
-                    // Create context menu
-                    const contextMenu = $('<div class="context-menu"></div>');
-                    
-                    // Add hide option
-                    const hideOption = $('<div class="context-menu-item">Hide Section</div>');
-                    hideOption.on('click', function() {
-                        toggleSectionVisibility(orderSection, showAllButtonContainer);
-                        $('.context-menu').remove();
-                    });
-                    contextMenu.append(hideOption);
-                    
-                    // Add edit option
-                    const editOption = $('<div class="context-menu-item">Edit Section</div>');
-                    editOption.on('click', function() {
-                        const sectionIndex = orderSection.data('section-index');
-                        const activeTabButton = $('.uhspa-tab-button.active');
-                        const activeTabKey = activeTabButton.data('tab-key');
-                        openMiniEditor(activeTabKey, sectionIndex);
-                        $('.context-menu').remove();
-                    });
-                    contextMenu.append(editOption);
-                    
-                    // Position and show the context menu
-                    contextMenu.css({
-                        top: e.pageY + 'px',
-                        left: e.pageX + 'px'
-                    });
-                    
-                    $('body').append(contextMenu);
-                    
-                    // Close context menu when clicking elsewhere
-                    $(document).on('click', function() {
-                        $('.context-menu').remove();
+                    // Make the entire order item clickable
+                    orderItem.on('click', function(e) {
+                        // Don't trigger if clicking on the input directly
+                        if (e.target !== orderInput[0]) {
+                            orderInput.prop('checked', !orderInput.prop('checked'));
+                        }
                     });
                 });
-            });
-        } else {
-            $('<div class="no-orders-message">No order sections available for this tab.</div>').appendTo(container);
+            } else {
+                $('<div class="no-orders-message">No orders defined for this section.</div>').appendTo(ordersList);
+            }
+        });
+        
+        // Update the count of hidden sections
+        if (hiddenSections > 0) {
+            updateHiddenSectionCount(showAllButtonContainer);
         }
     }
     
     // Helper function to toggle section visibility
     function toggleSectionVisibility(section, showAllButtonContainer) {
-        // Completely hide the section
-        section.addClass('completely-hidden');
+        // Find the parent wrapper
+        const sectionWrapper = section.closest('.order-section-wrapper');
         
-        // Update the hidden section count and show/hide the "Show All" button
+        // Toggle the completely-hidden class on the wrapper
+        sectionWrapper.toggleClass('completely-hidden');
+        
+        // Update the count of hidden sections
         updateHiddenSectionCount(showAllButtonContainer);
     }
     
     // Helper function to update hidden section count and show/hide the button
     function updateHiddenSectionCount(showAllButtonContainer) {
-        const hiddenSectionCount = $('.order-section.completely-hidden').length;
+        // Count hidden sections
+        const hiddenSections = $('.order-section-wrapper.completely-hidden').length;
         
-        if (hiddenSectionCount > 0) {
-            // Update button text with count
-            const buttonText = `Show All Hidden Sections (${hiddenSectionCount})`;
-            showAllButtonContainer.find('.show-all-sections-btn').text(buttonText);
+        // If there are hidden sections, show the button
+        if (hiddenSections > 0) {
+            showAllButtonContainer.empty();
             
-            // Show the button container
-            showAllButtonContainer.show();
+            // Only show the button if we're not in debug mode or if we're in debug mode with "Show Matching Sections" active
+            if (!window.conceptIntegration || !window.conceptIntegration.isDebugModeEnabled() || 
+                $('.debug-toggle-button:contains("Show Matching Sections")').hasClass('active')) {
+                
+                const showAllButton = $('<button class="show-all-sections-btn"></button>')
+                    .text(`Show All Hidden Sections (${hiddenSections})`)
+                    .appendTo(showAllButtonContainer);
+                
+                showAllButton.on('click', function() {
+                    // Show all hidden sections
+                    $('.order-section-wrapper.completely-hidden').removeClass('completely-hidden');
+                    
+                    // Hide the button
+                    showAllButtonContainer.empty();
+                });
+            }
         } else {
-            // Hide the button container if no sections are hidden
-            showAllButtonContainer.hide();
+            // No hidden sections, hide the button
+            showAllButtonContainer.empty();
         }
     }
     
@@ -513,48 +598,58 @@ $(document).ready(function() {
 
     // Helper function to render the advisor
     function renderAdvisor(config, cclResponse) {
-        // Clear the advisor container first
-        $('#advisor-container').empty();
+        // Clear the advisor container
+        $("#advisor-container").empty();
         
         // Create patient header
         createPatientHeader();
         
-        // Get tabs from config
-        const rconfig = config.RCONFIG;
-        const tabs = rconfig.TABS;
-        
-        // Create tab container
+        // Create tabs container
         const tabsContainer = $('<div class="uhspa-tabs-container"></div>').appendTo('#advisor-container');
         
-        // Create content wrapper
-        const contentWrapper = $('<div class="content-wrapper"></div>').appendTo('#advisor-container');
+        // Create tab content container
+        const tabContentContainer = $('<div class="uhspa-tab-content-container"></div>').appendTo('#advisor-container');
         
-        // Create tabs - ensure only the first tab is active
-        tabs.forEach((tab, index) => {
-            const tabButton = $(`<div class="uhspa-tab-button" data-tab-key="${tab.TAB_KEY}">${tab.TAB_NAME}</div>`);
-            // Only set the first tab as active
-            if (index === 0) {
+        // Check if we have tabs
+        if (!cclResponse.tabs || cclResponse.tabs.length === 0) {
+            tabContentContainer.html('<div class="error-message">No tabs defined in the configuration.</div>');
+            return;
+        }
+        
+        // Create tabs
+        cclResponse.tabs.forEach((tab, index) => {
+            // Create tab button
+            const tabButton = $(`<button class="uhspa-tab-button" data-tab-key="${tab.TAB_KEY}">${tab.TAB_NAME}</button>`);
+            tabButton.appendTo(tabsContainer);
+            
+            // Create tab content
+            const tabContent = $(`<div class="uhspa-tab-content" id="tab-content-${tab.TAB_KEY}"></div>`);
+            tabContent.appendTo(tabContentContainer);
+            
+            // Hide all tabs except the first one
+            if (index !== 0) {
+                tabContent.hide();
+            } else {
                 tabButton.addClass('active');
             }
-            tabButton.appendTo(tabsContainer);
-        });
-        
-        // Create tab content for the active tab (first tab)
-        const activeTab = tabs[0];
-        
-        renderTabContent(activeTab, contentWrapper);
-        
-        // Add tab click handlers
-        $('.uhspa-tab-button').click(function() {
-            $('.uhspa-tab-button').removeClass('active');
-            $(this).addClass('active');
             
-            const tabKey = $(this).data('tab-key');
-            const selectedTab = tabs.find(tab => tab.TAB_KEY === tabKey);
+            // Add click handler to tab button
+            tabButton.on('click', function() {
+                // Remove active class from all tab buttons
+                $('.uhspa-tab-button').removeClass('active');
+                
+                // Add active class to clicked tab button
+                $(this).addClass('active');
+                
+                // Hide all tab content
+                $('.uhspa-tab-content').hide();
+                
+                // Show the corresponding tab content
+                $(`#tab-content-${tab.TAB_KEY}`).show();
+            });
             
-            // Clear and render new content
-            contentWrapper.empty();
-            renderTabContent(selectedTab, contentWrapper);
+            // Render tab content
+            renderTab(tab, tabContent);
         });
     }
 
@@ -563,7 +658,6 @@ $(document).ready(function() {
         // Find the tab and section in the configuration
         const tab = window.currentConfig.RCONFIG.TABS.find(tab => tab.TAB_KEY === tabKey);
         if (!tab || !tab.ORDER_SECTIONS || !tab.ORDER_SECTIONS[sectionIndex]) {
-            console.error("Section not found in configuration");
             return;
         }
         
@@ -588,9 +682,9 @@ $(document).ready(function() {
             </div>
         `);
         
-        // Append to the order section
-        const orderSection = $(`.order-section[data-section-index="${sectionIndex}"]`);
-        miniEditorContainer.insertAfter(orderSection);
+        // Find the specific order section being edited and append the mini-editor after it
+        const orderSectionWrapper = $(`.order-section-wrapper:eq(${sectionIndex})`);
+        miniEditorContainer.insertAfter(orderSectionWrapper);
         
         // Set the content of the textarea
         const sectionJson = JSON.stringify(section, null, 2);
@@ -649,8 +743,18 @@ $(document).ready(function() {
                 // Get the edited content
                 const editedContent = miniEditor.getValue();
                 
+                if (!editedContent || editedContent.trim() === '') {
+                    throw new Error("Empty content cannot be saved");
+                }
+                
                 // Parse the JSON to validate it
-                const editedSection = JSON.parse(editedContent);
+                let editedSection;
+                try {
+                    editedSection = JSON.parse(editedContent);
+                } catch (parseError) {
+                    alert("Error parsing JSON: " + parseError.message);
+                    return;
+                }
                 
                 // Update the section in the configuration
                 tab.ORDER_SECTIONS[sectionIndex] = editedSection;
@@ -667,12 +771,21 @@ $(document).ready(function() {
                     document.dispatchEvent(configChangeEvent);
                 }
                 
-                // Close the mini-editor
-                miniEditorContainer.remove();
+                // Close the mini-editor - use multiple methods to ensure it's removed properly
+                try {
+                    const container = document.querySelector('.mini-editor-container');
+                    if (container) {
+                        container.remove();
+                    } else {
+                        $('.mini-editor-container').remove();
+                    }
+                } catch (removeError) {
+                    // As a fallback, try to hide it
+                    $('.mini-editor-container').hide();
+                }
             } catch (e) {
                 // Show error message
-                console.error("Error saving section:", e);
-                alert("Error parsing JSON: " + e.message);
+                alert("Error saving section: " + e.message);
             }
         });
         
@@ -735,437 +848,220 @@ $(document).ready(function() {
 
     // Function to open mini-editor for criteria sections
     function openCriteriaMiniEditor(tabKey) {
-        console.log(`openCriteriaMiniEditor called for tab ${tabKey}`);
-        
         // Find the tab in the configuration
         const tab = window.currentConfig.RCONFIG.TABS.find(tab => tab.TAB_KEY === tabKey);
         if (!tab) {
-            console.error("Tab not found in configuration");
             return;
         }
         
-        console.log("Found tab in configuration:", tab);
-        
-        // Get the criteria data to edit - check different possible locations
+        // Get the criteria data to edit
         let criteriaData = [];
         
         // Try to find criteria in the tab configuration
         if (tab.CRITERIA && Array.isArray(tab.CRITERIA)) {
-            criteriaData = tab.CRITERIA;
-            console.log("Found criteria in tab.CRITERIA:", criteriaData);
-        } 
-        // If not found, check if it's in a CRITERIA_SECTIONS array
-        else if (tab.CRITERIA_SECTIONS && Array.isArray(tab.CRITERIA_SECTIONS)) {
-            criteriaData = tab.CRITERIA_SECTIONS;
-            console.log("Found criteria in tab.CRITERIA_SECTIONS:", criteriaData);
-        }
-        // If still not found, create a new array based on what's displayed in the UI
-        else {
-            console.log("No criteria found in configuration, creating from UI");
-            // Extract criteria from the UI
-            const criteriaItems = $('.criterion');
-            criteriaItems.each(function() {
-                const label = $(this).find('.criterion-label').text();
-                const value = $(this).find('.criterion-value').text();
-                
-                criteriaData.push({
-                    LABEL: label,
-                    DISPLAY: value,
-                    STATUS: "pass" // Default status
-                });
-            });
-            
-            // If we still don't have criteria, create a sample one
-            if (criteriaData.length === 0) {
-                criteriaData = [
-                    {
-                        LABEL: "Sample Criterion",
-                        DISPLAY: "Sample Value",
-                        STATUS: "pass"
-                    }
-                ];
-            }
+            // Deep copy to avoid reference issues
+            criteriaData = JSON.parse(JSON.stringify(tab.CRITERIA));
+        } else {
+            // Create a default structure based on the model schema
+            criteriaData = [
+                {
+                    "LABEL": "Patient not on dialysis",
+                    "CONCEPT_NAME": "{EACRITERIANOTONDIALYSIS}",
+                    "DISPLAY": "",
+                    "VALUE": "",
+                    "TOOLTIP": "Patient is not on dialysis"
+                },
+                {
+                    "LABEL": "Dosing Weight > 50 kg",
+                    "CONCEPT_NAME": "{EACRITERIAWEIGHTGT50KG}",
+                    "DISPLAY": "",
+                    "VALUE": "",
+                    "TOOLTIP": "Patient's dosing weight is greater than 50 kg"
+                }
+            ];
         }
         
         // Close any existing mini-editors
         $('.mini-editor-container').remove();
         
-        console.log("Creating mini-editor container");
-        // Create mini-editor container
+        // Create mini-editor container with inline event handlers for better reliability
         const miniEditorContainer = $(`
             <div class="mini-editor-container">
                 <div class="mini-editor-header">
                     <span>Editing Criteria for ${tab.TAB_NAME || tab.TAB_KEY}</span>
                     <div class="mini-editor-actions">
-                        <button class="mini-editor-save">Save</button>
-                        <button class="mini-editor-cancel">Cancel</button>
+                        <button class="mini-editor-save" id="criteria-save-btn">Save</button>
+                        <button class="mini-editor-cancel" id="criteria-cancel-btn" onclick="document.querySelector('.mini-editor-container').remove();">Cancel</button>
                     </div>
                 </div>
                 <div class="mini-editor-content">
-                    <textarea class="mini-editor-textarea"></textarea>
+                    <textarea id="criteria-editor-textarea" class="mini-editor-textarea"></textarea>
                 </div>
             </div>
         `);
         
-        // Append to the criteria section
+        // Find the criteria section and append the mini-editor after it
         const criteriaSection = $('.info-header:contains("Criteria")').parent();
+        
+        if (criteriaSection.length === 0) {
+            return;
+        }
+        
         miniEditorContainer.insertAfter(criteriaSection);
         
         // Set the content of the textarea
         const criteriaJson = JSON.stringify(criteriaData, null, 2);
-        miniEditorContainer.find('.mini-editor-textarea').val(criteriaJson);
+        $('#criteria-editor-textarea').val(criteriaJson);
         
-        // Initialize CodeMirror on the textarea
-        const miniEditor = CodeMirror.fromTextArea(miniEditorContainer.find('.mini-editor-textarea')[0], {
-            mode: { name: "javascript", json: true },
-            theme: "material-ocean",
-            lineNumbers: true,
-            matchBrackets: true,
-            autoCloseBrackets: true,
-            foldGutter: true,
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-            indentUnit: 2,
-            tabSize: 2,
-            lineWrapping: true
-        });
-        
-        // Calculate the appropriate height based on content
-        const contentLines = criteriaJson.split('\n').length;
-        const lineHeight = 20; // Approximate height of each line in pixels
-        const paddingHeight = 10; // Additional padding
-        const minHeight = 100; // Minimum height
-        const maxHeight = 400; // Maximum height
-        
-        // Calculate height based on content (line count * line height + padding)
-        let autoHeight = (contentLines * lineHeight) + paddingHeight;
-        
-        // Ensure height is within min/max bounds
-        autoHeight = Math.max(minHeight, Math.min(autoHeight, maxHeight));
-        
-        // Set editor size with auto-calculated height
-        miniEditor.setSize("100%", autoHeight + "px");
-        
-        // Apply custom highlighting if available
-        if (window.jsonEditorHelpers && window.jsonEditorHelpers.applyCustomHighlighting) {
-            setTimeout(() => window.jsonEditorHelpers.applyCustomHighlighting(miniEditor), 100);
-            
-            // Add change handler to reapply highlighting when content changes
-            miniEditor.on("change", function() {
-                clearTimeout(miniEditor.highlightTimeout);
-                miniEditor.highlightTimeout = setTimeout(() => {
-                    window.jsonEditorHelpers.applyCustomHighlighting(miniEditor);
-                    
-                    // Update height when content changes
-                    const currentLines = miniEditor.getValue().split('\n').length;
-                    let newHeight = (currentLines * lineHeight) + paddingHeight;
-                    newHeight = Math.max(minHeight, Math.min(newHeight, maxHeight));
-                    miniEditor.setSize("100%", newHeight + "px");
-                }, 500);
-            });
-        }
-        
-        // Handle save button click
-        miniEditorContainer.find('.mini-editor-save').click(function() {
-            try {
-                // Get the edited content
-                const editedContent = miniEditor.getValue();
-                
-                // Parse the JSON to validate it
-                const editedCriteria = JSON.parse(editedContent);
-                
-                // Update the criteria in the configuration
-                if (tab.CRITERIA && Array.isArray(tab.CRITERIA)) {
-                    tab.CRITERIA = editedCriteria;
-                } else if (tab.CRITERIA_SECTIONS && Array.isArray(tab.CRITERIA_SECTIONS)) {
-                    tab.CRITERIA_SECTIONS = editedCriteria;
-                } else {
-                    // If criteria wasn't found in either location, add it to tab.CRITERIA
-                    tab.CRITERIA = editedCriteria;
-                }
-                
-                // Reinitialize the advisor with the updated configuration
-                initializeAdvisor(window.currentConfig);
-                
-                // Update the full-screen editor if it's available
-                if (window.CodeMirror && document.getElementById("config-editor")) {
-                    // We need to access the existing CodeMirror instance
-                    // The instance is likely stored in a variable in editor.js
-                    // Let's make the editor instance accessible globally
-                    
-                    // First, update the window.currentConfig
-                    // This ensures that when the full editor is opened, it will load the updated config
-                    
-                    // Create a custom event to notify the editor.js that the config has changed
-                    const configChangeEvent = new CustomEvent('configChanged', {
-                        detail: { config: window.currentConfig }
-                    });
-                    document.dispatchEvent(configChangeEvent);
-                }
-                
-                // Close the mini-editor
-                miniEditorContainer.remove();
-            } catch (e) {
-                // Show error message
-                console.error("Error saving criteria:", e);
-                alert("Error parsing JSON: " + e.message);
+        // Make sure the DOM is updated before initializing CodeMirror
+        setTimeout(() => {
+            // Initialize CodeMirror on the textarea
+            const textarea = document.getElementById('criteria-editor-textarea');
+            if (!textarea) {
+                return;
             }
-        });
-        
-        // Handle cancel button click
-        miniEditorContainer.find('.mini-editor-cancel').click(function() {
-            miniEditorContainer.remove();
-        });
+            
+            const miniEditor = CodeMirror.fromTextArea(textarea, {
+                mode: { name: "javascript", json: true },
+                theme: "material-ocean",
+                lineNumbers: true,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+                foldGutter: true,
+                gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+                indentUnit: 2,
+                tabSize: 2,
+                lineWrapping: true,
+                viewportMargin: Infinity // Ensures the editor renders all content
+            });
+            
+            // Force a refresh to ensure content is displayed
+            miniEditor.refresh();
+            
+            // Set a fixed height for the editor
+            miniEditor.setSize("100%", "300px");
+            
+            // Handle save button click using direct DOM method for better reliability
+            document.getElementById('criteria-save-btn').addEventListener('click', function() {
+                try {
+                    // Get the edited content
+                    const editedContent = miniEditor.getValue();
+                    
+                    if (!editedContent || editedContent.trim() === '') {
+                        throw new Error("Empty content cannot be saved");
+                    }
+                    
+                    // Parse the JSON to validate it
+                    let editedCriteria;
+                    try {
+                        editedCriteria = JSON.parse(editedContent);
+                        if (!Array.isArray(editedCriteria)) {
+                            throw new Error("Criteria must be an array");
+                        }
+                    } catch (parseError) {
+                        alert("Error parsing JSON: " + parseError.message);
+                        return;
+                    }
+                    
+                    // Update the criteria in the configuration
+                    tab.CRITERIA = editedCriteria;
+                    
+                    // Reinitialize the advisor with the updated configuration
+                    initializeAdvisor(window.currentConfig);
+                    
+                    // Update the full-screen editor if it's available
+                    if (window.CodeMirror && document.getElementById("config-editor")) {
+                        // Create a custom event to notify the editor.js that the config has changed
+                        const configChangeEvent = new CustomEvent('configChanged', {
+                            detail: { config: window.currentConfig }
+                        });
+                        document.dispatchEvent(configChangeEvent);
+                    }
+                    
+                    // Close the mini-editor - use multiple methods to ensure it's removed properly
+                    try {
+                        const container = document.querySelector('.mini-editor-container');
+                        if (container) {
+                            container.remove();
+                        } else {
+                            $('.mini-editor-container').remove();
+                        }
+                    } catch (removeError) {
+                        // As a fallback, try to hide it
+                        $('.mini-editor-container').hide();
+                    }
+                } catch (e) {
+                    // Show error message
+                    alert("Error saving criteria: " + e.message);
+                }
+            });
+        }, 100); // Short delay to ensure DOM is updated
     }
 
     function renderTab(tab, tabContainer) {
-        console.log(`Rendering tab: ${tab.TAB_KEY}`);
+        // Create content wrapper
+        const contentWrapper = $('<div class="content-wrapper"></div>').appendTo(tabContainer);
         
-        // Create tab content
-        const tabContent = $('<div class="tab-content"></div>').appendTo(tabContainer);
-        
-        // Add criteria section with explicit double-click handler
-        const criteriaContainer = $('<div class="criteria-container"></div>').appendTo(tabContent);
-        $('<h3>Criteria</h3>').appendTo(criteriaContainer);
-        
-        // Create a clickable edit button instead of relying on double-click
-        const editButton = $('<button class="edit-criteria-button">Edit Criteria</button>');
-        editButton.on('click', function() {
-            console.log("Edit criteria button clicked");
-            // Find the criteria section in the configuration
-            if (tab.CRITERIA) {
-                openCriteriaMiniEditor(tab.TAB_KEY);
-            } else {
-                console.error("No criteria found for this tab");
-            }
-        });
-        
-        editButton.appendTo(criteriaContainer);
-        
-        // Render criteria items
-        if (tab.CRITERIA && tab.CRITERIA.length > 0) {
-            console.log(`Tab ${tab.TAB_KEY} has ${tab.CRITERIA.length} criteria items`);
-            const criteriaList = $('<div class="criteria-list"></div>').appendTo(criteriaContainer);
-            
-            tab.CRITERIA.forEach(criteria => {
-                const criteriaItem = $('<div class="criteria-item"></div>').appendTo(criteriaList);
-                
-                if (criteria.CRITERIA_TEXT) {
-                    $(`<div class="criteria-text">${criteria.CRITERIA_TEXT}</div>`).appendTo(criteriaItem);
-                }
-                
-                if (criteria.VALUE) {
-                    $(`<div class="criteria-value">${criteria.VALUE}</div>`).appendTo(criteriaItem);
-                }
-            });
-        } else {
-            console.log(`Tab ${tab.TAB_KEY} has no criteria items`);
-            $('<div class="no-criteria">No criteria available</div>').appendTo(criteriaContainer);
-        }
-        
-        // Continue with the rest of your tab rendering code...
+        // Render tab content
+        renderTabContent(tab, contentWrapper);
     }
 });
 
 // Create a mock CCL response based on the configuration
 function createCCLResponse(config) {
-    // Check if config has the expected structure
-    if (!config || !config.RCONFIG || !config.RCONFIG.TABS) {
-        return {
-            RREC: {
-                STATUS_DATA: {
-                    STATUS: "E",
-                    MESSAGE: "Invalid configuration structure"
-                },
-                TAB: []
-            }
-        };
-    }
-    
-    var tabs = config.RCONFIG.TABS;
-    var response = {
-        RREC: {
-            STATUS_DATA: {
-                STATUS: "S"
-            },
-            TAB: []
-        }
+    // Create a mock CCL response based on the configuration
+    const cclResponse = {
+        tabs: []
     };
     
-    // Create tabs based on configuration
-    tabs.forEach(function(tab, index) {
-        var tabObj = {
-            ID: "tab-" + index,
-            DISPLAY: tab.TAB_NAME || "Tab " + (index + 1),
-            STATUS: index === 0 ? "alert" : "normal",
-            ORDER_PROVIDER_NAME: "Moore, Charles R",
-            CRITERIA: [],
-            SYNONYM: [],
-            GRAPH: [],
-            LAB_RESULTS: [],
-            ORDER_SECTION: []
-        };
-        
-        // Add criteria with proper status
-        if (tab.CRITERIA && Array.isArray(tab.CRITERIA)) {
-            tab.CRITERIA.forEach(function(criteria) {
-                tabObj.CRITERIA.push({
-                    LABEL: criteria.LABEL || "Unknown Criterion",
-                    DISPLAY: criteria.DISPLAY || "Yes",
-                    TOOLTIP: criteria.TOOLTIP || "",
-                    STATUS: "pass",
-                    CONCEPT_NAME: criteria.CONCEPT_NAME || ""
-                });
-            });
-        }
-        
-        // Add default criteria if none exist
-        if (tabObj.CRITERIA.length === 0) {
-            tabObj.CRITERIA.push({
-                LABEL: "Patient not on dialysis",
-                DISPLAY: "No",
-                TOOLTIP: "No active dialysis order",
-                STATUS: "pass"
-            });
+    // Process each tab in the configuration
+    if (config.RCONFIG && config.RCONFIG.TABS) {
+        config.RCONFIG.TABS.forEach(tab => {
+            const tabData = {
+                TAB_NAME: tab.TAB_NAME || 'Unnamed Tab',
+                TAB_KEY: tab.TAB_KEY || `tab_${Math.random().toString(36).substring(2, 11)}`,
+                FLAG_ON_CONCEPT: tab.FLAG_ON_CONCEPT || '',
+                CONCEPT_FOR_DISMISS: tab.CONCEPT_FOR_DISMISS || '',
+                MNEMONICS: tab.MNEMONICS || [],
+                CONCEPTS: tab.CONCEPTS || [],
+                CRITERIA: tab.CRITERIA || [],
+                GRAPHED_RESULTS: tab.GRAPHED_RESULTS || [],
+                ORDER_SECTIONS: [],
+                RESOURCE_URLS: tab.RESOURCE_URLS || [],
+                SUBMIT_BUTTON: tab.SUBMIT_BUTTON || { DISMISS_LABEL: 'Dismiss', SIGN_LABEL: 'Sign' },
+                CANCEL_BUTTON: tab.CANCEL_BUTTON || { CANCEL_LABEL: 'Cancel' }
+            };
             
-            tabObj.CRITERIA.push({
-                LABEL: "Dosing Weight > 50 kg",
-                DISPLAY: "62 kg",
-                TOOLTIP: "Dosing weight",
-                STATUS: "pass"
-            });
-            
-            tabObj.CRITERIA.push({
-                LABEL: "Creatinine Clearance",
-                DISPLAY: "43.06",
-                TOOLTIP: "Calculated creatinine clearance",
-                STATUS: "pass"
-            });
-            
-            tabObj.CRITERIA.push({
-                LABEL: "Serum Creatinine",
-                DISPLAY: "1.00",
-                TOOLTIP: "Serum creatinine level",
-                STATUS: "pass"
-            });
-        }
-        
-        // Add lab results based on tab name
-        if (tab.TAB_NAME === "Magnesium") {
-            tabObj.LAB_RESULTS = [
-                {
-                    LABEL: "Mg Lvl",
-                    VALUE: "2.0",
-                    UNITS: "mg/dL",
-                    NORMAL_LOW: "1.8",
-                    NORMAL_HIGH: "2.4",
-                    COLLECTION_DT_TM: new Date().toISOString(),
-                    AGE_IN_MINS: "52 mins"
-                },
-                {
-                    LABEL: "Creatinine",
-                    VALUE: "1.00",
-                    UNITS: "mg/dL",
-                    COLLECTION_DT_TM: new Date().toISOString(),
-                    AGE_IN_MINS: "52 mins"
-                }
-            ];
-        } else if (tab.TAB_NAME === "Potassium") {
-            tabObj.LAB_RESULTS = [
-                {
-                    LABEL: "Potassium",
-                    VALUE: "3.1",
-                    UNITS: "mEq/L",
-                    NORMAL_LOW: "3.5",
-                    NORMAL_HIGH: "5.0",
-                    COLLECTION_DT_TM: new Date().toISOString(),
-                    AGE_IN_MINS: "52 mins"
-                },
-                {
-                    LABEL: "Creatinine",
-                    VALUE: "1.00",
-                    UNITS: "mg/dL",
-                    COLLECTION_DT_TM: new Date().toISOString(),
-                    AGE_IN_MINS: "52 mins"
-                }
-            ];
-        } else if (tab.TAB_NAME === "Phosphate") {
-            tabObj.LAB_RESULTS = [
-                {
-                    LABEL: "Phosphate",
-                    VALUE: "2.5",
-                    UNITS: "mg/dL",
-                    NORMAL_LOW: "2.7",
-                    NORMAL_HIGH: "4.5",
-                    COLLECTION_DT_TM: new Date().toISOString(),
-                    AGE_IN_MINS: "52 mins"
-                }
-            ];
-        }
-        
-        // Add default order sections if none exist
-        if (tab.TAB_NAME === "Potassium") {
-            tabObj.ORDER_SECTION.push({
-                SECTION_NAME: "Potassium Level 3.1 - 3.5 mEq/L: 3.1",
-                ORDERS: [
-                    {
-                        MNEMONIC: "potassium chloride 10 mEq/50 mL intravenous solution",
-                        ORDER_SENTENCE: "10 mEq, Soln-IV, IV Piggyback, q1H Interval, Duration: 4 Doses",
-                        OS_COMMENT: "For Potassium Level 3.1 - 3.5 mEq/L; Total Dose = 40 mEq.",
-                        SYNONYM_ID: 12345,
-                        ORDER_SENTENCE_ID: 67890
-                    }
-                ]
-            });
-        } else if (tab.TAB_NAME === "Magnesium") {
-            tabObj.ORDER_SECTION.push({
-                SECTION_NAME: "Magnesium Level Blood, Stat collect, Once",
-                ORDERS: [
-                    {
-                        MNEMONIC: "Magnesium Oxide - Oral",
-                        ORDER_SENTENCE: "400 mg, Tablet, Oral, Once",
-                        OS_COMMENT: "For Magnesium Level 1.5 - 1.7 mg/dL",
-                        SYNONYM_ID: 23456,
-                        ORDER_SENTENCE_ID: 78901
-                    }
-                ]
-            });
-        }
-        
-        // Add order sections from configuration
-        if (tab.ORDER_SECTIONS && Array.isArray(tab.ORDER_SECTIONS)) {
-            tab.ORDER_SECTIONS.forEach(function(section) {
-                if (section.CONCEPT_NAME !== "[%false%]") {
-                    var orderSection = {
-                        SECTION_NAME: section.SECTION_NAME || "Orders",
+            // Process order sections
+            if (tab.ORDER_SECTIONS) {
+                tab.ORDER_SECTIONS.forEach(section => {
+                    const sectionData = {
+                        SECTION_NAME: section.SECTION_NAME || 'Unnamed Section',
+                        CONCEPT_NAME: section.CONCEPT_NAME || '',
+                        SINGLE_SELECT: section.SINGLE_SELECT || 0,
+                        SHOW_INACTIVE_DUPLICATES: section.SHOW_INACTIVE_DUPLICATES || 0,
                         ORDERS: []
                     };
                     
-                    if (section.ORDERS && Array.isArray(section.ORDERS)) {
-                        section.ORDERS.forEach(function(order) {
-                            orderSection.ORDERS.push({
-                                MNEMONIC: order.MNEMONIC || "",
-                                ORDER_SENTENCE: order.ORDER_SENTENCE || "Default order sentence",
-                                OS_COMMENT: order.COMMENT || "",
-                                SYNONYM_ID: Math.floor(Math.random() * 10000),
-                                ORDER_SENTENCE_ID: Math.floor(Math.random() * 10000)
+                    // Process orders
+                    if (section.ORDERS) {
+                        section.ORDERS.forEach(order => {
+                            sectionData.ORDERS.push({
+                                MNEMONIC: order.MNEMONIC || 'Unnamed Order',
+                                ORDER_SENTENCE: order.ORDER_SENTENCE || '',
+                                ASC_SHORT_DESCRIPTION: order.ASC_SHORT_DESCRIPTION || '',
+                                COMMENT: order.COMMENT || ''
                             });
                         });
                     }
                     
-                    // Only add if it has orders
-                    if (orderSection.ORDERS.length > 0) {
-                        tabObj.ORDER_SECTION.push(orderSection);
-                    }
-                }
-            });
-        }
-        
-        // Add submit button
-        tabObj.SUBMIT_BUTTON = tab.SUBMIT_BUTTON || "No Orders Necessary";
-        
-        // Add to response
-        response.RREC.TAB.push(tabObj);
-    });
+                    tabData.ORDER_SECTIONS.push(sectionData);
+                });
+            }
+            
+            cclResponse.tabs.push(tabData);
+        });
+    }
     
-    return response;
+    return cclResponse;
 } 

@@ -4,7 +4,13 @@ body {
     margin: 0;
     padding: 0;
     font-size: 12px; /* Reduced base font size */
-    overflow-x: hidden;
+    overflow: hidden; /* Change from overflow-x: hidden to prevent any scrollbars on body */
+    height: 100%;
+}
+
+html {
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling on html element */
 }
 
 /* Patient header */
@@ -51,6 +57,8 @@ body {
 /* Content wrapper */
 .content-wrapper {
     display: flex;
+    height: calc(100vh - 100px); /* Set a fixed height based on viewport minus headers */
+    overflow: hidden; /* Prevent scrolling on the content wrapper */
 }
 
 /* Left column */
@@ -66,6 +74,8 @@ body {
     display: flex;
     flex-direction: column;
     padding: 4px; /* Added minimal padding */
+    overflow: hidden; /* Change to prevent scrolling on the container itself */
+    height: 100%; /* Take full height of parent */
 }
 
 /* Info sections */
@@ -201,6 +211,10 @@ body {
     padding: 6px; /* Reduced from 8px */
     border-top: 1px solid #ccc;
     margin-top: auto;
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    z-index: 10;
 }
 
 .cancel-button {
@@ -378,5 +392,138 @@ label {
 
 /* Main app container */
 #advisor-container {
-    overflow-x: hidden;
+    overflow: hidden; /* Change from overflow-x: hidden and overflow-y: auto to prevent scrolling here */
+    height: 100%;
+}
+
+.app-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent scrolling on app container */
+}
+
+/* Order sections wrapper - add scrolling */
+.order-sections-wrapper {
+    overflow-y: auto;
+    max-height: calc(100vh - 200px); /* Adjust to account for header, tabs, and buttons */
+    padding-bottom: 10px; /* Add padding to prevent content from being cut off */
+    position: relative; /* Ensure proper positioning context for mini-editor */
+}
+
+/* Mini-editor container positioning fix */
+.mini-editor-container {
+    position: relative;
+    z-index: 1000;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 100%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Settings icon */
+.settings-icon-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+}
+
+.settings-icon {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.settings-icon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Debug icon */
+.debug-icon-container {
+    position: absolute;
+    top: 10px;
+    right: 50px; /* Position to the left of the settings icon */
+    z-index: 100;
+}
+
+.debug-icon {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.debug-icon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.debug-icon.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #ffcc00;
+}
+
+/* Debug information display */
+.debug-info {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 5px;
+    margin-bottom: 5px;
+    font-family: monospace;
+    font-size: 11px;
+}
+
+.debug-expression {
+    color: #0066cc;
+}
+
+.debug-result {
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.debug-result.true {
+    color: #00aa00;
+}
+
+.debug-result.false {
+    color: #cc0000;
+}
+
+.debug-toggle-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 5px;
+}
+
+.debug-toggle-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.debug-toggle-button:hover {
+    background-color: #e0e0e0;
+}
+
+.debug-toggle-button.active {
+    background-color: #2b6ca3;
+    color: white;
 }

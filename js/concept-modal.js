@@ -178,6 +178,19 @@ class ConceptModal {
     close() {
         this.modal.style.display = 'none';
         document.body.style.overflow = ''; // Restore scrolling
+        
+        // Refresh the advisor to reflect any concept changes
+        this.refreshAdvisor();
+    }
+
+    /**
+     * Refreshes the advisor to reflect concept changes
+     */
+    refreshAdvisor() {
+        // Refresh the advisor if the initializeAdvisor function is available
+        if (window.initializeAdvisor) {
+            window.initializeAdvisor();
+        }
     }
 
     /**

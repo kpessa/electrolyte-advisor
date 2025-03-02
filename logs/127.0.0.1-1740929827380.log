@@ -1,0 +1,170 @@
+app.js:23 Debug mode changed: true
+concept-parser.js:204 Error evaluating concept expression: SyntaxError: Invalid left-hand side in assignment
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:202:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:407:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:402:28)
+    at renderTabContent (app.js:211:9)
+    at renderTab (app.js:1006:9) Expression: false = 0
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:204
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:407
+renderOrderSections @ app.js:402
+renderTabContent @ app.js:211
+renderTab @ app.js:1006
+(anonymous) @ app.js:652
+renderAdvisor @ app.js:620
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:98
+(anonymous) @ concept-integration.js:73
+concept-parser.js:206 Original expression: [%{EACRITERIAVALIDMAGRESULT4H} = 0%]
+concept-parser.js:207 Processed expression: false = 0
+concept-parser.js:208 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:204 Error evaluating concept expression: SyntaxError: Invalid left-hand side in assignment
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:202:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:407:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:402:28)
+    at renderTabContent (app.js:211:9)
+    at renderTab (app.js:1006:9) Expression: false = 0
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:204
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:407
+renderOrderSections @ app.js:402
+renderTabContent @ app.js:211
+renderTab @ app.js:1006
+(anonymous) @ app.js:652
+renderAdvisor @ app.js:620
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:98
+(anonymous) @ concept-integration.js:73
+concept-parser.js:206 Original expression: [%{EACRITERIAVALIDPOTRESULT4H} = 0%]
+concept-parser.js:207 Processed expression: false = 0
+concept-parser.js:208 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:204 Error evaluating concept expression: SyntaxError: Invalid left-hand side in assignment
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:202:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:407:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:402:28)
+    at renderTabContent (app.js:211:9)
+    at renderTab (app.js:1006:9) Expression: false = 0
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:204
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:407
+renderOrderSections @ app.js:402
+renderTabContent @ app.js:211
+renderTab @ app.js:1006
+(anonymous) @ app.js:652
+renderAdvisor @ app.js:620
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:98
+(anonymous) @ concept-integration.js:73
+concept-parser.js:206 Original expression: [%{EACRITERIAVALIDPHOSRESULT4H} = 0%]
+concept-parser.js:207 Processed expression: false = 0
+concept-parser.js:208 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-integration.js:100 Debug mode enabled
+concept-parser.js:204 Error evaluating concept expression: SyntaxError: Invalid left-hand side in assignment
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:202:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:407:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:402:28)
+    at renderTabContent (app.js:211:9)
+    at renderTab (app.js:1006:9) Expression: false = 0
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:204
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:407
+renderOrderSections @ app.js:402
+renderTabContent @ app.js:211
+renderTab @ app.js:1006
+(anonymous) @ app.js:652
+renderAdvisor @ app.js:620
+initializeAdvisor @ app.js:91
+(anonymous) @ concept-integration.js:80
+concept-parser.js:206 Original expression: [%{EACRITERIAVALIDMAGRESULT4H} = 0%]
+concept-parser.js:207 Processed expression: false = 0
+concept-parser.js:208 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:204 Error evaluating concept expression: SyntaxError: Invalid left-hand side in assignment
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:202:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:407:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:402:28)
+    at renderTabContent (app.js:211:9)
+    at renderTab (app.js:1006:9) Expression: false = 0
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:204
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:407
+renderOrderSections @ app.js:402
+renderTabContent @ app.js:211
+renderTab @ app.js:1006
+(anonymous) @ app.js:652
+renderAdvisor @ app.js:620
+initializeAdvisor @ app.js:91
+(anonymous) @ concept-integration.js:80
+concept-parser.js:206 Original expression: [%{EACRITERIAVALIDPOTRESULT4H} = 0%]
+concept-parser.js:207 Processed expression: false = 0
+concept-parser.js:208 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:204 Error evaluating concept expression: SyntaxError: Invalid left-hand side in assignment
+    at new Function (<anonymous>)
+    at evaluateConceptExpression (concept-parser.js:202:16)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:118:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:407:33
+    at Array.forEach (<anonymous>)
+    at renderOrderSections (app.js:402:28)
+    at renderTabContent (app.js:211:9)
+    at renderTab (app.js:1006:9) Expression: false = 0
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:204
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:118
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:407
+renderOrderSections @ app.js:402
+renderTabContent @ app.js:211
+renderTab @ app.js:1006
+(anonymous) @ app.js:652
+renderAdvisor @ app.js:620
+initializeAdvisor @ app.js:91
+(anonymous) @ concept-integration.js:80
+concept-parser.js:206 Original expression: [%{EACRITERIAVALIDPHOSRESULT4H} = 0%]
+concept-parser.js:207 Processed expression: false = 0
+concept-parser.js:208 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
