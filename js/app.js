@@ -135,35 +135,6 @@ $(document).ready(function() {
             openCriteriaMiniEditor(activeTabKey);
         });
         
-        // Add a visual indicator for double-click functionality
-        criteriaSection.css({
-            'position': 'relative',
-            'cursor': 'pointer'
-        });
-        
-        // Add a small edit indicator in the corner instead of a tooltip
-        const editIndicator = $('<div class="criteria-edit-indicator">✎</div>');
-        editIndicator.css({
-            'position': 'absolute',
-            'top': '5px',
-            'right': '45px', /* Position to the left of the Edit button */
-            'font-size': '14px',
-            'color': '#89ddff',
-            'opacity': '0',
-            'transition': 'opacity 0.2s',
-            'pointer-events': 'none'
-        });
-        criteriaSection.append(editIndicator);
-        
-        // Show indicator on hover
-        criteriaSection.on('mouseenter', function() {
-            editIndicator.css('opacity', '1');
-        });
-        
-        criteriaSection.on('mouseleave', function() {
-            editIndicator.css('opacity', '0');
-        });
-        
         // Phosphorus Labs section (or equivalent for the tab)
         const labsSection = $('<div class="info-section"></div>').appendTo(infoContainer);
         $(`<div class="info-header">${tab.TAB_NAME} Labs</div>`).appendTo(labsSection);
