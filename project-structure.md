@@ -2,7 +2,8 @@ electrolyte-advisor/
 ├── index.html
 ├── css/
 │   ├── uhspa.tabbed_advisor.css
-│   └── custom-components.css
+│   ├── custom-components.css
+│   └── editor-styles.css
 ├── js/
 │   ├── uhspa.tabbed_advisor.js
 │   ├── uhspa.common.js

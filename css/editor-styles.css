@@ -1,0 +1,307 @@
+.app-container, .editor-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.editor-container {
+    background: #2d2d2d;
+    z-index: 10;
+    transform: translateX(100%);
+}
+
+.editor-container.active {
+    transform: translateX(0);
+}
+
+.app-container.inactive {
+    transform: translateX(-100%);
+}
+
+.CodeMirror {
+    height: calc(100% - 50px);
+    font-size: 14px;
+}
+
+.editor-toolbar {
+    height: 50px;
+    background: #333;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.editor-toolbar button {
+    margin-right: 10px;
+    padding: 8px 15px;
+    background: #4a4a4a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.editor-toolbar button:hover {
+    background: #5a5a5a;
+}
+
+.toggle-editor-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.toggle-editor-btn:hover {
+    background: #0069d9;
+}
+
+/* Mini-editor styles */
+.mini-editor-container {
+    margin: 10px 0;
+    border: 1px solid #444;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #2d2d2d;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.mini-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #333;
+    color: white;
+    font-size: 14px;
+}
+
+.mini-editor-actions button {
+    margin-left: 8px;
+    padding: 4px 10px;
+    background: #4a4a4a;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.mini-editor-actions button:hover {
+    background: #5a5a5a;
+}
+
+.mini-editor-save {
+    background: #28a745 !important;
+}
+
+.mini-editor-save:hover {
+    background: #218838 !important;
+}
+
+.mini-editor-cancel {
+    background: #dc3545 !important;
+}
+
+.mini-editor-cancel:hover {
+    background: #c82333 !important;
+}
+
+.mini-editor-content {
+    padding: 0;
+}
+
+.mini-editor-content .CodeMirror {
+    border-top: 1px solid #444;
+}
+
+/* Criteria section styles */
+.info-section {
+    position: relative;
+}
+
+/* Edit button for criteria */
+.edit-criteria-button {
+    float: right;
+    margin-top: -2px;
+    font-size: 11px;
+    padding: 2px 8px;
+    background-color: #89ddff;
+    color: #0f111a;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.edit-criteria-button:hover {
+    background-color: #56b6c2;
+}
+
+/* Make the criteria section appear clickable */
+.info-section.criteria-section-container {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.info-section.criteria-section-container:hover {
+    background-color: rgba(137, 221, 255, 0.05);
+}
+
+/* Tooltip for double-click */
+.criteria-edit-tooltip {
+    position: absolute;
+    top: 5px;
+    right: 45px; /* Position to the left of the Edit button */
+    font-size: 11px;
+    color: #89ddff;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+}
+
+.info-section.criteria-section-container:hover .criteria-edit-tooltip {
+    opacity: 1;
+}
+
+/* Criterion items with tooltips */
+.criterion {
+    padding: 2px 4px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.criterion:hover {
+    background-color: rgba(137, 221, 255, 0.1);
+}
+
+.criterion-check {
+    color: #98c379;
+    margin-right: 8px;
+}
+
+.criterion-label {
+    flex: 1;
+}
+
+.criterion-value {
+    float: right;
+    color: #4a9cd6; /* Darker blue color */
+}
+
+/* Add specific styling for different types of values if needed */
+.criterion:nth-child(2) .criterion-value {
+    color: #ffffff; /* White color for the weight value */
+}
+
+/* Order section styles */
+.order-section {
+    cursor: pointer;
+    transition: background-color 0.2s;
+    position: relative;
+}
+
+.order-section:hover {
+    background-color: rgba(137, 221, 255, 0.05);
+}
+
+/* Remove the automatic tooltip on hover */
+.order-section:hover::after {
+    content: none; /* Remove the default tooltip */
+}
+
+.criteria-section {
+    position: relative;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #464b5d;
+    border-radius: 4px;
+    background-color: rgba(15, 17, 26, 0.5);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.criteria-section-header {
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #c3e88d;
+}
+
+.criteria-list {
+    margin-left: 15px;
+}
+
+.criteria-item {
+    margin-bottom: 8px;
+    padding: 5px;
+    border-left: 3px solid #464b5d;
+    padding-left: 10px;
+}
+
+.criteria-text {
+    margin-bottom: 4px;
+    color: #eeffff;
+}
+
+.no-criteria {
+    color: #f07178;
+    font-style: italic;
+}
+
+/* Reset the width to original values */
+.uhspa-info-container {
+    width: 25%; /* Changed from 50% to 25% */
+    float: left;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative; /* For the resizer */
+}
+
+.uhspa-order-container {
+    width: 75%; /* Changed from 50% to 75% */
+    float: right;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Add a resizable divider */
+.panel-resizer {
+    width: 8px;
+    height: 100%;
+    position: absolute;
+    right: -4px; /* Center the resizer on the border */
+    top: 0;
+    cursor: col-resize;
+    z-index: 10;
+    background-color: transparent;
+}
+
+.panel-resizer:hover, .panel-resizer.active {
+    background-color: rgba(137, 221, 255, 0.3);
+}
+
+/* Visual divider */
+.uhspa-order-container {
+    border-left: 1px solid #464b5d;
+}
+
+/* Make sure the container clears floats */
+.uhspa-tab-content:after {
+    content: "";
+    display: table;
+    clear: both;
+} 
