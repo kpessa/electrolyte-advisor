@@ -322,4 +322,15 @@ html, body {
     content: "";
     display: table;
     clear: both;
+}
+
+/* Hide navbar when editor is active */
+.editor-container.active ~ .navbar,
+body:has(.editor-container.active) .navbar {
+    display: none;
+}
+
+/* Alternative approach for browsers that don't support :has */
+.app-container.inactive + .navbar {
+    display: none;
 } 

@@ -367,12 +367,16 @@ $(document).ready(function() {
         const editorContainer = $('.editor-container');
         const appContainer = $('.app-container');
         const toggleButton = $('#toggle-editor-btn');
+        const navbar = $('.navbar');
         
         if (editorContainer.hasClass('active')) {
             // Hide editor
             editorContainer.removeClass('active');
             appContainer.removeClass('inactive');
             toggleButton.text('Edit Configuration');
+            
+            // Show navbar
+            navbar.show();
             
             // If there are any changes, ask if the user wants to save
             const currentConfig = editor.getValue();
@@ -389,6 +393,9 @@ $(document).ready(function() {
             appContainer.addClass('inactive');
             toggleButton.text('Close Editor');
             
+            // Hide navbar
+            navbar.hide();
+            
             // Load the latest configuration from window.currentConfig
             if (window.currentConfig) {
                 try {
@@ -402,6 +409,7 @@ $(document).ready(function() {
                     setTimeout(() => applyCustomHighlighting(editor), 100);
                 } catch (e) {
                     console.error("Error loading current configuration:", e);
+                    alert('Failed to load configuration. Please check the console for details.');
                 }
             }
             

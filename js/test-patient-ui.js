@@ -128,53 +128,76 @@ class TestPatientUI {
      */
     showTestPatientManager() {
         console.log('Showing test patient manager...');
+        this.toggleSidebar();
+    }
+
+    /**
+     * Toggles the test patient sidebar
+     */
+    toggleSidebar() {
+        console.log('Toggling test patient sidebar...');
         
-        // Create modal container if it doesn't exist
-        let modalContainer = document.getElementById('test-patient-modal');
-        if (!modalContainer) {
-            modalContainer = document.createElement('div');
-            modalContainer.id = 'test-patient-modal';
-            modalContainer.className = 'test-patient-modal';
-            document.body.appendChild(modalContainer);
+        // Get or create the sidebar
+        let sidebar = document.querySelector('.test-patient-sidebar');
+        let overlay = document.querySelector('.sidebar-overlay');
+        
+        if (!sidebar) {
+            // Create sidebar
+            sidebar = document.createElement('div');
+            sidebar.className = 'test-patient-sidebar';
+            document.body.appendChild(sidebar);
             
-            // Create modal content
-            const modalContent = document.createElement('div');
-            modalContent.className = 'test-patient-modal-content';
-            modalContainer.appendChild(modalContent);
+            // Create sidebar header
+            const sidebarHeader = document.createElement('div');
+            sidebarHeader.className = 'sidebar-header';
+            sidebar.appendChild(sidebarHeader);
             
-            // Create header
-            const header = document.createElement('div');
-            header.className = 'test-patient-modal-header';
-            modalContent.appendChild(header);
-            
-            // Create title
-            const title = document.createElement('h2');
-            title.className = 'test-patient-modal-title';
-            title.textContent = 'Test Patient Manager';
-            header.appendChild(title);
+            // Create sidebar title
+            const sidebarTitle = document.createElement('h2');
+            sidebarTitle.textContent = 'Test Patients';
+            sidebarHeader.appendChild(sidebarTitle);
             
             // Create close button
-            const closeButton = document.createElement('span');
-            closeButton.className = 'test-patient-modal-close';
+            const closeButton = document.createElement('button');
+            closeButton.className = 'sidebar-close-btn';
             closeButton.innerHTML = '&times;';
-            closeButton.addEventListener('click', () => {
-                modalContainer.style.display = 'none';
-            });
-            header.appendChild(closeButton);
+            closeButton.setAttribute('aria-label', 'Close');
+            closeButton.addEventListener('click', () => this.toggleSidebar());
+            sidebarHeader.appendChild(closeButton);
             
-            // Create body
-            const body = document.createElement('div');
-            body.className = 'test-patient-modal-body';
-            modalContent.appendChild(body);
+            // Create sidebar content
+            const sidebarContent = document.createElement('div');
+            sidebarContent.className = 'sidebar-content';
+            sidebar.appendChild(sidebarContent);
             
-            // Create patient list
-            this.createPatientList(body);
+            // Create overlay
+            overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            overlay.addEventListener('click', () => this.toggleSidebar());
+            document.body.appendChild(overlay);
+            
+            // Render sidebar content
+            this.renderSidebarContent(sidebarContent);
         }
         
-        // Show the modal
-        modalContainer.style.display = 'block';
+        // Toggle sidebar visibility
+        sidebar.classList.toggle('active');
         
-        console.log('Test patient manager shown');
+        // Toggle overlay
+        if (overlay) {
+            overlay.classList.toggle('active');
+        }
+        
+        // Toggle body class for preventing scrolling
+        document.body.classList.toggle('sidebar-open');
+        
+        // Toggle app container shifting
+        const appContainer = document.getElementById('app-container');
+        if (appContainer) {
+            appContainer.classList.toggle('app-shifted');
+        }
+        
+        console.log('Test patient sidebar toggled');
     }
 
     /**
@@ -980,6 +1003,414 @@ class TestPatientUI {
             console.error('Error loading model configuration:', error);
             throw error;
         }
+    }
+
+    /**
+     * Renders the sidebar content with test patients
+     * @param {HTMLElement} sidebarContent - The sidebar content element
+     */
+    renderSidebarContent(sidebarContent) {
+        console.log('Rendering sidebar content...');
+        
+        // Clear the sidebar content
+        sidebarContent.innerHTML = '';
+        
+        // Get all test patients
+        const testPatients = this.testPatientManager.getTestPatients();
+        
+        // Create accordion items for each patient
+        testPatients.forEach(patient => {
+            const patientItem = document.createElement('div');
+            patientItem.className = 'sidebar-accordion-item expanded'; // Default to expanded
+            patientItem.dataset.patientId = patient.id;
+            
+            // Create patient header with name and edit button
+            const patientHeaderContainer = document.createElement('div');
+            patientHeaderContainer.className = 'sidebar-accordion-header-container';
+            
+            // Create editable patient name span
+            const patientNameSpan = document.createElement('span');
+            patientNameSpan.className = 'patient-name-span';
+            patientNameSpan.textContent = patient.name;
+            patientNameSpan.contentEditable = false; // Not editable by default
+            
+            // Create the header that will contain the name span
+            const patientHeader = document.createElement('div');
+            patientHeader.className = 'sidebar-accordion-header';
+            patientHeader.appendChild(patientNameSpan);
+            
+            // Add expand/collapse functionality
+            patientHeader.addEventListener('click', (e) => {
+                // Only toggle if we didn't click on the editable span while editing
+                if (!(e.target === patientNameSpan && patientNameSpan.contentEditable === 'true')) {
+                    patientItem.classList.toggle('expanded');
+                }
+            });
+            
+            // Create edit button for patient name
+            const editPatientButton = document.createElement('button');
+            editPatientButton.className = 'sidebar-edit-patient-btn';
+            editPatientButton.textContent = 'Edit';
+            editPatientButton.title = 'Edit patient name';
+            
+            // Function to save the patient name
+            const savePatientName = () => {
+                const newName = patientNameSpan.textContent.trim();
+                if (newName && newName !== patient.name) {
+                    // Update the patient name
+                    const updatedPatient = this.testPatientManager.updateTestPatient(patient.id, { name: newName });
+                    
+                    if (updatedPatient) {
+                        console.log(`Updated patient name to: ${updatedPatient.name}`);
+                        this.showNotification(`Patient name updated to "${updatedPatient.name}"`);
+                        patient.name = newName; // Update local reference
+                    } else {
+                        console.error('Failed to update patient name');
+                        patientNameSpan.textContent = patient.name; // Revert to original name
+                        this.showNotification('Failed to update patient name', 3000);
+                    }
+                } else if (!newName) {
+                    // If empty, revert to original name
+                    patientNameSpan.textContent = patient.name;
+                    this.showNotification('Patient name cannot be empty', 3000);
+                }
+                
+                // Reset editing state
+                patientNameSpan.contentEditable = false;
+                patientNameSpan.classList.remove('editing');
+                editPatientButton.textContent = 'Edit';
+                editPatientButton.classList.remove('save-mode');
+            };
+            
+            editPatientButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                if (patientNameSpan.contentEditable === 'true') {
+                    // If already editing, save the changes
+                    savePatientName();
+                } else {
+                    // Make the name span editable
+                    patientNameSpan.contentEditable = true;
+                    patientNameSpan.focus();
+                    
+                    // Select all text
+                    const range = document.createRange();
+                    range.selectNodeContents(patientNameSpan);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    
+                    // Add a class to indicate it's being edited
+                    patientNameSpan.classList.add('editing');
+                    
+                    // Change edit button to save button
+                    editPatientButton.textContent = 'Save';
+                    editPatientButton.classList.add('save-mode');
+                }
+            });
+            
+            // Add blur event to save changes when focus is lost
+            patientNameSpan.addEventListener('blur', () => {
+                if (patientNameSpan.contentEditable === 'true') {
+                    savePatientName();
+                }
+            });
+            
+            // Add keydown event to handle Enter and Escape keys
+            patientNameSpan.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Prevent adding a new line
+                    savePatientName();
+                    patientNameSpan.blur();
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    patientNameSpan.textContent = patient.name; // Revert to original name
+                    patientNameSpan.contentEditable = false;
+                    patientNameSpan.classList.remove('editing');
+                    editPatientButton.textContent = 'Edit';
+                    editPatientButton.classList.remove('save-mode');
+                }
+            });
+            
+            patientHeaderContainer.appendChild(patientHeader);
+            patientHeaderContainer.appendChild(editPatientButton);
+            patientItem.appendChild(patientHeaderContainer);
+            
+            // Create patient content (test cases)
+            const patientContent = document.createElement('div');
+            patientContent.className = 'sidebar-accordion-content';
+            
+            // Get test cases for this patient
+            const testCases = this.testPatientManager.getTestCases(patient.id);
+            
+            if (testCases.length > 0) {
+                // Create a list for test cases
+                const testCaseList = document.createElement('ul');
+                testCaseList.className = 'sidebar-test-case-list';
+                
+                testCases.forEach(testCase => {
+                    const testCaseItem = document.createElement('li');
+                    testCaseItem.className = 'sidebar-test-case-item';
+                    
+                    // Create test case name
+                    const testCaseName = document.createElement('span');
+                    testCaseName.className = 'sidebar-test-case-name';
+                    testCaseName.textContent = testCase.name;
+                    
+                    // Add click event to apply the test case
+                    testCaseName.addEventListener('click', () => {
+                        this.applyTestCase(testCase);
+                        this.showNotification(`Applied test case: ${testCase.name}`);
+                    });
+                    
+                    // Create edit button
+                    const editButton = document.createElement('button');
+                    editButton.className = 'sidebar-edit-btn';
+                    editButton.textContent = 'Edit';
+                    editButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        console.log(`Edit button clicked for patient ID: ${patient.id}, test case ID: ${testCase.id}`);
+                        this.editTestCase(patient.id, testCase.id);
+                    });
+                    
+                    testCaseItem.appendChild(testCaseName);
+                    testCaseItem.appendChild(editButton);
+                    testCaseList.appendChild(testCaseItem);
+                });
+                
+                patientContent.appendChild(testCaseList);
+            } else {
+                // No test cases
+                const noTestCases = document.createElement('div');
+                noTestCases.className = 'no-test-cases';
+                noTestCases.textContent = 'No test cases found for this patient.';
+                patientContent.appendChild(noTestCases);
+            }
+            
+            // Add button to create new test case
+            const addTestCaseButton = document.createElement('button');
+            addTestCaseButton.className = 'sidebar-add-test-case-btn';
+            addTestCaseButton.textContent = 'Add Test Case';
+            addTestCaseButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.createNewTestCase(patient.id);
+            });
+            
+            patientContent.appendChild(addTestCaseButton);
+            patientItem.appendChild(patientContent);
+            
+            sidebarContent.appendChild(patientItem);
+        });
+    }
+
+    /**
+     * Edit a test case for a patient
+     * @param {string} patientId - The ID of the patient
+     * @param {string} testCaseId - The ID of the test case to edit
+     */
+    editTestCase(patientId, testCaseId) {
+        console.log(`Editing test case with ID: ${testCaseId} for patient ID: ${patientId}`);
+        
+        // Get the test case
+        const testCase = this.testPatientManager.getTestCase(patientId, testCaseId);
+        if (!testCase) {
+            console.error(`Test case with ID ${testCaseId} not found for patient ID ${patientId}`);
+            return;
+        }
+        
+        // Apply the test case to the concept manager
+        this.applyTestCase(testCase);
+        
+        // Create or get the test case manager modal
+        let modal = document.getElementById('test-case-manager-modal');
+        if (!modal) {
+            // Create the modal
+            modal = document.createElement('div');
+            modal.id = 'test-case-manager-modal';
+            modal.className = 'test-case-manager-modal';
+            
+            // Create modal content
+            const modalContent = document.createElement('div');
+            modalContent.className = 'test-case-manager-modal-content';
+            modal.appendChild(modalContent);
+            
+            // Create modal header
+            const modalHeader = document.createElement('div');
+            modalHeader.className = 'test-case-manager-modal-header';
+            modalContent.appendChild(modalHeader);
+            
+            // Create modal title
+            const modalTitle = document.createElement('h2');
+            modalTitle.className = 'test-case-manager-modal-title';
+            modalTitle.textContent = 'Test Case Manager';
+            modalHeader.appendChild(modalTitle);
+            
+            // Create close button
+            const closeButton = document.createElement('button');
+            closeButton.className = 'test-case-manager-modal-close';
+            closeButton.innerHTML = '&times;';
+            closeButton.setAttribute('aria-label', 'Close');
+            closeButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            modalHeader.appendChild(closeButton);
+            
+            // Create modal body
+            const modalBody = document.createElement('div');
+            modalBody.className = 'test-case-manager-modal-body';
+            modalContent.appendChild(modalBody);
+            
+            document.body.appendChild(modal);
+        }
+        
+        // Get the modal body
+        const modalBody = modal.querySelector('.test-case-manager-modal-body');
+        modalBody.innerHTML = '';
+        
+        // Update the modal title
+        const modalTitle = modal.querySelector('.test-case-manager-modal-title');
+        modalTitle.textContent = `Editing Test Case: ${testCase.name}`;
+        
+        // Create the form
+        const form = document.createElement('form');
+        form.className = 'test-case-form';
+        
+        // Create test case name section
+        const nameSection = document.createElement('div');
+        nameSection.className = 'test-case-form-section';
+        
+        const nameLabel = document.createElement('label');
+        nameLabel.htmlFor = 'test-case-name';
+        nameLabel.textContent = 'Test Case Name';
+        
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.id = 'test-case-name';
+        nameInput.className = 'form-control';
+        nameInput.value = testCase.name;
+        
+        nameSection.appendChild(nameLabel);
+        nameSection.appendChild(nameInput);
+        form.appendChild(nameSection);
+        
+        // Create concepts section
+        const conceptsSection = document.createElement('div');
+        conceptsSection.className = 'test-case-form-section';
+        
+        const conceptsTitle = document.createElement('h3');
+        conceptsTitle.textContent = 'Concepts';
+        conceptsSection.appendChild(conceptsTitle);
+        
+        // Add concepts from the test case
+        if (testCase.concepts) {
+            const conceptsList = document.createElement('div');
+            conceptsList.className = 'concepts-list';
+            
+            Object.keys(testCase.concepts).forEach(conceptName => {
+                const concept = testCase.concepts[conceptName];
+                
+                const conceptItem = document.createElement('div');
+                conceptItem.className = 'concept-item';
+                
+                const conceptNameLabel = document.createElement('label');
+                conceptNameLabel.textContent = conceptName;
+                conceptItem.appendChild(conceptNameLabel);
+                
+                const conceptValueInput = document.createElement('input');
+                conceptValueInput.type = 'text';
+                conceptValueInput.className = 'form-control';
+                conceptValueInput.value = concept.value !== undefined ? concept.value : '';
+                conceptValueInput.dataset.conceptName = conceptName;
+                conceptItem.appendChild(conceptValueInput);
+                
+                conceptsList.appendChild(conceptItem);
+            });
+            
+            conceptsSection.appendChild(conceptsList);
+        } else {
+            const noConceptsMessage = document.createElement('p');
+            noConceptsMessage.textContent = 'No concepts found in this test case.';
+            conceptsSection.appendChild(noConceptsMessage);
+        }
+        
+        form.appendChild(conceptsSection);
+        
+        // Create form actions
+        const formActions = document.createElement('div');
+        formActions.className = 'test-case-form-actions';
+        
+        // Create cancel button
+        const cancelButton = document.createElement('button');
+        cancelButton.type = 'button';
+        cancelButton.className = 'btn-cancel';
+        cancelButton.textContent = 'Cancel';
+        cancelButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        formActions.appendChild(cancelButton);
+        
+        // Create save button
+        const saveButton = document.createElement('button');
+        saveButton.type = 'button';
+        saveButton.className = 'btn-save';
+        saveButton.textContent = 'Save Test Case';
+        saveButton.addEventListener('click', () => {
+            // Get the updated test case name
+            const updatedName = nameInput.value.trim();
+            if (!updatedName) {
+                alert('Please enter a name for the test case');
+                return;
+            }
+            
+            // Get the updated concepts
+            const updatedConcepts = {};
+            const conceptInputs = conceptsSection.querySelectorAll('input[data-concept-name]');
+            conceptInputs.forEach(input => {
+                const conceptName = input.dataset.conceptName;
+                const conceptValue = input.value.trim();
+                
+                if (conceptValue) {
+                    updatedConcepts[conceptName] = {
+                        value: conceptValue
+                    };
+                }
+            });
+            
+            // Update the test case
+            const updatedTestCase = this.testPatientManager.updateTestCase(
+                patientId,
+                testCaseId,
+                {
+                    name: updatedName,
+                    concepts: updatedConcepts
+                }
+            );
+            
+            if (updatedTestCase) {
+                this.showNotification(`Test case "${updatedName}" updated successfully`);
+                modal.style.display = 'none';
+                
+                // Refresh the sidebar if it's open
+                const sidebar = document.querySelector('.test-patient-sidebar');
+                if (sidebar && sidebar.classList.contains('active')) {
+                    const sidebarContent = sidebar.querySelector('.sidebar-content');
+                    if (sidebarContent) {
+                        this.renderSidebarContent(sidebarContent);
+                    }
+                }
+            } else {
+                alert('Failed to update test case. Please try again.');
+            }
+        });
+        formActions.appendChild(saveButton);
+        
+        form.appendChild(formActions);
+        modalBody.appendChild(form);
+        
+        // Show the modal
+        modal.style.display = 'block';
+        
+        console.log(`Test case loaded for editing: ${testCase.name}`);
     }
 }
 

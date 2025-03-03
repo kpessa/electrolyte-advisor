@@ -574,6 +574,9 @@ $(document).ready(function() {
     }
     
     function renderButtons(tab, container) {
+        // Remove any existing button container first to avoid duplicates
+        container.find('.button-container').remove();
+        
         const buttonContainer = $('<div class="button-container"></div>').appendTo(container);
         
         // Get button labels from config or use defaults
@@ -583,6 +586,22 @@ $(document).ready(function() {
         
         $(`<button class="cancel-button">${cancelLabel}</button>`).appendTo(buttonContainer);
         $(`<button class="submit-button">${dismissLabel}</button>`).appendTo(buttonContainer);
+        
+        // Ensure the button container is visible by scrolling to it if needed
+        setTimeout(() => {
+            if (buttonContainer[0]) {
+                // Check if button container is in viewport
+                const rect = buttonContainer[0].getBoundingClientRect();
+                const isVisible = (
+                    rect.top >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+                );
+                
+                if (!isVisible) {
+                    buttonContainer[0].scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }
+            }
+        }, 100);
         
         // Add input change handler to update button text
         $(document).on('change', '.order-input', function() {
@@ -651,6 +670,9 @@ $(document).ready(function() {
             // Render tab content
             renderTab(tab, tabContent);
         });
+        
+        // Add debug mode enhancements
+        enhanceConceptsInDebugMode();
     }
 
     // Add this new function to handle the mini-editor
@@ -1004,6 +1026,569 @@ $(document).ready(function() {
         
         // Render tab content
         renderTabContent(tab, contentWrapper);
+    }
+
+    // Extract all concepts from an expression
+    function extractAllConceptsFromExpression(expression) {
+        if (!expression) return [];
+        
+        // Remove the [% and %] wrapper
+        const expr = expression.replace(/^\[\%/, '').replace(/\%\]$/, '');
+        
+        // First, try to extract concepts in the format {CONCEPTNAME}
+        const conceptRegex = /\{([A-Za-z0-9_]+)(?:\.[A-Za-z0-9_]+)?\}/g;
+        const matches = [...expr.matchAll(conceptRegex)];
+        
+        const concepts = [];
+        if (matches.length > 0) {
+            for (const match of matches) {
+                if (match[1]) {
+                    concepts.push(match[1]);
+                }
+            }
+        } else {
+            // If no matches found with the regex, try to extract from the expression format
+            // Look for concepts in the format [%CONCEPTNAME%]
+            const simpleMatch = expression.match(/\[\%([A-Za-z0-9_]+)\%\]/);
+            if (simpleMatch && simpleMatch[1]) {
+                concepts.push(simpleMatch[1]);
+            } else {
+                // Try to extract concepts from more complex expressions
+                // This regex looks for words that might be concept names (all caps with underscores)
+                const complexMatches = expr.match(/\b([A-Z][A-Z0-9_]+)\b/g);
+                if (complexMatches) {
+                    // Filter out common keywords that might be mistaken for concepts
+                    const keywords = ['AND', 'OR', 'NOT', 'TRUE', 'FALSE'];
+                    concepts.push(...complexMatches.filter(word => !keywords.includes(word)));
+                }
+            }
+        }
+        
+        // Remove duplicates
+        return [...new Set(concepts)];
+    }
+
+    // Add this function to enhance concepts in debug mode
+    function enhanceConceptsInDebugMode() {
+        if (!window.conceptIntegration || !window.conceptIntegration.isDebugModeEnabled()) {
+            return;
+        }
+        
+        console.log('Enhancing concepts in debug mode...');
+        
+        // Check if concept manager is properly initialized
+        const conceptManager = window.conceptIntegration.conceptModal?.conceptManager;
+        if (!conceptManager || !conceptManager.conceptInstantiation) {
+            console.warn('Concept manager not fully initialized. Debug features may be limited.');
+        }
+        
+        // Add debug mode class to the body
+        document.body.classList.add('debug-mode');
+        
+        // Find all concept expressions and debug info elements in the document
+        const conceptElements = document.querySelectorAll('.concept-expression, .debug-info');
+        
+        // Create a save button if it doesn't exist
+        if (!document.querySelector('.save-to-test-case-btn')) {
+            const saveButton = document.createElement('button');
+            saveButton.className = 'save-to-test-case-btn';
+            saveButton.textContent = 'Save Concepts to Test Case';
+            saveButton.addEventListener('click', saveConceptsToTestCase);
+            document.body.appendChild(saveButton);
+        }
+        
+        try {
+            // Process each concept element
+            conceptElements.forEach(element => {
+                try {
+                    // Get the concept expression
+                    let expression = element.getAttribute('data-concept-expression');
+                    
+                    // For debug-info elements, use the text content as the concept name if no expression attribute
+                    if (!expression && element.classList.contains('debug-info')) {
+                        const text = element.textContent.trim();
+                        if (text) {
+                            // Extract concept name from text if possible
+                            const match = text.match(/([A-Za-z0-9_]+)(?:\s*[:=]\s*(true|false|[\d.]+))?/i);
+                            if (match) {
+                                const conceptName = match[1];
+                                expression = `[%${conceptName}%]`;
+                                
+                                // Store the expression as an attribute for future reference
+                                element.setAttribute('data-concept-expression', expression);
+                            }
+                        }
+                    }
+                    
+                    if (!expression) return;
+                    
+                    // Evaluate the concept expression safely
+                    let isActive = false;
+                    try {
+                        isActive = evaluateConceptExpression(expression);
+                    } catch (evalError) {
+                        console.warn(`Error evaluating expression "${expression}":`, evalError);
+                    }
+                    
+                    // Add active/inactive class
+                    element.classList.add(isActive ? 'active' : 'inactive');
+                    
+                    // Create tooltip if it doesn't exist
+                    if (!element.querySelector('.concept-tooltip')) {
+                        const tooltip = document.createElement('div');
+                        tooltip.className = 'concept-tooltip';
+                        
+                        // Extract all concepts from the expression
+                        const conceptNames = extractAllConceptsFromExpression(expression);
+                        
+                        if (conceptNames.length > 0) {
+                            // Create a header if there are multiple concepts
+                            if (conceptNames.length > 1) {
+                                const header = document.createElement('div');
+                                header.className = 'tooltip-header';
+                                header.textContent = 'Concepts in this expression:';
+                                tooltip.appendChild(header);
+                            }
+                            
+                            // Create toggle controls for each concept
+                            conceptNames.forEach(conceptName => {
+                                // Skip if concept name is empty or a JavaScript keyword
+                                if (!conceptName || ['true', 'false', 'null', 'undefined', 'NaN', 'Infinity', 'eval', 'Function'].includes(conceptName.toLowerCase())) {
+                                    return;
+                                }
+                                
+                                // Create toggle switch container
+                                const toggleContainer = document.createElement('div');
+                                toggleContainer.className = 'concept-toggle-container';
+                                
+                                const toggleLabel = document.createElement('span');
+                                toggleLabel.textContent = `${conceptName}: `;
+                                toggleContainer.appendChild(toggleLabel);
+                                
+                                const toggle = document.createElement('label');
+                                toggle.className = 'concept-toggle';
+                                
+                                // Safely get concept value
+                                let isConceptActive = false;
+                                try {
+                                    const conceptValue = getConceptValue(conceptName);
+                                    isConceptActive = conceptValue === true;
+                                } catch (err) {
+                                    console.warn(`Error getting value for concept ${conceptName}:`, err);
+                                }
+                                
+                                const toggleInput = document.createElement('input');
+                                toggleInput.type = 'checkbox';
+                                toggleInput.checked = isConceptActive;
+                                toggleInput.addEventListener('change', (e) => {
+                                    e.stopPropagation();
+                                    toggleConcept(conceptName, e.target.checked, element);
+                                });
+                                
+                                const toggleSlider = document.createElement('span');
+                                toggleSlider.className = 'concept-toggle-slider';
+                                
+                                toggle.appendChild(toggleInput);
+                                toggle.appendChild(toggleSlider);
+                                toggleContainer.appendChild(toggle);
+                                
+                                // Add value input for non-boolean concepts
+                                const valueInput = document.createElement('input');
+                                valueInput.type = 'text';
+                                valueInput.className = 'concept-value-input';
+                                valueInput.placeholder = 'Value';
+                                
+                                // Safely get concept value
+                                let conceptValue = null;
+                                try {
+                                    conceptValue = getConceptValue(conceptName);
+                                } catch (err) {
+                                    console.warn(`Error getting value for concept ${conceptName}:`, err);
+                                }
+                                
+                                valueInput.value = conceptValue !== null ? conceptValue : '';
+                                
+                                valueInput.addEventListener('input', (e) => {
+                                    e.stopPropagation();
+                                    setConceptValue(conceptName, e.target.value, element);
+                                });
+                                toggleContainer.appendChild(valueInput);
+                                
+                                tooltip.appendChild(toggleContainer);
+                            });
+                            
+                            // Add expression result at the bottom if there are multiple concepts
+                            if (conceptNames.length > 1) {
+                                const resultContainer = document.createElement('div');
+                                resultContainer.className = 'expression-result';
+                                resultContainer.innerHTML = `<strong>Expression:</strong> <span class="expression-code">${expression}</span><br>
+                                                            <strong>Result:</strong> <span class="${isActive ? 'active-result' : 'inactive-result'}">${isActive ? 'TRUE' : 'FALSE'}</span>`;
+                                tooltip.appendChild(resultContainer);
+                            }
+                        } else {
+                            // If no concepts could be extracted, show the raw expression
+                            const expressionText = document.createElement('div');
+                            expressionText.className = 'expression-text';
+                            expressionText.textContent = `Expression: ${expression}`;
+                            tooltip.appendChild(expressionText);
+                            
+                            const resultText = document.createElement('div');
+                            resultText.className = 'expression-result';
+                            resultText.innerHTML = `<strong>Result:</strong> <span class="${isActive ? 'active-result' : 'inactive-result'}">${isActive ? 'TRUE' : 'FALSE'}</span>`;
+                            tooltip.appendChild(resultText);
+                        }
+                        
+                        element.appendChild(tooltip);
+                    }
+                } catch (elementError) {
+                    console.warn('Error processing concept element:', elementError);
+                }
+            });
+        } catch (error) {
+            console.error('Error enhancing concepts in debug mode:', error);
+        }
+    }
+
+    // Toggle concept active state
+    function toggleConcept(conceptName, isActive, element) {
+        console.log(`Toggling concept ${conceptName} to ${isActive}`);
+        
+        if (window.conceptIntegration && window.conceptIntegration.conceptModal) {
+            const conceptManager = window.conceptIntegration.conceptModal.conceptManager;
+            if (conceptManager) {
+                // Set the concept value based on active state
+                conceptManager.setConceptValue(conceptName, isActive ? true : null);
+                
+                // Update element class
+                if (element) {
+                    element.classList.remove('active', 'inactive');
+                    element.classList.add(isActive ? 'active' : 'inactive');
+                }
+                
+                // Refresh the advisor to show updated concept states
+                if (window.initializeAdvisor) {
+                    window.initializeAdvisor();
+                }
+            }
+        }
+    }
+
+    // Set concept value
+    function setConceptValue(conceptName, value, element) {
+        console.log(`Setting concept ${conceptName} value to ${value}`);
+        
+        if (window.conceptIntegration && window.conceptIntegration.conceptModal) {
+            const conceptManager = window.conceptIntegration.conceptModal.conceptManager;
+            if (conceptManager) {
+                // Convert value to appropriate type
+                let typedValue = value;
+                if (value === 'true') typedValue = true;
+                else if (value === 'false') typedValue = false;
+                else if (!isNaN(value) && value !== '') typedValue = Number(value);
+                
+                // Set the concept value
+                conceptManager.setConceptValue(conceptName, typedValue);
+                
+                // Update element class for boolean values
+                if (element && (typedValue === true || typedValue === false)) {
+                    element.classList.remove('active', 'inactive');
+                    element.classList.add(typedValue ? 'active' : 'inactive');
+                }
+                
+                // Refresh the advisor to show updated concept states
+                if (window.initializeAdvisor) {
+                    window.initializeAdvisor();
+                }
+            }
+        }
+    }
+
+    // Get concept value
+    function getConceptValue(conceptName) {
+        if (window.conceptIntegration && window.conceptIntegration.conceptModal) {
+            const conceptManager = window.conceptIntegration.conceptModal.conceptManager;
+            if (conceptManager && conceptManager.conceptInstantiation) {
+                const concept = conceptManager.conceptInstantiation[conceptName];
+                return concept ? concept.value : null;
+            }
+        }
+        return null;
+    }
+
+    // Save concepts to test case
+    function saveConceptsToTestCase() {
+        if (!window.conceptIntegration || !window.conceptIntegration.conceptModal) {
+            console.error('Concept integration not available');
+            return;
+        }
+        
+        const conceptManager = window.conceptIntegration.conceptModal.conceptManager;
+        if (!conceptManager) {
+            console.error('Concept manager not available');
+            return;
+        }
+        
+        // Get all active concepts
+        const concepts = conceptManager.getAllConcepts();
+        const activeConcepts = {};
+        
+        Object.keys(concepts).forEach(conceptName => {
+            const value = concepts[conceptName];
+            if (value !== null && value !== undefined) {
+                activeConcepts[conceptName] = { value };
+            }
+        });
+        
+        // Check if we have any active concepts
+        if (Object.keys(activeConcepts).length === 0) {
+            alert('No active concepts to save');
+            return;
+        }
+        
+        // Open a dialog to create a new test case
+        const testPatientUI = window.testPatientUI;
+        if (testPatientUI) {
+            // Show the test patient sidebar
+            testPatientUI.toggleSidebar();
+            
+            // Create a modal for saving to a test case
+            const modal = document.createElement('div');
+            modal.className = 'test-patient-modal';
+            modal.style.display = 'block';
+            
+            const modalContent = document.createElement('div');
+            modalContent.className = 'test-patient-modal-content';
+            
+            const modalHeader = document.createElement('div');
+            modalHeader.className = 'test-patient-modal-header';
+            
+            const modalTitle = document.createElement('h2');
+            modalTitle.className = 'test-patient-modal-title';
+            modalTitle.textContent = 'Save Concepts to Test Case';
+            
+            const closeButton = document.createElement('button');
+            closeButton.className = 'test-patient-modal-close';
+            closeButton.innerHTML = '&times;';
+            closeButton.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+            
+            modalHeader.appendChild(modalTitle);
+            modalHeader.appendChild(closeButton);
+            
+            const modalBody = document.createElement('div');
+            modalBody.className = 'test-patient-modal-body';
+            
+            // Create a form for selecting a patient and test case
+            const form = document.createElement('form');
+            form.className = 'test-case-form';
+            
+            // Create patient selection
+            const patientGroup = document.createElement('div');
+            patientGroup.className = 'form-group';
+            
+            const patientLabel = document.createElement('label');
+            patientLabel.textContent = 'Select Patient:';
+            patientLabel.setAttribute('for', 'patient-select');
+            
+            const patientSelect = document.createElement('select');
+            patientSelect.id = 'patient-select';
+            patientSelect.required = true;
+            
+            // Get all patients
+            const patients = testPatientUI.testPatientManager.getAllTestPatients();
+            
+            // Add option to create a new patient
+            const newPatientOption = document.createElement('option');
+            newPatientOption.value = 'new';
+            newPatientOption.textContent = '-- Create New Patient --';
+            patientSelect.appendChild(newPatientOption);
+            
+            // Add existing patients
+            patients.forEach(patient => {
+                const option = document.createElement('option');
+                option.value = patient.id;
+                option.textContent = patient.name;
+                patientSelect.appendChild(option);
+            });
+            
+            patientGroup.appendChild(patientLabel);
+            patientGroup.appendChild(patientSelect);
+            form.appendChild(patientGroup);
+            
+            // Create test case selection (initially hidden)
+            const testCaseGroup = document.createElement('div');
+            testCaseGroup.className = 'form-group';
+            testCaseGroup.style.display = 'none';
+            
+            const testCaseLabel = document.createElement('label');
+            testCaseLabel.textContent = 'Select Test Case:';
+            testCaseLabel.setAttribute('for', 'test-case-select');
+            
+            const testCaseSelect = document.createElement('select');
+            testCaseSelect.id = 'test-case-select';
+            
+            // Add option to create a new test case
+            const newTestCaseOption = document.createElement('option');
+            newTestCaseOption.value = 'new';
+            newTestCaseOption.textContent = '-- Create New Test Case --';
+            testCaseSelect.appendChild(newTestCaseOption);
+            
+            testCaseGroup.appendChild(testCaseLabel);
+            testCaseGroup.appendChild(testCaseSelect);
+            form.appendChild(testCaseGroup);
+            
+            // Create new patient name input (initially hidden)
+            const newPatientGroup = document.createElement('div');
+            newPatientGroup.className = 'form-group';
+            newPatientGroup.style.display = 'none';
+            
+            const newPatientLabel = document.createElement('label');
+            newPatientLabel.textContent = 'New Patient Name:';
+            newPatientLabel.setAttribute('for', 'new-patient-name');
+            
+            const newPatientInput = document.createElement('input');
+            newPatientInput.type = 'text';
+            newPatientInput.id = 'new-patient-name';
+            newPatientInput.placeholder = 'Enter patient name';
+            
+            newPatientGroup.appendChild(newPatientLabel);
+            newPatientGroup.appendChild(newPatientInput);
+            form.appendChild(newPatientGroup);
+            
+            // Create new test case name input (initially hidden)
+            const newTestCaseGroup = document.createElement('div');
+            newTestCaseGroup.className = 'form-group';
+            newTestCaseGroup.style.display = 'none';
+            
+            const newTestCaseLabel = document.createElement('label');
+            newTestCaseLabel.textContent = 'New Test Case Name:';
+            newTestCaseLabel.setAttribute('for', 'new-test-case-name');
+            
+            const newTestCaseInput = document.createElement('input');
+            newTestCaseInput.type = 'text';
+            newTestCaseInput.id = 'new-test-case-name';
+            newTestCaseInput.placeholder = 'Enter test case name';
+            
+            newTestCaseGroup.appendChild(newTestCaseLabel);
+            newTestCaseGroup.appendChild(newTestCaseInput);
+            form.appendChild(newTestCaseGroup);
+            
+            // Add event listener to patient select
+            patientSelect.addEventListener('change', () => {
+                const selectedPatientId = patientSelect.value;
+                
+                // Show/hide new patient name input
+                newPatientGroup.style.display = selectedPatientId === 'new' ? 'block' : 'none';
+                
+                // Show/hide test case selection
+                testCaseGroup.style.display = selectedPatientId !== 'new' ? 'block' : 'none';
+                
+                // If an existing patient is selected, populate test cases
+                if (selectedPatientId !== 'new') {
+                    // Clear existing options except the first one
+                    while (testCaseSelect.options.length > 1) {
+                        testCaseSelect.remove(1);
+                    }
+                    
+                    // Get test cases for the selected patient
+                    const testCases = testPatientUI.testPatientManager.getTestCases(selectedPatientId);
+                    
+                    // Add test cases to the select
+                    testCases.forEach(testCase => {
+                        const option = document.createElement('option');
+                        option.value = testCase.id;
+                        option.textContent = testCase.name;
+                        testCaseSelect.appendChild(option);
+                    });
+                }
+            });
+            
+            // Add event listener to test case select
+            testCaseSelect.addEventListener('change', () => {
+                const selectedTestCaseId = testCaseSelect.value;
+                
+                // Show/hide new test case name input
+                newTestCaseGroup.style.display = selectedTestCaseId === 'new' ? 'block' : 'none';
+            });
+            
+            // Add submit button
+            const submitButton = document.createElement('button');
+            submitButton.type = 'submit';
+            submitButton.className = 'save-test-case-btn';
+            submitButton.textContent = 'Save Concepts';
+            form.appendChild(submitButton);
+            
+            // Add form submission handler
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                let patientId = patientSelect.value;
+                let testCaseId = testCaseSelect.value;
+                
+                // Create new patient if needed
+                if (patientId === 'new') {
+                    const patientName = newPatientInput.value.trim();
+                    if (!patientName) {
+                        alert('Please enter a patient name');
+                        return;
+                    }
+                    
+                    // Create the patient
+                    const newPatient = testPatientUI.testPatientManager.createTestPatient(patientName);
+                    patientId = newPatient.id;
+                }
+                
+                // Create new test case if needed
+                if (testCaseId === 'new' || patientId === 'new') {
+                    const testCaseName = newTestCaseInput.value.trim();
+                    if (!testCaseName) {
+                        alert('Please enter a test case name');
+                        return;
+                    }
+                    
+                    // Create the test case
+                    const newTestCase = testPatientUI.testPatientManager.createTestCase(patientId, testCaseName);
+                    testCaseId = newTestCase.id;
+                }
+                
+                // Get the test case
+                const testCase = testPatientUI.testPatientManager.getTestCase(patientId, testCaseId);
+                if (!testCase) {
+                    alert('Failed to get test case');
+                    return;
+                }
+                
+                // Add concepts to the test case
+                testCase.concepts = testCase.concepts || {};
+                
+                Object.keys(activeConcepts).forEach(conceptName => {
+                    testCase.concepts[conceptName] = activeConcepts[conceptName];
+                });
+                
+                // Update the test case
+                testPatientUI.testPatientManager.updateTestCase(patientId, testCaseId, testCase);
+                
+                // Show notification
+                testPatientUI.showNotification(`Saved ${Object.keys(activeConcepts).length} concepts to test case "${testCase.name}"`);
+                
+                // Refresh the sidebar
+                testPatientUI.loadPatientsIntoSidebar();
+                
+                // Close the modal
+                document.body.removeChild(modal);
+            });
+            
+            modalBody.appendChild(form);
+            
+            modalContent.appendChild(modalHeader);
+            modalContent.appendChild(modalBody);
+            
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+        } else {
+            alert('Test patient UI not available');
+        }
     }
 });
 

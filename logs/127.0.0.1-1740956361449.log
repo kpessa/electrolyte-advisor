@@ -1,0 +1,1439 @@
+test-patient-ui.js:31 Initializing TestPatientUI...
+test-patient-ui.js:1248 Fetching model configuration from config/config.json
+test-patient-ui.js:1262 DEBUG: Loaded model configuration structure: {"RCONFIG":{"TABS":[{"TAB_NAME":"Magnesium","TAB_KEY":"MAGNESIUM","MNEMONICS":[{"MNEMONIC":"Magnesiu...
+test-patient-ui.js:42 TestPatientUI initialized successfully
+navbar.js:94 Navbar created and added to document
+test-patient-ui.js:55 Creating test patient icon...
+test-patient-ui.js:84 Test patient icon created
+app.js:23 Debug mode changed: true
+app.js:1055 Enhancing concepts in debug mode...
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+(anonymous) @ app.js:26
+toggleDebugMode @ concept-integration.js:124
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-integration.js:126 Debug mode enabled
+app.js:1055 Enhancing concepts in debug mode...
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+concept-parser.js:208 Error evaluating concept expression: ReferenceError: Concept is not defined
+    at eval (eval at evaluateConceptExpression (concept-parser.js:206:16), <anonymous>:3:1)
+    at evaluateConceptExpression (concept-parser.js:206:46)
+    at ConceptManager.evaluateExpression (concept-manager.js:95:16)
+    at ConceptIntegration.evaluateConceptExpression (concept-integration.js:149:53)
+    at evaluateConceptExpression (app.js:334:46)
+    at app.js:1104:38
+    at NodeList.forEach (<anonymous>)
+    at enhanceConceptsInDebugMode (app.js:1080:29)
+    at renderAdvisor (app.js:656:9)
+    at initializeAdvisor (app.js:91:13) Expression: Concept
+overrideMethod @ hook.js:608
+evaluateConceptExpression @ concept-parser.js:208
+evaluateExpression @ concept-manager.js:95
+evaluateConceptExpression @ concept-integration.js:149
+evaluateConceptExpression @ app.js:334
+(anonymous) @ app.js:1104
+enhanceConceptsInDebugMode @ app.js:1080
+renderAdvisor @ app.js:656
+initializeAdvisor @ app.js:91
+toggleDebugMode @ concept-integration.js:130
+(anonymous) @ navbar.js:69
+concept-parser.js:210 Original expression: [%Concept%]
+concept-parser.js:211 Processed expression: Concept
+concept-parser.js:212 Concept values: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}

@@ -50,37 +50,45 @@ html {
 /* Tabs */
 .uhspa-tabs-container {
     display: flex;
-    background-color: #2b6ca3;
-    margin: 0; /* Ensure no margin */
-    padding: 0; /* No padding */
-    border-top: none; /* Remove the separator */
+    flex-direction: row;
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    overflow-x: auto;
 }
 
 .uhspa-tab-button {
-    padding: 8px 16px; /* Reduced padding */
-    background-color: #2b6ca3;
-    color: white;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
     border: none;
+    border-bottom: 3px solid transparent;
     cursor: pointer;
-    font-weight: bold;
-    font-size: 12px; /* Explicit font size */
-    margin: 0; /* Ensure no margin */
-    height: auto; /* Let the content determine the height */
-    line-height: 1; /* Tighter line height */
+    font-weight: 500;
+    color: #495057;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+
+.uhspa-tab-button:hover {
+    background-color: #e9ecef;
+    border-bottom-color: #adb5bd;
 }
 
 .uhspa-tab-button.active {
-    background-color: white;
-    color: #333;
+    background-color: #fff;
+    border-bottom-color: #2b6ca3;
+    color: #2b6ca3;
 }
 
 /* Tab content container */
 .uhspa-tab-content-container {
-    margin: 0;
-    padding: 0;
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    background-color: #fff;
+    border-radius: 0 0 4px 4px;
 }
 
 .uhspa-tab-content {
@@ -247,29 +255,48 @@ html {
 .button-container {
     display: flex;
     justify-content: flex-end;
-    padding: 6px; /* Reduced from 8px */
+    padding: 10px 15px;
     border-top: 1px solid #ccc;
     margin-top: auto;
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
     background-color: white;
-    z-index: 10;
+    z-index: 100;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    height: 60px; /* Fixed height to match app-container padding-bottom */
+    box-sizing: border-box;
 }
 
 .cancel-button {
-    padding: 8px 15px;
+    padding: 10px 20px;
     margin-right: 10px;
     background-color: #f5f5f5;
     border: 1px solid #ccc;
+    border-radius: 4px;
     cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.cancel-button:hover {
+    background-color: #e5e5e5;
 }
 
 .submit-button {
-    padding: 8px 15px;
+    padding: 10px 20px;
     background-color: #2b6ca3;
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.submit-button:hover {
+    background-color: #235a8a;
 }
 
 /* Links */
@@ -431,25 +458,29 @@ label {
 
 /* Main app container */
 #advisor-container {
-    overflow: hidden; /* Change from overflow-x: hidden and overflow-y: auto to prevent scrolling here */
-    height: 100%;
+    overflow: hidden;
+    height: calc(100vh - 50px); /* Use viewport height minus navbar height */
     display: flex;
     flex-direction: column;
     margin: 0;
     padding: 0;
+    margin-top: 0; /* Remove margin-top since app-container has padding-top */
 }
 
 .app-container {
     position: relative;
     width: 100%;
+    padding-top: 50px; /* Match navbar height */
+    padding-bottom: 60px; /* Space for button container */
+    min-height: 100vh;
 }
 
 /* Order sections wrapper - add scrolling */
 .order-sections-wrapper {
     overflow-y: auto;
-    max-height: calc(100vh - 200px); /* Adjust to account for header, tabs, and buttons */
-    padding-bottom: 10px; /* Add padding to prevent content from being cut off */
-    position: relative; /* Ensure proper positioning context for mini-editor */
+    max-height: calc(100vh - 170px); /* Adjust to account for navbar (50px), tabs (~50px), and buttons (~70px) */
+    padding-bottom: 80px; /* Add padding to ensure space for the button container */
+    position: relative;
 }
 
 /* Mini-editor container positioning fix */

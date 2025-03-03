@@ -1,0 +1,232 @@
+test-patient-ui.js:31 Initializing TestPatientUI...
+test-patient-ui.js:1383 Fetching model configuration from config/config.json
+test-patient-ui.js:1397 DEBUG: Loaded model configuration structure: {"RCONFIG":{"TABS":[{"TAB_NAME":"Magnesium","TAB_KEY":"MAGNESIUM","MNEMONICS":[{"MNEMONIC":"Magnesiu...
+test-patient-ui.js:42 TestPatientUI initialized successfully
+navbar.js:94 Navbar created and added to document
+test-patient-ui.js:55 Creating test patient icon...
+test-patient-ui.js:72 Container is a string: app-container
+test-patient-ui.js:78 Treating as ID selector: #app-container
+test-patient-ui.js:85 Appended icon to element found with selector: #app-container
+test-patient-ui.js:122 Test patient icon created
+test-patient-ui.js:130 Showing test patient manager...
+test-patient-ui.js:185 Creating patient list...
+test-patient-ui.js:232 Patient list created with 2 patients
+test-patient-ui.js:177 Test patient manager shown
+test-patient-ui.js:240 Selecting patient with ID: m7rtc0rq7lsh5
+test-patient-ui.js:320 Selected patient: Adult Male Patient
+test-patient-ui.js:329 Selecting test case with ID: m7rtcg9r0ok9u for patient ID: m7rtc0rq7lsh5
+ Using cached model configuration
+ Selected test case: Potassium Level 2.9
+ ===== STARTING CONCEPT GROUPING PROCESS =====
+ Grouping concepts by model configuration: {EALABMAGALERT: {…}, EACRITERIANODIALYSIS: {…}, EACRITERIAWEIGHT: {…}, WEIGHTDOSING: {…}, EACRITERIADIGOXINCARDIAC: {…}, …}
+ DEBUG: Config structure: {"RCONFIG":{"TABS":[{"TAB_NAME":"Magnesium","TAB_KEY":"MAGNESIUM","MNEMONICS":[{"MNEMONIC":"Magnesium Oxide - Oral","ProtocolURL":"","Event_Name":""},{"MNEMONIC":"Magnesium Sulfate - IV","ProtocolURL":"","Event_Name":""},{"MNEMONIC":"Magnesium Oxide - Oral."},{"MNEMONIC":"Magnesium Sulfate - IV."}],"CRITERIA":[{"LABEL":"Patient not on dialysis","CONCEPT_NAME":"[%{EACRITERIANODIALYSIS}%]","DISPLAY":"","TOOLTIP":"No active dialysis order"},{"LABEL":"Dosing Weight > 50 kg","CONCEPT_NAME":"[%{EACRIT...
+ Config type: object
+ Config keys: ['RCONFIG']
+ DEBUG: Found TABS array in config.RCONFIG.TABS structure with 3 tabs
+ DEBUG: Found 3 tabs in configuration
+ DEBUG: Processing tab magnesium
+ DEBUG: Added EALABMAGALERT to magnesium flag concepts
+ DEBUG: Processing 6 criteria for tab magnesium
+ DEBUG: Added EACRITERIANODIALYSIS to magnesium criteria criterion_1
+ DEBUG: Added EACRITERIAWEIGHT to magnesium criteria criterion_2
+ DEBUG: Added WEIGHTDOSING from DISPLAY to magnesium criteria criterion_2
+ DEBUG: Added EACRITERIADIGOXINCARDIAC to magnesium criteria criterion_4
+ DEBUG: Added EACRITERIACREATININECLEARANCE to magnesium criteria criterion_5
+ DEBUG: Added EACRITERIACREATININECLEARANCE from DISPLAY to magnesium criteria criterion_5
+ DEBUG: Added EACRITERIASERUMCREATININE to magnesium criteria criterion_6
+ DEBUG: Added EACRITERIASERUMCREATININE from DISPLAY to magnesium criteria criterion_6
+ DEBUG: Processing 9 order sections for tab magnesium
+ DEBUG: Added EACRITERIAVALIDMAGRESULT4H to magnesium order section_1
+ DEBUG: Added EASHOWMAGORDERS to magnesium order section_2
+ DEBUG: Added EAPROTOCOLMAGIV to magnesium order section_2
+ DEBUG: Added EACRITERIAVALIDMAGRESULT4H to magnesium order section_2
+ DEBUG: Added EALABMAGBTW00AND13 to magnesium order section_2
+ DEBUG: Added EASHOWMAGORDERS to magnesium order section_3
+ DEBUG: Added EAPROTOCOLMAGIV to magnesium order section_3
+ DEBUG: Added EAPROTOCOLMAGORAL to magnesium order section_3
+ DEBUG: Added EACRITERIANOTNPO to magnesium order section_3
+ DEBUG: Added EACRITERIAVALIDMAGRESULT4H to magnesium order section_3
+ DEBUG: Added EALABMAGBTW14AND19 to magnesium order section_3
+ DEBUG: Added EASHOWMAGORDERS to magnesium order section_4
+ DEBUG: Added EAPROTOCOLMAGIV to magnesium order section_4
+ DEBUG: Added EACRITERIAVALIDMAGRESULT4H to magnesium order section_4
+ DEBUG: Added EALABMAGBTW00AND13 to magnesium order section_4
+ DEBUG: Added EASHOWMAGORDERS to magnesium order section_5
+ DEBUG: Added EAPROTOCOLMAGIV to magnesium order section_5
+ DEBUG: Added EAPROTOCOLMAGORAL to magnesium order section_5
+ DEBUG: Added EACRITERIANOTNPO to magnesium order section_5
+ DEBUG: Added EACRITERIAVALIDMAGRESULT4H to magnesium order section_5
+ DEBUG: Added EALABMAGBTW14AND19 to magnesium order section_5
+ DEBUG: Added EASHOWMAGORDERS to magnesium order section_6
+ DEBUG: Added EAPROTOCOLMAGIV to magnesium order section_6
+ DEBUG: Added EAPROTOCOLMAGORAL to magnesium order section_6
+ DEBUG: Added EACRITERIANOTNPO to magnesium order section_6
+ DEBUG: Added EACRITERIAVALIDMAGRESULT4H to magnesium order section_6
+ DEBUG: Added EALABMAGBTW14AND19 to magnesium order section_6
+ DEBUG: Added EASHOWMAGORDERS to magnesium order section_7
+ DEBUG: Added EAPROTOCOLMAGIV to magnesium order section_7
+ DEBUG: Added EAPROTOCOLMAGORAL to magnesium order section_7
+ DEBUG: Added EACRITERIANOTNPO to magnesium order section_7
+ DEBUG: Added EACRITERIAVALIDMAGRESULT4H to magnesium order section_7
+ DEBUG: Added EALABMAGBTW14AND19 to magnesium order section_7
+ DEBUG: Added EACRITERIAVALIDMAGRESULT4H to magnesium order section_8
+ DEBUG: Processing tab potassium
+ DEBUG: Added EALABPOTALERT to potassium flag concepts
+ DEBUG: Added EALABPOTTODO to potassium dismiss concepts
+ DEBUG: Processing 6 criteria for tab potassium
+ DEBUG: Added EACRITERIANODIALYSIS to potassium criteria criterion_1
+ DEBUG: Added EACRITERIAWEIGHT to potassium criteria criterion_2
+test-patient-ui.js:1207 DEBUG: Added WEIGHTDOSING from DISPLAY to potassium criteria criterion_2
+test-patient-ui.js:1196 DEBUG: Added EACRITERIADIGOXINCARDIAC to potassium criteria criterion_4
+test-patient-ui.js:1196 DEBUG: Added EACRITERIACREATININECLEARANCE to potassium criteria criterion_5
+test-patient-ui.js:1207 DEBUG: Added EACRITERIACREATININECLEARANCE from DISPLAY to potassium criteria criterion_5
+test-patient-ui.js:1196 DEBUG: Added EACRITERIASERUMCREATININE to potassium criteria criterion_6
+test-patient-ui.js:1207 DEBUG: Added EACRITERIASERUMCREATININE from DISPLAY to potassium criteria criterion_6
+test-patient-ui.js:1218 DEBUG: Processing 10 order sections for tab potassium
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPOTRESULT4H to potassium order section_1
+test-patient-ui.js:1240 DEBUG: Added EASHOWPOTORDERS to potassium order section_2
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPOT to potassium order section_2
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPOTRESULT4H to potassium order section_2
+test-patient-ui.js:1240 DEBUG: Added EALABPOTBTW00AND24 to potassium order section_2
+test-patient-ui.js:1240 DEBUG: Added EASHOWPOTORDERS to potassium order section_3
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPOT to potassium order section_3
+test-patient-ui.js:1240 DEBUG: Added EACRITERIANOTNPO to potassium order section_3
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPOTRESULT4H to potassium order section_3
+test-patient-ui.js:1240 DEBUG: Added EALABPOTBTW25AND29 to potassium order section_3
+test-patient-ui.js:1240 DEBUG: Added EASHOWPOTORDERS to potassium order section_4
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPOT to potassium order section_4
+test-patient-ui.js:1240 DEBUG: Added EACRITERIANOTNPO to potassium order section_4
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPOTRESULT4H to potassium order section_4
+test-patient-ui.js:1240 DEBUG: Added EALABPOTBTW25AND29 to potassium order section_4
+test-patient-ui.js:1240 DEBUG: Added EALABPOTTODO to potassium order section_5
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPOT to potassium order section_5
+test-patient-ui.js:1240 DEBUG: Added EACRITERIANOTNPO to potassium order section_5
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPOTRESULT4H to potassium order section_5
+test-patient-ui.js:1240 DEBUG: Added EALABPOTBTW30AND34 to potassium order section_5
+test-patient-ui.js:1240 DEBUG: Added EASHOWPOTORDERS to potassium order section_6
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPOT to potassium order section_6
+test-patient-ui.js:1240 DEBUG: Added EACRITERIANOTNPO to potassium order section_6
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPOTRESULT4H to potassium order section_6
+test-patient-ui.js:1240 DEBUG: Added EALABPOTBTW30AND34 to potassium order section_6
+test-patient-ui.js:1240 DEBUG: Added EASHOWPOTORDERS to potassium order section_7
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPOT to potassium order section_7
+test-patient-ui.js:1240 DEBUG: Added EACRITERIANOTNPO to potassium order section_7
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPOTRESULT4H to potassium order section_7
+test-patient-ui.js:1240 DEBUG: Added EALABPOTBTW35AND39 to potassium order section_7
+test-patient-ui.js:1240 DEBUG: Added EASHOWPOTORDERS to potassium order section_8
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPOT to potassium order section_8
+test-patient-ui.js:1240 DEBUG: Added EACRITERIANOTNPO to potassium order section_8
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPOTRESULT4H to potassium order section_8
+test-patient-ui.js:1240 DEBUG: Added EALABPOTBTW35AND39 to potassium order section_8
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPOTRESULT4H to potassium order section_9
+test-patient-ui.js:1127 DEBUG: Processing tab phosphate
+test-patient-ui.js:1149 DEBUG: Added EALABPHOSALERT to phosphate flag concepts
+test-patient-ui.js:1178 DEBUG: Processing 6 criteria for tab phosphate
+test-patient-ui.js:1196 DEBUG: Added EACRITERIANODIALYSIS to phosphate criteria criterion_1
+test-patient-ui.js:1196 DEBUG: Added EACRITERIAWEIGHT to phosphate criteria criterion_2
+test-patient-ui.js:1207 DEBUG: Added WEIGHTDOSING from DISPLAY to phosphate criteria criterion_2
+test-patient-ui.js:1196 DEBUG: Added EACRITERIADIGOXINCARDIAC to phosphate criteria criterion_4
+test-patient-ui.js:1196 DEBUG: Added EACRITERIACREATININECLEARANCE to phosphate criteria criterion_5
+test-patient-ui.js:1207 DEBUG: Added EACRITERIACREATININECLEARANCE from DISPLAY to phosphate criteria criterion_5
+test-patient-ui.js:1196 DEBUG: Added EACRITERIASERUMCREATININE to phosphate criteria criterion_6
+test-patient-ui.js:1207 DEBUG: Added EACRITERIASERUMCREATININE from DISPLAY to phosphate criteria criterion_6
+test-patient-ui.js:1218 DEBUG: Processing 9 order sections for tab phosphate
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPHOSRESULT4H to phosphate order section_1
+test-patient-ui.js:1240 DEBUG: Added EASHOWPHOSORDERS to phosphate order section_2
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSIV to phosphate order section_2
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPHOSRESULT4H to phosphate order section_2
+test-patient-ui.js:1240 DEBUG: Added EALABPHOSBTW00AND09 to phosphate order section_2
+test-patient-ui.js:1240 DEBUG: Added EASHOWPHOSORDERS to phosphate order section_3
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSIV to phosphate order section_3
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSORAL to phosphate order section_3
+test-patient-ui.js:1240 DEBUG: Added ACTIVENPODIETORDER to phosphate order section_3
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPHOSRESULT4H to phosphate order section_3
+test-patient-ui.js:1240 DEBUG: Added EALABPHOSBTW10AND20 to phosphate order section_3
+test-patient-ui.js:1240 DEBUG: Added EASHOWPHOSORDERS to phosphate order section_4
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSIV to phosphate order section_4
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPHOSRESULT4H to phosphate order section_4
+test-patient-ui.js:1240 DEBUG: Added EALABPHOSBTW00AND09 to phosphate order section_4
+test-patient-ui.js:1240 DEBUG: Added EASHOWPHOSORDERS to phosphate order section_5
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSIV to phosphate order section_5
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSORAL to phosphate order section_5
+test-patient-ui.js:1240 DEBUG: Added EACRITERIANOTNPO to phosphate order section_5
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPHOSRESULT4H to phosphate order section_5
+test-patient-ui.js:1240 DEBUG: Added EALABPHOSBTW10AND20 to phosphate order section_5
+test-patient-ui.js:1240 DEBUG: Added EASHOWPHOSORDERS to phosphate order section_6
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSIV to phosphate order section_6
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSORAL to phosphate order section_6
+test-patient-ui.js:1240 DEBUG: Added EACRITERIANOTNPO to phosphate order section_6
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPHOSRESULT4H to phosphate order section_6
+test-patient-ui.js:1240 DEBUG: Added EALABPHOSBTW10AND20 to phosphate order section_6
+test-patient-ui.js:1240 DEBUG: Added EASHOWPHOSORDERS to phosphate order section_7
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSIV to phosphate order section_7
+test-patient-ui.js:1240 DEBUG: Added EAPROTOCOLPHOSORAL to phosphate order section_7
+test-patient-ui.js:1240 DEBUG: Added EACRITERIANOTNPO to phosphate order section_7
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPHOSRESULT4H to phosphate order section_7
+test-patient-ui.js:1240 DEBUG: Added EALABPHOSBTW10AND20 to phosphate order section_7
+test-patient-ui.js:1240 DEBUG: Added EACRITERIAVALIDPHOSRESULT4H to phosphate order section_8
+test-patient-ui.js:1308 Tab magnesium:
+test-patient-ui.js:1333   Criteria concepts: 6
+test-patient-ui.js:1334   Order concepts: 34
+test-patient-ui.js:1335   Flag concepts: 1
+test-patient-ui.js:1336   Dismiss concepts: 0
+test-patient-ui.js:1337   Other concepts: 0
+test-patient-ui.js:1338   Total concepts: 41
+test-patient-ui.js:1308 Tab potassium:
+test-patient-ui.js:1333   Criteria concepts: 6
+test-patient-ui.js:1334   Order concepts: 36
+test-patient-ui.js:1335   Flag concepts: 1
+test-patient-ui.js:1336   Dismiss concepts: 1
+test-patient-ui.js:1337   Other concepts: 0
+test-patient-ui.js:1338   Total concepts: 44
+test-patient-ui.js:1308 Tab phosphate:
+test-patient-ui.js:1333   Criteria concepts: 6
+test-patient-ui.js:1334   Order concepts: 34
+test-patient-ui.js:1335   Flag concepts: 1
+test-patient-ui.js:1336   Dismiss concepts: 0
+test-patient-ui.js:1337   Other concepts: 0
+test-patient-ui.js:1338   Total concepts: 41
+test-patient-ui.js:1346 Available concept names: (31) ['EALABMAGALERT', 'EACRITERIANODIALYSIS', 'EACRITERIAWEIGHT', 'WEIGHTDOSING', 'EACRITERIADIGOXINCARDIAC', 'EACRITERIACREATININECLEARANCE', 'EACRITERIASERUMCREATININE', 'EASHOWMAGORDERS', 'EAPROTOCOLMAGIV', 'EACRITERIAVALIDMAGRESULT4H', 'EALABMAGBTW00AND13', 'EAPROTOCOLMAGORAL', 'EACRITERIANOTNPO', 'EALABMAGBTW14AND19', 'EALABPOTALERT', 'EASHOWPOTORDERS', 'EAPROTOCOLPOT', 'EACRITERIAVALIDPOTRESULT4H', 'EALABPOTBTW00AND24', 'EALABPOTBTW25AND29', 'EALABPOTTODO', 'EALABPOTBTW30AND34', 'EALABPOTBTW35AND39', 'EALABPHOSALERT', 'EASHOWPHOSORDERS', 'EAPROTOCOLPHOSIV', 'EACRITERIAVALIDPHOSRESULT4H', 'EALABPHOSBTW00AND09', 'EAPROTOCOLPHOSORAL', 'ACTIVENPODIETORDER', 'EALABPHOSBTW10AND20']
+test-patient-ui.js:1347 Total unique categorized concepts: 31 out of 31
+test-patient-ui.js:1363 
+===== FINAL GROUPED CONCEPTS =====
+test-patient-ui.js:1364 {magnesium: {…}, potassium: {…}, phosphate: {…}}
+test-patient-ui.js:1365 ==================================
+
+test-patient-ui.js:579 Updated test case: Potassium Level 2.9
+test-patient-ui.js:579 Updated test case: Potassium Level 2.9
+test-patient-ui.js:731 Applying test case: Potassium Level 2.9
+test-patient-ui.js:748 Set concept EALABMAGALERT to value: null
+test-patient-ui.js:748 Set concept EACRITERIANODIALYSIS to value: null
+test-patient-ui.js:748 Set concept EACRITERIAWEIGHT to value: null
+test-patient-ui.js:748 Set concept WEIGHTDOSING to value: null
+test-patient-ui.js:748 Set concept EACRITERIADIGOXINCARDIAC to value: null
+test-patient-ui.js:748 Set concept EACRITERIACREATININECLEARANCE to value: null
+test-patient-ui.js:748 Set concept EACRITERIASERUMCREATININE to value: null
+test-patient-ui.js:748 Set concept EASHOWMAGORDERS to value: null
+test-patient-ui.js:748 Set concept EAPROTOCOLMAGIV to value: null
+test-patient-ui.js:748 Set concept EACRITERIAVALIDMAGRESULT4H to value: null
+test-patient-ui.js:748 Set concept EALABMAGBTW00AND13 to value: null
+test-patient-ui.js:748 Set concept EAPROTOCOLMAGORAL to value: null
+test-patient-ui.js:748 Set concept EACRITERIANOTNPO to value: null
+test-patient-ui.js:748 Set concept EALABMAGBTW14AND19 to value: null
+test-patient-ui.js:748 Set concept EALABPOTALERT to value: null
+test-patient-ui.js:748 Set concept EASHOWPOTORDERS to value: null
+test-patient-ui.js:748 Set concept EAPROTOCOLPOT to value: null
+test-patient-ui.js:748 Set concept EACRITERIAVALIDPOTRESULT4H to value: null
+test-patient-ui.js:748 Set concept EALABPOTBTW00AND24 to value: null
+test-patient-ui.js:748 Set concept EALABPOTBTW25AND29 to value: null
+test-patient-ui.js:748 Set concept EALABPOTTODO to value: null
+test-patient-ui.js:748 Set concept EALABPOTBTW30AND34 to value: null
+test-patient-ui.js:748 Set concept EALABPOTBTW35AND39 to value: null
+test-patient-ui.js:748 Set concept EALABPHOSALERT to value: null
+test-patient-ui.js:748 Set concept EASHOWPHOSORDERS to value: null
+test-patient-ui.js:748 Set concept EAPROTOCOLPHOSIV to value: null
+test-patient-ui.js:748 Set concept EACRITERIAVALIDPHOSRESULT4H to value: null
+test-patient-ui.js:748 Set concept EALABPHOSBTW00AND09 to value: null
+test-patient-ui.js:748 Set concept EAPROTOCOLPHOSORAL to value: null
+test-patient-ui.js:748 Set concept ACTIVENPODIETORDER to value: null
+test-patient-ui.js:748 Set concept EALABPHOSBTW10AND20 to value: null
+test-patient-ui.js:767 Refreshed advisor with test case data
+app.js:23 Debug mode changed: true
+concept-integration.js:120 Debug mode enabled

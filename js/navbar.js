@@ -39,7 +39,7 @@ class Navbar {
         
         // Create brand/title
         const brand = document.createElement('div');
-        brand.className = 'navbar-brand';
+        brand.className = 'navbar-brand navbar-title';
         brand.textContent = 'Electrolyte Advisor';
         this.navbar.appendChild(brand);
         

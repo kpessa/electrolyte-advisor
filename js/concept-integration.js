@@ -14,7 +14,13 @@ class ConceptIntegration {
     constructor() {
         this.conceptModal = new ConceptModal();
         this.initialized = false;
-        this.debugMode = false;
+        this._debugMode = false;
+        
+        // Check if debug mode is enabled via URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('debug') || urlParams.has('debug_concepts')) {
+            this.enableDebugMode();
+        }
     }
 
     /**
@@ -49,7 +55,7 @@ class ConceptIntegration {
             this.conceptModal,
             testPatientUI,
             this.toggleDebugMode.bind(this),
-            this.debugMode
+            this._debugMode
         );
         
         // For backward compatibility, we'll keep these methods but they won't create visible elements
@@ -81,7 +87,7 @@ class ConceptIntegration {
         debugButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z" fill="currentColor"/></svg>';
         
         // Add active class if debug mode is enabled
-        if (this.debugMode) {
+        if (this._debugMode) {
             debugButton.classList.add('active');
         }
         
@@ -106,18 +112,18 @@ class ConceptIntegration {
      * Toggles debug mode on/off
      */
     toggleDebugMode() {
-        this.debugMode = !this.debugMode;
+        this._debugMode = !this._debugMode;
         
         // Update the navbar debug button
-        navbar.updateDebugButton(this.debugMode);
+        navbar.updateDebugButton(this._debugMode);
         
         // Dispatch an event to notify the application of the debug mode change
         const event = new CustomEvent('debugModeChanged', { 
-            detail: { debugMode: this.debugMode } 
+            detail: { debugMode: this._debugMode } 
         });
         document.dispatchEvent(event);
         
-        console.log(`Debug mode ${this.debugMode ? 'enabled' : 'disabled'}`);
+        console.log(`Debug mode ${this._debugMode ? 'enabled' : 'disabled'}`);
         
         // Refresh the advisor to show debug information
         if (window.initializeAdvisor) {
@@ -130,7 +136,7 @@ class ConceptIntegration {
      * @returns {boolean} - Whether debug mode is enabled
      */
     isDebugModeEnabled() {
-        return this.debugMode;
+        return this._debugMode;
     }
 
     /**
@@ -156,6 +162,107 @@ class ConceptIntegration {
             await this.initialize();
         }
         this.conceptModal.open();
+    }
+
+    // Initialize the concept modal
+    initializeConceptModal(conceptManager) {
+        this.conceptModal = {
+            conceptManager: conceptManager
+        };
+        
+        // If debug mode is enabled, enhance concepts
+        if (this._debugMode && window.enhanceConceptsInDebugMode) {
+            window.enhanceConceptsInDebugMode();
+        }
+    }
+    
+    // Enable debug mode
+    enableDebugMode() {
+        console.log('Enabling concept debug mode');
+        this._debugMode = true;
+        document.body.classList.add('debug-mode');
+        
+        // Add debug mode toggle to navbar
+        this.addDebugModeToggle();
+        
+        // Enhance concepts if already rendered
+        if (window.enhanceConceptsInDebugMode) {
+            window.enhanceConceptsInDebugMode();
+        }
+    }
+    
+    // Disable debug mode
+    disableDebugMode() {
+        console.log('Disabling concept debug mode');
+        this._debugMode = false;
+        document.body.classList.remove('debug-mode');
+        
+        // Remove debug mode UI elements
+        const debugElements = document.querySelectorAll('.concept-tooltip, .save-to-test-case-btn');
+        debugElements.forEach(element => {
+            element.remove();
+        });
+        
+        // Remove active/inactive classes from concept expressions
+        const conceptExpressions = document.querySelectorAll('.concept-expression');
+        conceptExpressions.forEach(element => {
+            element.classList.remove('active', 'inactive');
+        });
+    }
+    
+    // Add debug mode toggle to navbar
+    addDebugModeToggle() {
+        const navbar = document.querySelector('.navbar');
+        if (!navbar) return;
+        
+        // Check if toggle already exists
+        if (document.querySelector('#debug-mode-toggle')) return;
+        
+        // Create toggle container
+        const toggleContainer = document.createElement('div');
+        toggleContainer.className = 'debug-mode-toggle-container';
+        
+        // Create toggle label
+        const toggleLabel = document.createElement('label');
+        toggleLabel.className = 'debug-mode-toggle-label';
+        toggleLabel.setAttribute('for', 'debug-mode-toggle');
+        toggleLabel.textContent = 'Debug Mode';
+        
+        // Create toggle switch
+        const toggle = document.createElement('label');
+        toggle.className = 'debug-mode-toggle';
+        
+        const toggleInput = document.createElement('input');
+        toggleInput.type = 'checkbox';
+        toggleInput.id = 'debug-mode-toggle';
+        toggleInput.checked = this._debugMode;
+        
+        const toggleSlider = document.createElement('span');
+        toggleSlider.className = 'debug-mode-toggle-slider';
+        
+        toggle.appendChild(toggleInput);
+        toggle.appendChild(toggleSlider);
+        
+        // Add event listener to toggle
+        toggleInput.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                this.enableDebugMode();
+            } else {
+                this.disableDebugMode();
+            }
+        });
+        
+        // Add toggle to navbar
+        toggleContainer.appendChild(toggleLabel);
+        toggleContainer.appendChild(toggle);
+        
+        // Find navbar controls and insert at the beginning
+        const navbarControls = navbar.querySelector('.navbar-controls');
+        if (navbarControls) {
+            navbarControls.insertBefore(toggleContainer, navbarControls.firstChild);
+        } else {
+            navbar.appendChild(toggleContainer);
+        }
     }
 }
 

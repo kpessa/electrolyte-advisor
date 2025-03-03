@@ -167,12 +167,18 @@ function evaluateConceptExpression(expression, conceptValues) {
     if (expr === 'true') return true;
     if (expr === 'false') return false;
     
+    // Check if the expression is just a single concept name
+    if (/^[A-Za-z0-9_]+$/.test(expr)) {
+        // If it's a single concept name, check if it exists and is active
+        return conceptValues && conceptValues[expr] && conceptValues[expr].isActive === true;
+    }
+    
     // Replace concept references with their values
     expr = expr.replace(CONCEPT_REGEX, (match, conceptName) => {
         const parts = conceptName.split('.');
         const concept = parts[0];
         
-        if (!conceptValues[concept]) {
+        if (!conceptValues || !conceptValues[concept]) {
             // If concept doesn't exist, return string 'false' for the expression evaluation
             return 'false';
         }
@@ -200,6 +206,9 @@ function evaluateConceptExpression(expression, conceptValues) {
     expr = expr.replace(/([^=!><])=([^=])/g, '$1==$2');
     
     try {
+        // Wrap the expression in parentheses to ensure it's evaluated as a whole
+        expr = `(${expr})`;
+        
         // Use Function constructor to evaluate the expression
         // Note: This is generally not recommended for security reasons in production
         // but is used here for demonstration purposes

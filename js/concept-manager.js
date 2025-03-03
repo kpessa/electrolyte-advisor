@@ -379,6 +379,14 @@ class ConceptManager {
             noExpressionsMessage.remove();
         }
     }
+
+    /**
+     * Gets all concepts with their values and active states
+     * @returns {Object} - Object containing all concepts
+     */
+    getAllConcepts() {
+        return this.conceptInstantiation;
+    }
 }
 
 // Export the ConceptManager class

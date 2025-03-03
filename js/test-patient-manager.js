@@ -75,6 +75,14 @@ class TestPatientManager {
     }
 
     /**
+     * Alias for getTestPatients for compatibility with new UI
+     * @returns {Array} - Array of test patient objects
+     */
+    getAllTestPatients() {
+        return this.getTestPatients();
+    }
+
+    /**
      * Gets a test patient by ID
      * @param {string} patientId - The ID of the test patient
      * @returns {Object|null} - The test patient object or null if not found
@@ -193,15 +201,23 @@ class TestPatientManager {
      * Updates a test case
      * @param {string} patientId - The ID of the test patient
      * @param {string} caseId - The ID of the test case to update
-     * @param {Object} updates - The updates to apply
+     * @param {Object} updates - The updates to apply to the test case
      * @returns {Object|null} - The updated test case object or null if not found
      */
     updateTestCase(patientId, caseId, updates) {
+        console.log(`Updating test case with ID: ${caseId} for patient ID: ${patientId}`, updates);
+        
         const patient = this.getTestPatient(patientId);
-        if (!patient) return null;
+        if (!patient) {
+            console.error(`Patient with ID ${patientId} not found`);
+            return null;
+        }
         
         const caseIndex = patient.testCases.findIndex(testCase => testCase.id === caseId);
-        if (caseIndex === -1) return null;
+        if (caseIndex === -1) {
+            console.error(`Test case with ID ${caseId} not found for patient ID ${patientId}`);
+            return null;
+        }
         
         const updatedCase = {
             ...patient.testCases[caseIndex],
@@ -211,6 +227,7 @@ class TestPatientManager {
         patient.testCases[caseIndex] = updatedCase;
         this.saveTestPatientsToStorage();
         
+        console.log('Test case updated successfully:', updatedCase);
         return updatedCase;
     }
 
@@ -243,10 +260,24 @@ class TestPatientManager {
      */
     setPatientConceptValue(patientId, conceptName, value) {
         const patient = this.getTestPatient(patientId);
-        if (patient && patient.concepts[conceptName]) {
-            patient.concepts[conceptName].value = value;
-            this.saveTestPatientsToStorage();
+        if (!patient) return;
+        
+        // Initialize concepts object if it doesn't exist
+        if (!patient.concepts) {
+            patient.concepts = {};
         }
+        
+        // Create the concept if it doesn't exist
+        if (!patient.concepts[conceptName]) {
+            patient.concepts[conceptName] = {
+                value: null,
+                isActive: true
+            };
+        }
+        
+        // Set the value
+        patient.concepts[conceptName].value = value;
+        this.saveTestPatientsToStorage();
     }
 
     /**
@@ -257,10 +288,24 @@ class TestPatientManager {
      */
     setPatientConceptActive(patientId, conceptName, isActive) {
         const patient = this.getTestPatient(patientId);
-        if (patient && patient.concepts[conceptName]) {
-            patient.concepts[conceptName].isActive = isActive;
-            this.saveTestPatientsToStorage();
+        if (!patient) return;
+        
+        // Initialize concepts object if it doesn't exist
+        if (!patient.concepts) {
+            patient.concepts = {};
         }
+        
+        // Create the concept if it doesn't exist
+        if (!patient.concepts[conceptName]) {
+            patient.concepts[conceptName] = {
+                value: null,
+                isActive: true
+            };
+        }
+        
+        // Set the active state
+        patient.concepts[conceptName].isActive = isActive;
+        this.saveTestPatientsToStorage();
     }
 
     /**
@@ -272,10 +317,24 @@ class TestPatientManager {
      */
     setCaseConceptValue(patientId, caseId, conceptName, value) {
         const testCase = this.getTestCase(patientId, caseId);
-        if (testCase && testCase.concepts[conceptName]) {
-            testCase.concepts[conceptName].value = value;
-            this.saveTestPatientsToStorage();
+        if (!testCase) return;
+        
+        // Initialize concepts object if it doesn't exist
+        if (!testCase.concepts) {
+            testCase.concepts = {};
         }
+        
+        // Create the concept if it doesn't exist
+        if (!testCase.concepts[conceptName]) {
+            testCase.concepts[conceptName] = {
+                value: null,
+                isActive: true
+            };
+        }
+        
+        // Set the value
+        testCase.concepts[conceptName].value = value;
+        this.saveTestPatientsToStorage();
     }
 
     /**
@@ -287,10 +346,24 @@ class TestPatientManager {
      */
     setCaseConceptActive(patientId, caseId, conceptName, isActive) {
         const testCase = this.getTestCase(patientId, caseId);
-        if (testCase && testCase.concepts[conceptName]) {
-            testCase.concepts[conceptName].isActive = isActive;
-            this.saveTestPatientsToStorage();
+        if (!testCase) return;
+        
+        // Initialize concepts object if it doesn't exist
+        if (!testCase.concepts) {
+            testCase.concepts = {};
         }
+        
+        // Create the concept if it doesn't exist
+        if (!testCase.concepts[conceptName]) {
+            testCase.concepts[conceptName] = {
+                value: null,
+                isActive: true
+            };
+        }
+        
+        // Set the active state
+        testCase.concepts[conceptName].isActive = isActive;
+        this.saveTestPatientsToStorage();
     }
 
     /**
@@ -331,7 +404,16 @@ class TestPatientManager {
         }
         
         // Get the concept instantiation from the concept manager
-        const conceptInstantiation = this.conceptManager.conceptInstantiation;
+        let conceptInstantiation = {};
+        
+        // Try to get the concept instantiation directly
+        if (this.conceptManager.conceptInstantiation) {
+            conceptInstantiation = this.conceptManager.conceptInstantiation;
+        } 
+        // Try to use getAllConcepts method if available
+        else if (typeof this.conceptManager.getAllConcepts === 'function') {
+            conceptInstantiation = this.conceptManager.getAllConcepts();
+        }
         
         // Create a deep clone of the concept instantiation
         const clone = {};
