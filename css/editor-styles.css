@@ -21,6 +21,16 @@ html, body {
     background: #0069d9;
 }
 
+/* Navbar edit config button styles */
+#navbar-edit-config-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+#navbar-edit-config-btn:hover {
+    background-color: #0069d9;
+}
+
 .app-container, .editor-container {
     position: absolute;
     top: 0;

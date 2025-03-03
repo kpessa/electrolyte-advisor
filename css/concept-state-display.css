@@ -1,0 +1,209 @@
+/**
+ * Concept State Display CSS
+ * Styles for the global concept state display panel
+ */
+
+/* Container */
+.concept-state-display {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 600px;
+    max-width: 90vw;
+    max-height: 80vh;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 9000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Header */
+.concept-state-display-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.concept-state-display-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #343a40;
+}
+
+.concept-state-display-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: #6c757d;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.concept-state-display-close:hover {
+    color: #343a40;
+}
+
+/* Filter */
+.concept-state-filter-container {
+    padding: 10px 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.concept-state-filter {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.concept-state-filter:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Content */
+.concept-state-display-content {
+    padding: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Empty state */
+.concept-state-empty {
+    padding: 20px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Table */
+.concept-state-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.concept-state-table th,
+.concept-state-table td {
+    padding: 10px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.concept-state-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.concept-state-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Table cells */
+.concept-state-name {
+    font-weight: 500;
+    word-break: break-word;
+    max-width: 200px;
+}
+
+.concept-state-value {
+    font-family: monospace;
+    word-break: break-all;
+}
+
+.concept-state-state {
+    font-weight: 600;
+    text-align: center;
+}
+
+.concept-state-state.state-true {
+    color: #155724;
+    background-color: #d4edda;
+}
+
+.concept-state-state.state-false {
+    color: #721c24;
+    background-color: #f8d7da;
+}
+
+.concept-state-state.state-undefined {
+    color: #383d41;
+    background-color: #e2e3e5;
+}
+
+.concept-state-actions {
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Buttons */
+.concept-state-reset-btn {
+    padding: 4px 8px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.concept-state-reset-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Toggle button */
+.concept-state-display-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 8000;
+}
+
+.concept-state-display-toggle:hover {
+    background-color: #0069d9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .concept-state-display {
+        width: 95vw;
+        max-width: 95vw;
+        top: 10px;
+        right: 10px;
+        max-height: 85vh;
+    }
+    
+    .concept-state-table th,
+    .concept-state-table td {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    
+    .concept-state-name {
+        max-width: 120px;
+    }
+} 

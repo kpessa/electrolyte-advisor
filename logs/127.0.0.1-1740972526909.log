@@ -1,0 +1,68 @@
+concept-state-manager.js:17 ConceptStateManager initialized
+concept-state-display.js:76 Concept state display initialized
+test-patient-ui.js:34 Initializing TestPatientUI...
+test-patient-ui.js:1427 DEBUG: Loaded model configuration structure: {"RCONFIG":{"TABS":[{"TAB_NAME":"Magnesium","TAB_KEY":"MAGNESIUM","MNEMONICS":[{"MNEMONIC":"Magnesiu...
+test-patient-ui.js:45 TestPatientUI initialized successfully
+navbar.js:111 Navbar created and added to document
+test-patient-ui.js:58 Creating test patient icon...
+test-patient-ui.js:75 Container is a string: app-container
+test-patient-ui.js:81 Treating as ID selector: #app-container
+test-patient-ui.js:88 Appended icon to element found with selector: #app-container
+test-patient-ui.js:125 Test patient icon created
+index.html:1 Uncaught (in promise) Error: A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received
+test-patient-ui.js:133 Showing test patient manager...
+test-patient-ui.js:141 Toggling test patient sidebar...
+test-patient-ui.js:1442 Rendering sidebar content...
+test-patient-ui.js:203 Test patient sidebar toggled
+test-patient-ui.js:1601 Edit button clicked for patient ID: m7rtc0rq7lsh5, test case ID: m7rtcg9r0ok9u
+test-patient-ui.js:1724 Editing test case m7rtcg9r0ok9u for patient m7rtc0rq7lsh5
+test-patient-ui.js:1740 Creating new test case modal
+test-patient-ui.js:1846 Getting concepts from global concept state manager
+test-patient-ui.js:1850 Global concepts: []
+test-patient-ui.js:1976 Grouping concepts for tab: magnesium
+test-patient-ui.js:1085 DEBUG: Config structure: {"RCONFIG":{"TABS":[{"TAB_NAME":"Magnesium","TAB_KEY":"MAGNESIUM","MNEMONICS":[{"MNEMONIC":"Magnesium Oxide - Oral","ProtocolURL":"","Event_Name":""},{"MNEMONIC":"Magnesium Sulfate - IV","ProtocolURL":"","Event_Name":""},{"MNEMONIC":"Magnesium Oxide - Oral."},{"MNEMONIC":"Magnesium Sulfate - IV."}],"CRITERIA":[{"LABEL":"Patient not on dialysis","CONCEPT_NAME":"[%{EACRITERIANODIALYSIS}%]","DISPLAY":"","TOOLTIP":"No active dialysis order"},{"LABEL":"Dosing Weight > 50 kg","CONCEPT_NAME":"[%{EACRIT...
+test-patient-ui.js:1104 Config type: object
+test-patient-ui.js:1106 Config keys: ['RCONFIG']
+test-patient-ui.js:1126 DEBUG: Found TABS array in config.RCONFIG.TABS structure with 3 tabs
+test-patient-ui.js:1148 DEBUG: Found 3 tabs in configuration
+test-patient-ui.js:1159 DEBUG: Processing tab magnesium
+test-patient-ui.js:1169 DEBUG: Processing 6 criteria for tab magnesium
+test-patient-ui.js:1205 DEBUG: Processing 9 order sections for tab magnesium
+test-patient-ui.js:1159 DEBUG: Processing tab potassium
+test-patient-ui.js:1169 DEBUG: Processing 6 criteria for tab potassium
+test-patient-ui.js:1205 DEBUG: Processing 10 order sections for tab potassium
+test-patient-ui.js:1159 DEBUG: Processing tab phosphate
+test-patient-ui.js:1169 DEBUG: Processing 6 criteria for tab phosphate
+test-patient-ui.js:1205 DEBUG: Processing 9 order sections for tab phosphate
+test-patient-ui.js:1976 Grouping concepts for tab: potassium
+test-patient-ui.js:1085 DEBUG: Config structure: {"RCONFIG":{"TABS":[{"TAB_NAME":"Magnesium","TAB_KEY":"MAGNESIUM","MNEMONICS":[{"MNEMONIC":"Magnesium Oxide - Oral","ProtocolURL":"","Event_Name":""},{"MNEMONIC":"Magnesium Sulfate - IV","ProtocolURL":"","Event_Name":""},{"MNEMONIC":"Magnesium Oxide - Oral."},{"MNEMONIC":"Magnesium Sulfate - IV."}],"CRITERIA":[{"LABEL":"Patient not on dialysis","CONCEPT_NAME":"[%{EACRITERIANODIALYSIS}%]","DISPLAY":"","TOOLTIP":"No active dialysis order"},{"LABEL":"Dosing Weight > 50 kg","CONCEPT_NAME":"[%{EACRIT...
+test-patient-ui.js:1104 Config type: object
+test-patient-ui.js:1106 Config keys: ['RCONFIG']
+test-patient-ui.js:1126 DEBUG: Found TABS array in config.RCONFIG.TABS structure with 3 tabs
+test-patient-ui.js:1148 DEBUG: Found 3 tabs in configuration
+test-patient-ui.js:1159 DEBUG: Processing tab magnesium
+test-patient-ui.js:1169 DEBUG: Processing 6 criteria for tab magnesium
+test-patient-ui.js:1205 DEBUG: Processing 9 order sections for tab magnesium
+test-patient-ui.js:1159 DEBUG: Processing tab potassium
+test-patient-ui.js:1169 DEBUG: Processing 6 criteria for tab potassium
+test-patient-ui.js:1205 DEBUG: Processing 10 order sections for tab potassium
+test-patient-ui.js:1159 DEBUG: Processing tab phosphate
+test-patient-ui.js:1169 DEBUG: Processing 6 criteria for tab phosphate
+test-patient-ui.js:1205 DEBUG: Processing 9 order sections for tab phosphate
+test-patient-ui.js:1976 Grouping concepts for tab: phosphate
+test-patient-ui.js:1085 DEBUG: Config structure: {"RCONFIG":{"TABS":[{"TAB_NAME":"Magnesium","TAB_KEY":"MAGNESIUM","MNEMONICS":[{"MNEMONIC":"Magnesium Oxide - Oral","ProtocolURL":"","Event_Name":""},{"MNEMONIC":"Magnesium Sulfate - IV","ProtocolURL":"","Event_Name":""},{"MNEMONIC":"Magnesium Oxide - Oral."},{"MNEMONIC":"Magnesium Sulfate - IV."}],"CRITERIA":[{"LABEL":"Patient not on dialysis","CONCEPT_NAME":"[%{EACRITERIANODIALYSIS}%]","DISPLAY":"","TOOLTIP":"No active dialysis order"},{"LABEL":"Dosing Weight > 50 kg","CONCEPT_NAME":"[%{EACRIT...
+test-patient-ui.js:1104 Config type: object
+test-patient-ui.js:1106 Config keys: ['RCONFIG']
+test-patient-ui.js:1126 DEBUG: Found TABS array in config.RCONFIG.TABS structure with 3 tabs
+test-patient-ui.js:1148 DEBUG: Found 3 tabs in configuration
+test-patient-ui.js:1159 DEBUG: Processing tab magnesium
+test-patient-ui.js:1169 DEBUG: Processing 6 criteria for tab magnesium
+test-patient-ui.js:1205 DEBUG: Processing 9 order sections for tab magnesium
+test-patient-ui.js:1159 DEBUG: Processing tab potassium
+test-patient-ui.js:1169 DEBUG: Processing 6 criteria for tab potassium
+test-patient-ui.js:1205 DEBUG: Processing 10 order sections for tab potassium
+test-patient-ui.js:1159 DEBUG: Processing tab phosphate
+test-patient-ui.js:1169 DEBUG: Processing 6 criteria for tab phosphate
+test-patient-ui.js:1205 DEBUG: Processing 9 order sections for tab phosphate
+test-patient-ui.js:1642 Showing modal
+test-patient-ui.js:1690 Modal display style: flex

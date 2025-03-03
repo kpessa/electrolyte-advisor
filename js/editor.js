@@ -375,6 +375,9 @@ $(document).ready(function() {
             appContainer.removeClass('inactive');
             toggleButton.text('Edit Configuration');
             
+            // Update navbar button if it exists
+            $('#navbar-edit-config-btn').html('📝 Edit Config');
+            
             // Show navbar
             navbar.show();
             
@@ -392,6 +395,9 @@ $(document).ready(function() {
             editorContainer.addClass('active');
             appContainer.addClass('inactive');
             toggleButton.text('Close Editor');
+            
+            // Update navbar button if it exists
+            $('#navbar-edit-config-btn').html('📝 Close Editor');
             
             // Hide navbar
             navbar.hide();
@@ -419,6 +425,9 @@ $(document).ready(function() {
             }, 300); // Wait for the transition to complete
         }
     }
+    
+    // Expose toggleEditor globally
+    window.toggleEditor = toggleEditor;
     
     // Save and apply the configuration
     function saveConfig() {

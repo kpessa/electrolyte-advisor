@@ -1,40 +1,49 @@
 // Initialize the application
 $(document).ready(function() {
-    // Import the concept integration module
-    import('./concept-integration.js')
-        .then(module => {
-            const conceptIntegration = module.default;
+    // Import the concept state manager, concept state display, and concept integration modules
+    Promise.all([
+        import('./concept-state-manager.js'),
+        import('./concept-state-display.js'),
+        import('./concept-integration.js')
+    ])
+    .then(([stateModule, displayModule, integrationModule]) => {
+        const conceptStateManager = stateModule.default;
+        const conceptStateDisplay = displayModule.default;
+        const conceptIntegration = integrationModule.default;
+        
+        // Make the concept state manager available globally
+        window.conceptStateManager = conceptStateManager;
+        
+        // Initialize the concept manager
+        conceptIntegration.initialize().then(() => {
+            // Add the settings icon to the app container
+            conceptIntegration.addSettingsIcon('app-container');
             
-            // Initialize the concept manager
-            conceptIntegration.initialize().then(() => {
-                // Add the settings icon to the app container
-                conceptIntegration.addSettingsIcon('app-container');
-                
-                // Make the openConceptManager function available globally for testing
-                window.openConceptManager = () => {
-                    conceptIntegration.openConceptManager().catch(error => {
-                        console.error('Failed to open concept manager:', error);
-                        showError('Failed to open concept manager. Please check the console for details.');
-                    });
-                };
-                
-                // Add event listener for debug mode changes
-                document.addEventListener('debugModeChanged', function(event) {
-                    console.log('Debug mode changed:', event.detail.debugMode);
-                    // Refresh the advisor to show debug information
-                    if (window.initializeAdvisor) {
-                        window.initializeAdvisor();
-                    }
+            // Make the openConceptManager function available globally for testing
+            window.openConceptManager = () => {
+                conceptIntegration.openConceptManager().catch(error => {
+                    console.error('Failed to open concept manager:', error);
+                    showError('Failed to open concept manager. Please check the console for details.');
                 });
-            }).catch(error => {
-                console.error('Error initializing concept integration:', error);
-                showError('Failed to initialize concept integration. Please check the console for details.');
+            };
+            
+            // Add event listener for debug mode changes
+            document.addEventListener('debugModeChanged', function(event) {
+                console.log('Debug mode changed:', event.detail.debugMode);
+                // Refresh the advisor to show debug information
+                if (window.initializeAdvisor) {
+                    window.initializeAdvisor();
+                }
             });
-        })
-        .catch(error => {
-            console.error('Error importing concept integration:', error);
-            showError('Failed to import concept integration. Please check the console for details.');
+        }).catch(error => {
+            console.error('Error initializing concept integration:', error);
+            showError('Failed to initialize concept integration. Please check the console for details.');
         });
+    })
+    .catch(error => {
+        console.error('Error importing modules:', error);
+        showError('Failed to import required modules. Please check the console for details.');
+    });
     
     // Load configuration
     $.getJSON('config/config.json', function(config) {
@@ -49,8 +58,9 @@ $(document).ready(function() {
             'left': '20px',
             'right': 'auto'  // Remove the right positioning
         });
-    }).fail(function() {
-        $('body').append('<div class="error-message">Failed to load configuration.</div>');
+    }).fail(function(jqxhr, textStatus, error) {
+        console.error('Error loading configuration:', error);
+        showError('Failed to load configuration. Please check the console for details.');
     });
 
     // Make initializeAdvisor globally accessible
@@ -1253,6 +1263,34 @@ $(document).ready(function() {
     function toggleConcept(conceptName, isActive, element) {
         console.log(`Toggling concept ${conceptName} to ${isActive}`);
         
+        // Use the global concept state manager if available
+        if (window.conceptStateManager) {
+            // Set the concept value and state based on active state
+            window.conceptStateManager.setConceptState(conceptName, isActive ? true : null, isActive ? true : undefined);
+            
+            // Update element class
+            if (element) {
+                element.classList.remove('active', 'inactive');
+                element.classList.add(isActive ? 'active' : 'inactive');
+            }
+            
+            // Also update the concept manager for backward compatibility
+            if (window.conceptIntegration && window.conceptIntegration.conceptModal) {
+                const conceptManager = window.conceptIntegration.conceptModal.conceptManager;
+                if (conceptManager) {
+                    conceptManager.setConceptValue(conceptName, isActive ? true : null);
+                }
+            }
+            
+            // Refresh the advisor to show updated concept states
+            if (window.initializeAdvisor) {
+                window.initializeAdvisor();
+            }
+            
+            return;
+        }
+        
+        // Fallback to old method if global state manager is not available
         if (window.conceptIntegration && window.conceptIntegration.conceptModal) {
             const conceptManager = window.conceptIntegration.conceptModal.conceptManager;
             if (conceptManager) {
@@ -1277,15 +1315,50 @@ $(document).ready(function() {
     function setConceptValue(conceptName, value, element) {
         console.log(`Setting concept ${conceptName} value to ${value}`);
         
+        // Convert value to appropriate type
+        let typedValue = value;
+        if (value === 'true') typedValue = true;
+        else if (value === 'false') typedValue = false;
+        else if (!isNaN(value) && value !== '') typedValue = Number(value);
+        
+        // Use the global concept state manager if available
+        if (window.conceptStateManager) {
+            // Determine state based on value
+            let state;
+            if (typedValue === true) state = true;
+            else if (typedValue === false) state = false;
+            else if (typedValue === null || typedValue === undefined) state = undefined;
+            else state = true; // Non-boolean values with content are considered "true" state
+            
+            // Set the concept value and state
+            window.conceptStateManager.setConceptState(conceptName, typedValue, state);
+            
+            // Update element class for boolean values
+            if (element && (typedValue === true || typedValue === false)) {
+                element.classList.remove('active', 'inactive');
+                element.classList.add(typedValue ? 'active' : 'inactive');
+            }
+            
+            // Also update the concept manager for backward compatibility
+            if (window.conceptIntegration && window.conceptIntegration.conceptModal) {
+                const conceptManager = window.conceptIntegration.conceptModal.conceptManager;
+                if (conceptManager) {
+                    conceptManager.setConceptValue(conceptName, typedValue);
+                }
+            }
+            
+            // Refresh the advisor to show updated concept states
+            if (window.initializeAdvisor) {
+                window.initializeAdvisor();
+            }
+            
+            return;
+        }
+        
+        // Fallback to old method if global state manager is not available
         if (window.conceptIntegration && window.conceptIntegration.conceptModal) {
             const conceptManager = window.conceptIntegration.conceptModal.conceptManager;
             if (conceptManager) {
-                // Convert value to appropriate type
-                let typedValue = value;
-                if (value === 'true') typedValue = true;
-                else if (value === 'false') typedValue = false;
-                else if (!isNaN(value) && value !== '') typedValue = Number(value);
-                
                 // Set the concept value
                 conceptManager.setConceptValue(conceptName, typedValue);
                 
@@ -1305,6 +1378,12 @@ $(document).ready(function() {
 
     // Get concept value
     function getConceptValue(conceptName) {
+        // Use the global concept state manager if available
+        if (window.conceptStateManager) {
+            return window.conceptStateManager.getConceptValue(conceptName);
+        }
+        
+        // Fallback to old method if global state manager is not available
         if (window.conceptIntegration && window.conceptIntegration.conceptModal) {
             const conceptManager = window.conceptIntegration.conceptModal.conceptManager;
             if (conceptManager && conceptManager.conceptInstantiation) {
@@ -1314,9 +1393,38 @@ $(document).ready(function() {
         }
         return null;
     }
+    
+    // Get concept state (true, false, or undefined)
+    function getConceptState(conceptName) {
+        // Use the global concept state manager if available
+        if (window.conceptStateManager) {
+            return window.conceptStateManager.getConceptState(conceptName);
+        }
+        
+        // Fallback to determining state from value if global state manager is not available
+        const value = getConceptValue(conceptName);
+        if (value === true) return true;
+        if (value === false) return false;
+        return undefined;
+    }
 
     // Save concepts to test case
     function saveConceptsToTestCase() {
+        // Use the global concept state manager if available
+        if (window.conceptStateManager) {
+            // Get all concepts from the global state
+            const activeConcepts = window.conceptStateManager.exportForTestCase();
+            
+            console.log('Saving concepts to test case from global state:', activeConcepts);
+            
+            // Create a test case with the active concepts
+            if (window._testPatientUI && typeof window._testPatientUI.saveConceptsToTestCase === 'function') {
+                window._testPatientUI.saveConceptsToTestCase(activeConcepts);
+                return;
+            }
+        }
+        
+        // Fallback to old method if global state manager is not available
         if (!window.conceptIntegration || !window.conceptIntegration.conceptModal) {
             console.error('Concept integration not available');
             return;
@@ -1339,255 +1447,11 @@ $(document).ready(function() {
             }
         });
         
-        // Check if we have any active concepts
-        if (Object.keys(activeConcepts).length === 0) {
-            alert('No active concepts to save');
-            return;
-        }
+        console.log('Saving concepts to test case from concept manager:', activeConcepts);
         
-        // Open a dialog to create a new test case
-        const testPatientUI = window.testPatientUI;
-        if (testPatientUI) {
-            // Show the test patient sidebar
-            testPatientUI.toggleSidebar();
-            
-            // Create a modal for saving to a test case
-            const modal = document.createElement('div');
-            modal.className = 'test-patient-modal';
-            modal.style.display = 'block';
-            
-            const modalContent = document.createElement('div');
-            modalContent.className = 'test-patient-modal-content';
-            
-            const modalHeader = document.createElement('div');
-            modalHeader.className = 'test-patient-modal-header';
-            
-            const modalTitle = document.createElement('h2');
-            modalTitle.className = 'test-patient-modal-title';
-            modalTitle.textContent = 'Save Concepts to Test Case';
-            
-            const closeButton = document.createElement('button');
-            closeButton.className = 'test-patient-modal-close';
-            closeButton.innerHTML = '&times;';
-            closeButton.addEventListener('click', () => {
-                document.body.removeChild(modal);
-            });
-            
-            modalHeader.appendChild(modalTitle);
-            modalHeader.appendChild(closeButton);
-            
-            const modalBody = document.createElement('div');
-            modalBody.className = 'test-patient-modal-body';
-            
-            // Create a form for selecting a patient and test case
-            const form = document.createElement('form');
-            form.className = 'test-case-form';
-            
-            // Create patient selection
-            const patientGroup = document.createElement('div');
-            patientGroup.className = 'form-group';
-            
-            const patientLabel = document.createElement('label');
-            patientLabel.textContent = 'Select Patient:';
-            patientLabel.setAttribute('for', 'patient-select');
-            
-            const patientSelect = document.createElement('select');
-            patientSelect.id = 'patient-select';
-            patientSelect.required = true;
-            
-            // Get all patients
-            const patients = testPatientUI.testPatientManager.getAllTestPatients();
-            
-            // Add option to create a new patient
-            const newPatientOption = document.createElement('option');
-            newPatientOption.value = 'new';
-            newPatientOption.textContent = '-- Create New Patient --';
-            patientSelect.appendChild(newPatientOption);
-            
-            // Add existing patients
-            patients.forEach(patient => {
-                const option = document.createElement('option');
-                option.value = patient.id;
-                option.textContent = patient.name;
-                patientSelect.appendChild(option);
-            });
-            
-            patientGroup.appendChild(patientLabel);
-            patientGroup.appendChild(patientSelect);
-            form.appendChild(patientGroup);
-            
-            // Create test case selection (initially hidden)
-            const testCaseGroup = document.createElement('div');
-            testCaseGroup.className = 'form-group';
-            testCaseGroup.style.display = 'none';
-            
-            const testCaseLabel = document.createElement('label');
-            testCaseLabel.textContent = 'Select Test Case:';
-            testCaseLabel.setAttribute('for', 'test-case-select');
-            
-            const testCaseSelect = document.createElement('select');
-            testCaseSelect.id = 'test-case-select';
-            
-            // Add option to create a new test case
-            const newTestCaseOption = document.createElement('option');
-            newTestCaseOption.value = 'new';
-            newTestCaseOption.textContent = '-- Create New Test Case --';
-            testCaseSelect.appendChild(newTestCaseOption);
-            
-            testCaseGroup.appendChild(testCaseLabel);
-            testCaseGroup.appendChild(testCaseSelect);
-            form.appendChild(testCaseGroup);
-            
-            // Create new patient name input (initially hidden)
-            const newPatientGroup = document.createElement('div');
-            newPatientGroup.className = 'form-group';
-            newPatientGroup.style.display = 'none';
-            
-            const newPatientLabel = document.createElement('label');
-            newPatientLabel.textContent = 'New Patient Name:';
-            newPatientLabel.setAttribute('for', 'new-patient-name');
-            
-            const newPatientInput = document.createElement('input');
-            newPatientInput.type = 'text';
-            newPatientInput.id = 'new-patient-name';
-            newPatientInput.placeholder = 'Enter patient name';
-            
-            newPatientGroup.appendChild(newPatientLabel);
-            newPatientGroup.appendChild(newPatientInput);
-            form.appendChild(newPatientGroup);
-            
-            // Create new test case name input (initially hidden)
-            const newTestCaseGroup = document.createElement('div');
-            newTestCaseGroup.className = 'form-group';
-            newTestCaseGroup.style.display = 'none';
-            
-            const newTestCaseLabel = document.createElement('label');
-            newTestCaseLabel.textContent = 'New Test Case Name:';
-            newTestCaseLabel.setAttribute('for', 'new-test-case-name');
-            
-            const newTestCaseInput = document.createElement('input');
-            newTestCaseInput.type = 'text';
-            newTestCaseInput.id = 'new-test-case-name';
-            newTestCaseInput.placeholder = 'Enter test case name';
-            
-            newTestCaseGroup.appendChild(newTestCaseLabel);
-            newTestCaseGroup.appendChild(newTestCaseInput);
-            form.appendChild(newTestCaseGroup);
-            
-            // Add event listener to patient select
-            patientSelect.addEventListener('change', () => {
-                const selectedPatientId = patientSelect.value;
-                
-                // Show/hide new patient name input
-                newPatientGroup.style.display = selectedPatientId === 'new' ? 'block' : 'none';
-                
-                // Show/hide test case selection
-                testCaseGroup.style.display = selectedPatientId !== 'new' ? 'block' : 'none';
-                
-                // If an existing patient is selected, populate test cases
-                if (selectedPatientId !== 'new') {
-                    // Clear existing options except the first one
-                    while (testCaseSelect.options.length > 1) {
-                        testCaseSelect.remove(1);
-                    }
-                    
-                    // Get test cases for the selected patient
-                    const testCases = testPatientUI.testPatientManager.getTestCases(selectedPatientId);
-                    
-                    // Add test cases to the select
-                    testCases.forEach(testCase => {
-                        const option = document.createElement('option');
-                        option.value = testCase.id;
-                        option.textContent = testCase.name;
-                        testCaseSelect.appendChild(option);
-                    });
-                }
-            });
-            
-            // Add event listener to test case select
-            testCaseSelect.addEventListener('change', () => {
-                const selectedTestCaseId = testCaseSelect.value;
-                
-                // Show/hide new test case name input
-                newTestCaseGroup.style.display = selectedTestCaseId === 'new' ? 'block' : 'none';
-            });
-            
-            // Add submit button
-            const submitButton = document.createElement('button');
-            submitButton.type = 'submit';
-            submitButton.className = 'save-test-case-btn';
-            submitButton.textContent = 'Save Concepts';
-            form.appendChild(submitButton);
-            
-            // Add form submission handler
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                let patientId = patientSelect.value;
-                let testCaseId = testCaseSelect.value;
-                
-                // Create new patient if needed
-                if (patientId === 'new') {
-                    const patientName = newPatientInput.value.trim();
-                    if (!patientName) {
-                        alert('Please enter a patient name');
-                        return;
-                    }
-                    
-                    // Create the patient
-                    const newPatient = testPatientUI.testPatientManager.createTestPatient(patientName);
-                    patientId = newPatient.id;
-                }
-                
-                // Create new test case if needed
-                if (testCaseId === 'new' || patientId === 'new') {
-                    const testCaseName = newTestCaseInput.value.trim();
-                    if (!testCaseName) {
-                        alert('Please enter a test case name');
-                        return;
-                    }
-                    
-                    // Create the test case
-                    const newTestCase = testPatientUI.testPatientManager.createTestCase(patientId, testCaseName);
-                    testCaseId = newTestCase.id;
-                }
-                
-                // Get the test case
-                const testCase = testPatientUI.testPatientManager.getTestCase(patientId, testCaseId);
-                if (!testCase) {
-                    alert('Failed to get test case');
-                    return;
-                }
-                
-                // Add concepts to the test case
-                testCase.concepts = testCase.concepts || {};
-                
-                Object.keys(activeConcepts).forEach(conceptName => {
-                    testCase.concepts[conceptName] = activeConcepts[conceptName];
-                });
-                
-                // Update the test case
-                testPatientUI.testPatientManager.updateTestCase(patientId, testCaseId, testCase);
-                
-                // Show notification
-                testPatientUI.showNotification(`Saved ${Object.keys(activeConcepts).length} concepts to test case "${testCase.name}"`);
-                
-                // Refresh the sidebar
-                testPatientUI.loadPatientsIntoSidebar();
-                
-                // Close the modal
-                document.body.removeChild(modal);
-            });
-            
-            modalBody.appendChild(form);
-            
-            modalContent.appendChild(modalHeader);
-            modalContent.appendChild(modalBody);
-            
-            modal.appendChild(modalContent);
-            document.body.appendChild(modal);
-        } else {
-            alert('Test patient UI not available');
+        // Create a test case with the active concepts
+        if (window._testPatientUI && typeof window._testPatientUI.saveConceptsToTestCase === 'function') {
+            window._testPatientUI.saveConceptsToTestCase(activeConcepts);
         }
     }
 });

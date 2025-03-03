@@ -106,6 +106,26 @@ class ConceptManager {
     }
 
     /**
+     * Resets a concept value to its default state
+     * @param {string} conceptName - The name of the concept to reset
+     */
+    resetConceptValue(conceptName) {
+        if (this.conceptInstantiation[conceptName]) {
+            // Reset the value to undefined (default state)
+            this.conceptInstantiation[conceptName].value = undefined;
+            this.refreshAdvisor();
+        }
+    }
+
+    /**
+     * Gets all concept names managed by this ConceptManager
+     * @returns {string[]} - Array of all concept names
+     */
+    getAllConceptNames() {
+        return Object.keys(this.conceptInstantiation);
+    }
+
+    /**
      * Creates a UI for managing concepts
      * @param {string} containerId - The ID of the container element
      */

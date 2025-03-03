@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="css/concept-modal.css">
     <link rel="stylesheet" href="css/test-patient-manager.css">
     <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/test-case-modal-animation.css">
+    <link rel="stylesheet" href="css/concept-state-display.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/fold/foldgutter.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
@@ -47,9 +49,12 @@
         <textarea id="config-editor"></textarea>
     </div>
     
-    <button class="toggle-editor-btn" id="toggle-editor-btn">Edit Configuration</button>
+    <!-- Hidden button for backward compatibility -->
+    <button class="toggle-editor-btn" id="toggle-editor-btn" style="display: none;">Edit Configuration</button>
     
     <!-- Scripts -->
+    <script type="module" src="js/concept-state-manager.js"></script>
+    <script type="module" src="js/concept-state-display.js"></script>
     <script type="module" src="js/app.js"></script>
     <script src="js/editor.js"></script>
 </body>

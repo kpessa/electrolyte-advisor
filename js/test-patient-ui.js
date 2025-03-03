@@ -388,12 +388,50 @@ class TestPatientUI {
             return;
         }
         
-        // Get the modal container
-        const modalContainer = document.getElementById('test-patient-modal');
+        // Get or create the modal container
+        let modalContainer = document.getElementById('test-patient-modal');
         if (!modalContainer) {
-            console.error('Test patient modal container not found');
-            return;
+            console.log('Creating test patient modal container');
+            modalContainer = document.createElement('div');
+            modalContainer.id = 'test-patient-modal';
+            modalContainer.className = 'test-patient-modal';
+            
+            // Create modal content
+            const modalContent = document.createElement('div');
+            modalContent.className = 'test-patient-modal-content';
+            
+            // Create modal header
+            const modalHeader = document.createElement('div');
+            modalHeader.className = 'test-patient-modal-header';
+            
+            // Create modal title
+            const modalTitle = document.createElement('h2');
+            modalTitle.className = 'test-patient-modal-title';
+            modalTitle.textContent = 'Add New Test Case';
+            modalHeader.appendChild(modalTitle);
+            
+            // Create close button
+            const closeButton = document.createElement('button');
+            closeButton.className = 'test-patient-modal-close';
+            closeButton.innerHTML = '&times;';
+            closeButton.addEventListener('click', () => {
+                modalContainer.style.display = 'none';
+            });
+            modalHeader.appendChild(closeButton);
+            
+            // Create modal body
+            const modalBody = document.createElement('div');
+            modalBody.className = 'test-patient-modal-body';
+            
+            // Append elements to modal
+            modalContent.appendChild(modalHeader);
+            modalContent.appendChild(modalBody);
+            modalContainer.appendChild(modalContent);
+            document.body.appendChild(modalContainer);
         }
+        
+        // Make sure the modal is visible
+        modalContainer.style.display = 'block';
         
         // Get the modal body
         const modalBody = modalContainer.querySelector('.test-patient-modal-body');
@@ -417,24 +455,44 @@ class TestPatientUI {
         // Create a form for the new test case
         const form = document.createElement('form');
         form.className = 'test-case-form';
+        form.style.marginTop = '20px';
         modalBody.appendChild(form);
         
         // Create a name input
         const nameLabel = document.createElement('label');
         nameLabel.textContent = 'Test Case Name:';
+        nameLabel.style.display = 'block';
+        nameLabel.style.marginBottom = '8px';
+        nameLabel.style.fontWeight = 'bold';
         form.appendChild(nameLabel);
         
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.name = 'name';
         nameInput.required = true;
+        nameInput.style.width = '100%';
+        nameInput.style.padding = '8px';
+        nameInput.style.marginBottom = '20px';
+        nameInput.style.borderRadius = '4px';
+        nameInput.style.border = '1px solid #ccc';
         form.appendChild(nameInput);
         
         // Create a submit button
         const submitButton = document.createElement('button');
         submitButton.type = 'submit';
         submitButton.textContent = 'Create Test Case';
+        submitButton.style.backgroundColor = '#4CAF50';
+        submitButton.style.color = 'white';
+        submitButton.style.padding = '10px 15px';
+        submitButton.style.border = 'none';
+        submitButton.style.borderRadius = '4px';
+        submitButton.style.cursor = 'pointer';
         form.appendChild(submitButton);
+        
+        // Focus on the name input
+        setTimeout(() => {
+            nameInput.focus();
+        }, 100);
         
         // Add submit event listener
         form.addEventListener('submit', (event) => {
@@ -448,8 +506,12 @@ class TestPatientUI {
             
             // Create the test case
             const newTestCase = this.testPatientManager.createTestCase(patientId, name);
+            
             if (newTestCase) {
                 console.log(`Created new test case: ${newTestCase.name}`);
+                
+                // Show a notification
+                this.showNotification(`Test case "${newTestCase.name}" created successfully`);
                 
                 // Go back to the test cases list
                 this.selectPatient(patientId);
@@ -1263,9 +1325,24 @@ class TestPatientUI {
             document.body.appendChild(modal);
         }
         
+        // Make sure the modal is visible with proper styling
+        modal.style.display = 'block';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        modal.style.zIndex = '99999';
+        modal.style.display = 'flex';
+        modal.style.justifyContent = 'center';
+        modal.style.alignItems = 'center';
+        
         // Get the modal body
         const modalBody = modal.querySelector('.test-case-manager-modal-body');
         modalBody.innerHTML = '';
+        modalBody.style.maxHeight = '80vh';
+        modalBody.style.overflowY = 'auto';
         
         // Update the modal title
         const modalTitle = modal.querySelector('.test-case-manager-modal-title');
@@ -1274,76 +1351,393 @@ class TestPatientUI {
         // Create the form
         const form = document.createElement('form');
         form.className = 'test-case-form';
+        form.style.width = '100%';
         
         // Create test case name section
         const nameSection = document.createElement('div');
         nameSection.className = 'test-case-form-section';
+        nameSection.style.marginBottom = '20px';
         
         const nameLabel = document.createElement('label');
         nameLabel.htmlFor = 'test-case-name';
         nameLabel.textContent = 'Test Case Name';
+        nameLabel.style.fontWeight = 'bold';
+        nameLabel.style.display = 'block';
+        nameLabel.style.marginBottom = '8px';
         
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.id = 'test-case-name';
         nameInput.className = 'form-control';
         nameInput.value = testCase.name;
+        nameInput.style.width = '100%';
+        nameInput.style.padding = '8px';
+        nameInput.style.borderRadius = '4px';
+        nameInput.style.border = '1px solid #ccc';
+        nameInput.style.marginBottom = '20px';
         
         nameSection.appendChild(nameLabel);
         nameSection.appendChild(nameInput);
         form.appendChild(nameSection);
         
-        // Create concepts section
+        // Create concepts section with tabs
         const conceptsSection = document.createElement('div');
         conceptsSection.className = 'test-case-form-section';
         
-        const conceptsTitle = document.createElement('h3');
-        conceptsTitle.textContent = 'Concepts';
-        conceptsSection.appendChild(conceptsTitle);
+        // Create concepts header
+        const conceptsHeader = document.createElement('div');
+        conceptsHeader.className = 'concepts-header';
+        conceptsHeader.style.marginBottom = '15px';
         
-        // Add concepts from the test case
-        if (testCase.concepts) {
-            const conceptsList = document.createElement('div');
-            conceptsList.className = 'concepts-list';
+        const conceptsTitle = document.createElement('h3');
+        conceptsTitle.textContent = 'Concepts by Electrolyte';
+        conceptsTitle.style.marginBottom = '10px';
+        conceptsHeader.appendChild(conceptsTitle);
+        
+        conceptsSection.appendChild(conceptsHeader);
+        
+        // Create tabs container
+        const tabsContainer = document.createElement('div');
+        tabsContainer.className = 'tabs-container';
+        
+        // Create tab buttons
+        const tabButtons = document.createElement('div');
+        tabButtons.className = 'tab-buttons';
+        tabButtons.style.display = 'flex';
+        tabButtons.style.borderBottom = '1px solid #ddd';
+        tabButtons.style.marginBottom = '15px';
+        
+        // Define tabs
+        const tabs = ['Magnesium', 'Potassium', 'Phosphate'];
+        const tabPanes = {};
+        
+        // Create tab buttons and panes
+        tabs.forEach((tabName, index) => {
+            // Create tab button
+            const tabButton = document.createElement('button');
+            tabButton.className = 'tab-button' + (index === 0 ? ' active' : '');
+            tabButton.textContent = tabName;
+            tabButton.dataset.tab = tabName.toLowerCase();
+            tabButton.type = 'button';
+            tabButton.style.padding = '10px 15px';
+            tabButton.style.border = 'none';
+            tabButton.style.background = 'none';
+            tabButton.style.borderBottom = index === 0 ? '2px solid #4CAF50' : 'none';
+            tabButton.style.cursor = 'pointer';
+            tabButton.style.fontWeight = index === 0 ? 'bold' : 'normal';
             
-            Object.keys(testCase.concepts).forEach(conceptName => {
-                const concept = testCase.concepts[conceptName];
+            // Add event listener to switch tabs
+            tabButton.addEventListener('click', (e) => {
+                // Remove active class from all buttons
+                tabButtons.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.style.borderBottom = 'none';
+                    btn.style.fontWeight = 'normal';
+                });
                 
-                const conceptItem = document.createElement('div');
-                conceptItem.className = 'concept-item';
+                // Add active class to clicked button
+                tabButton.classList.add('active');
+                tabButton.style.borderBottom = '2px solid #4CAF50';
+                tabButton.style.fontWeight = 'bold';
                 
-                const conceptNameLabel = document.createElement('label');
-                conceptNameLabel.textContent = conceptName;
-                conceptItem.appendChild(conceptNameLabel);
+                // Hide all tab panes
+                Object.values(tabPanes).forEach(pane => {
+                    pane.style.display = 'none';
+                });
                 
-                const conceptValueInput = document.createElement('input');
-                conceptValueInput.type = 'text';
-                conceptValueInput.className = 'form-control';
-                conceptValueInput.value = concept.value !== undefined ? concept.value : '';
-                conceptValueInput.dataset.conceptName = conceptName;
-                conceptItem.appendChild(conceptValueInput);
-                
-                conceptsList.appendChild(conceptItem);
+                // Show the selected tab pane
+                const selectedTab = tabButton.dataset.tab;
+                tabPanes[selectedTab].style.display = 'block';
             });
             
-            conceptsSection.appendChild(conceptsList);
-        } else {
-            const noConceptsMessage = document.createElement('p');
-            noConceptsMessage.textContent = 'No concepts found in this test case.';
-            conceptsSection.appendChild(noConceptsMessage);
-        }
+            tabButtons.appendChild(tabButton);
+            
+            // Create tab pane
+            const tabPane = document.createElement('div');
+            tabPane.className = 'tab-pane';
+            tabPane.dataset.tab = tabName.toLowerCase();
+            tabPane.style.display = index === 0 ? 'block' : 'none';
+            
+            tabPanes[tabName.toLowerCase()] = tabPane;
+            tabsContainer.appendChild(tabPane);
+        });
         
-        form.appendChild(conceptsSection);
+        tabsContainer.insertBefore(tabButtons, tabsContainer.firstChild);
+        conceptsSection.appendChild(tabsContainer);
+        
+        // Function to group concepts for each tab
+        const groupConceptsForTab = (tabName) => {
+            // Convert tab name to lowercase for consistency
+            const tabKey = tabName.toLowerCase();
+            
+            // Define sample concepts for each tab if no concepts exist
+            const sampleConcepts = {
+                magnesium: {
+                    'mg_alert_low': { value: true },
+                    'mg_alert_high': { value: false },
+                    'mg_dismiss_low': { value: false },
+                    'mg_dismiss_high': { value: false },
+                    'mg_level': { value: 1.8 },
+                    'mg_low_threshold': { value: 1.5 },
+                    'mg_high_threshold': { value: 2.5 },
+                    'mg_critical_low': { value: 1.0 },
+                    'mg_critical_high': { value: 3.0 }
+                },
+                potassium: {
+                    'k_alert_low': { value: false },
+                    'k_alert_high': { value: true },
+                    'k_dismiss_low': { value: false },
+                    'k_dismiss_high': { value: false },
+                    'k_level': { value: 5.2 },
+                    'k_low_threshold': { value: 3.5 },
+                    'k_high_threshold': { value: 5.0 },
+                    'k_critical_low': { value: 2.5 },
+                    'k_critical_high': { value: 6.0 }
+                },
+                phosphate: {
+                    'phos_alert_low': { value: false },
+                    'phos_alert_high': { value: false },
+                    'phos_dismiss_low': { value: false },
+                    'phos_dismiss_high': { value: false },
+                    'phos_level': { value: 3.5 },
+                    'phos_low_threshold': { value: 2.5 },
+                    'phos_high_threshold': { value: 4.5 },
+                    'phos_critical_low': { value: 1.5 },
+                    'phos_critical_high': { value: 5.5 }
+                }
+            };
+            
+            // Get concepts from the test case or use sample concepts
+            let tabConcepts = {};
+            
+            // Start with sample concepts
+            if (sampleConcepts[tabKey]) {
+                tabConcepts = {...sampleConcepts[tabKey]};
+            }
+            
+            // Override with actual test case concepts if they exist
+            if (testCase.concepts) {
+                Object.keys(testCase.concepts).forEach(conceptName => {
+                    // Check if this concept belongs to the current tab
+                    if (conceptName.startsWith(tabKey.substring(0, 2)) || 
+                        (tabKey === 'phosphate' && conceptName.startsWith('phos'))) {
+                        tabConcepts[conceptName] = testCase.concepts[conceptName];
+                    }
+                });
+            }
+            
+            // Add concepts from the concept manager
+            const conceptManagerConcepts = this.conceptManager.getAllConcepts();
+            Object.keys(conceptManagerConcepts).forEach(conceptName => {
+                // Check if this concept belongs to the current tab
+                if (conceptName.startsWith(tabKey.substring(0, 2)) || 
+                    (tabKey === 'phosphate' && conceptName.startsWith('phos'))) {
+                    // Only add if not already in tabConcepts
+                    if (!tabConcepts[conceptName]) {
+                        tabConcepts[conceptName] = {
+                            value: conceptManagerConcepts[conceptName]
+                        };
+                    }
+                }
+            });
+            
+            return tabConcepts;
+        };
+        
+        // Function to create concept sections
+        const createConceptSections = (tabPane, tabConcepts) => {
+            // Group concepts by type
+            const alertConcepts = {};
+            const dismissConcepts = {};
+            const levelConcepts = {};
+            const otherConcepts = {};
+            
+            Object.keys(tabConcepts).forEach(conceptName => {
+                if (conceptName.includes('alert')) {
+                    alertConcepts[conceptName] = tabConcepts[conceptName];
+                } else if (conceptName.includes('dismiss')) {
+                    dismissConcepts[conceptName] = tabConcepts[conceptName];
+                } else if (conceptName.includes('level') || conceptName.includes('threshold') || conceptName.includes('critical')) {
+                    levelConcepts[conceptName] = tabConcepts[conceptName];
+                } else {
+                    otherConcepts[conceptName] = tabConcepts[conceptName];
+                }
+            });
+            
+            // Create sections
+            if (Object.keys(alertConcepts).length > 0) {
+                createConceptSection(tabPane, 'Alert Concepts', alertConcepts);
+            }
+            
+            if (Object.keys(dismissConcepts).length > 0) {
+                createConceptSection(tabPane, 'Dismiss Concepts', dismissConcepts);
+            }
+            
+            if (Object.keys(levelConcepts).length > 0) {
+                createConceptSection(tabPane, 'Level & Threshold Concepts', levelConcepts);
+            }
+            
+            if (Object.keys(otherConcepts).length > 0) {
+                createConceptSection(tabPane, 'Other Concepts', otherConcepts);
+            }
+        };
+        
+        // Function to create a concept section
+        const createConceptSection = (container, title, concepts) => {
+            const section = document.createElement('div');
+            section.className = 'concept-section';
+            section.style.marginBottom = '20px';
+            section.style.border = '1px solid #eee';
+            section.style.borderRadius = '4px';
+            
+            // Create section header
+            const sectionHeader = document.createElement('div');
+            sectionHeader.className = 'concept-section-header';
+            sectionHeader.style.padding = '10px 15px';
+            sectionHeader.style.backgroundColor = '#f9f9f9';
+            sectionHeader.style.borderBottom = '1px solid #eee';
+            sectionHeader.style.cursor = 'pointer';
+            sectionHeader.style.display = 'flex';
+            sectionHeader.style.justifyContent = 'space-between';
+            sectionHeader.style.alignItems = 'center';
+            
+            const sectionTitle = document.createElement('h4');
+            sectionTitle.textContent = title;
+            sectionTitle.style.margin = '0';
+            sectionHeader.appendChild(sectionTitle);
+            
+            // Add collapse/expand arrow
+            const arrow = document.createElement('span');
+            arrow.innerHTML = '&#9660;'; // Down arrow
+            arrow.style.transition = 'transform 0.3s';
+            sectionHeader.appendChild(arrow);
+            
+            section.appendChild(sectionHeader);
+            
+            // Create section content
+            const sectionContent = document.createElement('div');
+            sectionContent.className = 'concept-section-content';
+            sectionContent.style.padding = '15px';
+            
+            // Create table for concepts
+            const table = document.createElement('table');
+            table.className = 'concepts-table';
+            table.style.width = '100%';
+            table.style.borderCollapse = 'collapse';
+            
+            // Create table header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            
+            const nameHeader = document.createElement('th');
+            nameHeader.textContent = 'Concept Name';
+            nameHeader.style.textAlign = 'left';
+            nameHeader.style.padding = '8px';
+            headerRow.appendChild(nameHeader);
+            
+            const valueHeader = document.createElement('th');
+            valueHeader.textContent = 'Value';
+            valueHeader.style.textAlign = 'left';
+            valueHeader.style.padding = '8px';
+            headerRow.appendChild(valueHeader);
+            
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            
+            // Create table body
+            const tbody = document.createElement('tbody');
+            
+            // Add concept rows
+            Object.keys(concepts).forEach(conceptName => {
+                const concept = concepts[conceptName];
+                
+                const row = document.createElement('tr');
+                row.style.borderBottom = '1px solid #eee';
+                
+                const nameCell = document.createElement('td');
+                nameCell.textContent = conceptName;
+                nameCell.style.padding = '8px';
+                row.appendChild(nameCell);
+                
+                const valueCell = document.createElement('td');
+                valueCell.style.padding = '8px';
+                
+                // Create appropriate input based on value type
+                let input;
+                const value = concept.value;
+                
+                if (typeof value === 'boolean') {
+                    // Create checkbox for boolean values
+                    input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.checked = value;
+                    input.dataset.conceptName = conceptName;
+                    input.dataset.valueType = 'boolean';
+                } else if (typeof value === 'number') {
+                    // Create number input for numeric values
+                    input = document.createElement('input');
+                    input.type = 'number';
+                    input.value = value;
+                    input.step = '0.1';
+                    input.dataset.conceptName = conceptName;
+                    input.dataset.valueType = 'number';
+                    input.style.width = '80px';
+                } else {
+                    // Create text input for string values
+                    input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = value !== undefined ? value : '';
+                    input.dataset.conceptName = conceptName;
+                    input.dataset.valueType = 'string';
+                }
+                
+                valueCell.appendChild(input);
+                row.appendChild(valueCell);
+                
+                tbody.appendChild(row);
+            });
+            
+            table.appendChild(tbody);
+            sectionContent.appendChild(table);
+            section.appendChild(sectionContent);
+            
+            // Add click event to toggle section
+            sectionHeader.addEventListener('click', () => {
+                const isCollapsed = sectionContent.style.display === 'none';
+                sectionContent.style.display = isCollapsed ? 'block' : 'none';
+                arrow.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(-90deg)';
+            });
+            
+            container.appendChild(section);
+        };
+        
+        // Populate tabs with concepts
+        tabs.forEach(tabName => {
+            const tabKey = tabName.toLowerCase();
+            const tabPane = tabPanes[tabKey];
+            const tabConcepts = groupConceptsForTab(tabKey);
+            
+            createConceptSections(tabPane, tabConcepts);
+        });
         
         // Create form actions
         const formActions = document.createElement('div');
         formActions.className = 'test-case-form-actions';
+        formActions.style.marginTop = '20px';
+        formActions.style.display = 'flex';
+        formActions.style.justifyContent = 'flex-end';
+        formActions.style.gap = '10px';
         
         // Create cancel button
         const cancelButton = document.createElement('button');
         cancelButton.type = 'button';
         cancelButton.className = 'btn-cancel';
         cancelButton.textContent = 'Cancel';
+        cancelButton.style.padding = '8px 15px';
+        cancelButton.style.backgroundColor = '#f1f1f1';
+        cancelButton.style.border = 'none';
+        cancelButton.style.borderRadius = '4px';
+        cancelButton.style.cursor = 'pointer';
         cancelButton.addEventListener('click', () => {
             modal.style.display = 'none';
         });
@@ -1354,63 +1748,108 @@ class TestPatientUI {
         saveButton.type = 'button';
         saveButton.className = 'btn-save';
         saveButton.textContent = 'Save Test Case';
+        saveButton.style.padding = '8px 15px';
+        saveButton.style.backgroundColor = '#4CAF50';
+        saveButton.style.color = 'white';
+        saveButton.style.border = 'none';
+        saveButton.style.borderRadius = '4px';
+        saveButton.style.cursor = 'pointer';
         saveButton.addEventListener('click', () => {
-            // Get the updated test case name
-            const updatedName = nameInput.value.trim();
-            if (!updatedName) {
-                alert('Please enter a name for the test case');
-                return;
-            }
-            
-            // Get the updated concepts
-            const updatedConcepts = {};
-            const conceptInputs = conceptsSection.querySelectorAll('input[data-concept-name]');
-            conceptInputs.forEach(input => {
-                const conceptName = input.dataset.conceptName;
-                const conceptValue = input.value.trim();
-                
-                if (conceptValue) {
-                    updatedConcepts[conceptName] = {
-                        value: conceptValue
-                    };
-                }
-            });
-            
-            // Update the test case
-            const updatedTestCase = this.testPatientManager.updateTestCase(
-                patientId,
-                testCaseId,
-                {
-                    name: updatedName,
-                    concepts: updatedConcepts
-                }
-            );
-            
-            if (updatedTestCase) {
-                this.showNotification(`Test case "${updatedName}" updated successfully`);
-                modal.style.display = 'none';
-                
-                // Refresh the sidebar if it's open
-                const sidebar = document.querySelector('.test-patient-sidebar');
-                if (sidebar && sidebar.classList.contains('active')) {
-                    const sidebarContent = sidebar.querySelector('.sidebar-content');
-                    if (sidebarContent) {
-                        this.renderSidebarContent(sidebarContent);
-                    }
-                }
-            } else {
-                alert('Failed to update test case. Please try again.');
-            }
+            this.saveTestCase(patientId, testCaseId, nameInput, form);
         });
         formActions.appendChild(saveButton);
         
         form.appendChild(formActions);
         modalBody.appendChild(form);
         
-        // Show the modal
-        modal.style.display = 'block';
+        console.log('Showing test case edit form');
+    }
+    
+    /**
+     * Save a test case
+     * @param {string} patientId - The ID of the patient
+     * @param {string} testCaseId - The ID of the test case to save
+     * @param {HTMLInputElement} nameInput - The input element containing the test case name
+     * @param {HTMLFormElement} form - The form containing the concept inputs
+     */
+    saveTestCase(patientId, testCaseId, nameInput, form) {
+        console.log('Saving test case...');
         
-        console.log(`Test case loaded for editing: ${testCase.name}`);
+        // Get the updated test case name
+        const updatedName = nameInput.value.trim();
+        if (!updatedName) {
+            alert('Please enter a name for the test case');
+            return;
+        }
+        
+        // Get the updated concepts
+        const updatedConcepts = {};
+        
+        // Get all concept inputs from the form
+        const conceptInputs = form.querySelectorAll('input[data-concept-name]');
+        conceptInputs.forEach(input => {
+            const conceptName = input.dataset.conceptName;
+            const valueType = input.dataset.valueType;
+            let conceptValue;
+            
+            // Parse the value based on its type
+            if (valueType === 'boolean') {
+                conceptValue = input.checked;
+            } else if (valueType === 'number') {
+                conceptValue = parseFloat(input.value);
+                if (isNaN(conceptValue)) {
+                    conceptValue = 0;
+                }
+            } else {
+                conceptValue = input.value.trim();
+            }
+            
+            // Only add non-empty values
+            if (conceptValue !== '' || valueType === 'boolean' || valueType === 'number') {
+                updatedConcepts[conceptName] = {
+                    value: conceptValue
+                };
+            }
+        });
+        
+        // Add concepts from the concept manager
+        const conceptManagerConcepts = this.conceptManager.getAllConcepts();
+        Object.keys(conceptManagerConcepts).forEach(conceptName => {
+            // Only add if not already in updatedConcepts
+            if (!updatedConcepts[conceptName]) {
+                updatedConcepts[conceptName] = {
+                    value: conceptManagerConcepts[conceptName]
+                };
+            }
+        });
+        
+        console.log('Saving concepts:', updatedConcepts);
+        
+        // Update the test case
+        const updatedTestCase = this.testPatientManager.updateTestCase(
+            patientId,
+            testCaseId,
+            {
+                name: updatedName,
+                concepts: updatedConcepts
+            }
+        );
+        
+        if (updatedTestCase) {
+            console.log(`Updated test case: ${updatedTestCase.name}`);
+            
+            // Show a notification
+            this.showNotification(`Test case "${updatedTestCase.name}" saved successfully`);
+            
+            // Hide the modal
+            const modal = document.getElementById('test-case-manager-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        } else {
+            console.error('Failed to update test case');
+            alert('Failed to update test case. Please try again.');
+        }
     }
 }
 

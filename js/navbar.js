@@ -88,6 +88,23 @@ class Navbar {
         );
         controls.appendChild(conceptButton);
         
+        // Add Edit Configuration button
+        const editConfigButton = this.createNavbarButton(
+            '📝 Edit Config',
+            'Edit configuration',
+            () => {
+                // Use the existing toggle-editor-btn click handler
+                if (window.toggleEditor) {
+                    window.toggleEditor();
+                } else {
+                    // Fallback to triggering the click on the original button
+                    $('#toggle-editor-btn').click();
+                }
+            }
+        );
+        editConfigButton.id = 'navbar-edit-config-btn';
+        controls.appendChild(editConfigButton);
+        
         // Add navbar to document
         document.body.insertBefore(this.navbar, document.body.firstChild);
         
